@@ -1,0 +1,12 @@
+{
+    "expo": {
+      "name": "CommerceUI",
+      "slug": "commerceui",
+      "platforms": ["ios", "android", "web"],
+      "version": "1.0.0",
+      "sdkVersion": "52.0.0",
+      "assetBundlePatterns": ["**/*"],
+      "newArchEnabled": true
+    }
+  }
+  
