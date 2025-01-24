@@ -1,7 +1,8 @@
+// Models/Sidebar/SidebarModel.js
 export const sidebarItems = [
     {
       title: "Dashboard",
-      icon: "FaHome", // Pasaremos el nombre del icono como string
+      icon: "home",
       route: "/dashboard",
       submenus: [
         { title: "Resumen", route: "/dashboard/overview" },
@@ -10,20 +11,20 @@ export const sidebarItems = [
     },
     {
       title: "Usuarios",
-      icon: "FaUser",
+      icon: "users",
       route: "/usuarios",
       submenus: [],
     },
     {
       title: "Notificaciones",
-      icon: "FaBell",
+      icon: "bell",
       route: "/notificaciones",
       submenus: [],
-      badge: 3, // Notificaciones o indicadores
+      badge: 3,
     },
     {
       title: "Configuración",
-      icon: "FaCog",
+      icon: "settings",
       route: "/configuracion",
       submenus: [
         { title: "Perfil", route: "/configuracion/perfil" },
