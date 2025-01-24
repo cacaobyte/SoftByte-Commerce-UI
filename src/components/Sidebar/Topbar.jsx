@@ -3,14 +3,11 @@ import { IoNotificationsOutline, IoPersonCircleOutline } from "react-icons/io5";
 
 const Topbar = () => {
   return (
-    <div className="bg-gray-100 border-b border-gray-300 h-16 flex justify-between items-center px-4">
-      {/* Título o espacio vacío */}
-      <div className="text-lg font-bold">SoftByte Commerce</div>
-
-      {/* Opciones */}
+    <div className="bg-white h-16 shadow-md flex justify-between items-center px-6">
+      <h1 className="text-xl font-bold text-blue-700">SoftByte Commerce</h1>
       <div className="flex items-center space-x-4">
-        <IoNotificationsOutline size={24} />
-        <IoPersonCircleOutline size={24} />
+        <IoNotificationsOutline size={24} className="text-blue-700" />
+        <IoPersonCircleOutline size={28} className="text-blue-700" />
       </div>
     </div>
   );
