@@ -27,7 +27,7 @@ const Sidebar = () => {
 
       {/* Sidebar */}
       <Sheet open={isSidebarOpen} onOpenChange={setIsSidebarOpen}>
-        <SheetContent className="w-72" side="left">
+        <SheetContent className="w-72 max-h-screen overflow-y-auto" side="left">
           {/* Título accesible */}
           <SheetTitle className="sr-only">Menú lateral</SheetTitle>
 
@@ -36,13 +36,6 @@ const Sidebar = () => {
             <Icons.logo className="w-6 h-6 text-cyan-500" />
             <span className="text-lg font-semibold">SoftByte</span>
             {/* Botón para cerrar el sidebar */}
-            {/* <Button
-              variant="ghost"
-              className="ml-auto"
-              onClick={() => setIsSidebarOpen(false)}
-            >
-              <Icons.close className="w-5 h-5" />
-            </Button> */}
           </div>
 
           {/* Menú dinámico */}

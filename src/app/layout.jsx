@@ -32,7 +32,7 @@ export default function RootLayout({ children }) {
         <link rel="icon" href="/Logo_CacaoByte_S.A.png" type="image/png" />
       </head>
       <body
-        className={`${geistSans.variable} ${geistMono.variable} min-h-screen antialiased bg-gray-50`}
+        className={`${geistSans.variable} ${geistMono.variable} min-h-screen antialiased bg-gray-50 dark:bg-gray-800`}
       >
         <div className="flex h-screen overflow-hidden">
           {/* Sidebar */}
@@ -44,7 +44,7 @@ export default function RootLayout({ children }) {
             <Topbar />
 
             {/* Contenido dinámico */}
-            <main className="flex-1 overflow-y-auto bg-gray-100 p-6">
+            <main className="flex-1 overflow-y-auto bg-gray-100 dark:bg-gray-900 p-6">
               {children}
             </main>
           </div>

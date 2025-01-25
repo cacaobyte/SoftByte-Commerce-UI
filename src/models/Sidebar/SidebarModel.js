@@ -18,6 +18,7 @@ export const sidebarItems = [
       { title: "Nueva Venta", route: "/ventas/nueva" },
       { title: "Historial de Ventas", route: "/ventas/historial" },
       { title: "Facturas", route: "/ventas/facturas" },
+      { title: "Devoluciones", route: "/ventas/devoluciones" },
     ],
   },
   {
@@ -29,6 +30,7 @@ export const sidebarItems = [
       { title: "Inventario", route: "/productos/inventario" },
       { title: "Categorías", route: "/productos/categorias" },
       { title: "Proveedores", route: "/productos/proveedores" },
+      { title: "Etiquetas", route: "/productos/etiquetas" },
     ],
   },
   {
@@ -39,6 +41,7 @@ export const sidebarItems = [
       { title: "Lista de Clientes", route: "/clientes/lista" },
       { title: "Créditos", route: "/clientes/creditos" },
       { title: "Contactos", route: "/clientes/contactos" },
+      { title: "Estadísticas", route: "/clientes/estadisticas" },
     ],
   },
   {
@@ -56,6 +59,7 @@ export const sidebarItems = [
       { title: "Perfil", route: "/configuracion/perfil" },
       { title: "Seguridad", route: "/configuracion/seguridad" },
       { title: "Tienda", route: "/configuracion/tienda" },
+      { title: "Impuestos", route: "/configuracion/impuestos" },
     ],
   },
   {
@@ -66,6 +70,7 @@ export const sidebarItems = [
       { title: "Reporte de Ventas", route: "/reportes/ventas" },
       { title: "Reporte de Inventario", route: "/reportes/inventario" },
       { title: "Reporte de Clientes", route: "/reportes/clientes" },
+      { title: "Reporte de Proveedores", route: "/reportes/proveedores" },
     ],
   },
   {
@@ -76,6 +81,7 @@ export const sidebarItems = [
       { title: "Apertura de Caja", route: "/cajas/apertura" },
       { title: "Cierre de Caja", route: "/cajas/cierre" },
       { title: "Movimientos", route: "/cajas/movimientos" },
+      { title: "Historial de Cajas", route: "/cajas/historial" },
     ],
   },
   {
@@ -86,6 +92,7 @@ export const sidebarItems = [
       { title: "FAQs", route: "/soporte/faqs" },
       { title: "Tickets", route: "/soporte/tickets" },
       { title: "Contacto", route: "/soporte/contacto" },
+      { title: "Guías", route: "/soporte/guias" },
     ],
   },
   {
@@ -95,6 +102,17 @@ export const sidebarItems = [
     submenus: [
       { title: "Administrar Roles", route: "/admin/usuarios/roles" },
       { title: "Permisos", route: "/admin/usuarios/permisos" },
+      { title: "Lista de Usuarios", route: "/admin/usuarios/lista" },
+    ],
+  },
+  {
+    title: "Facturación",
+    icon: "billing",
+    route: "/facturacion",
+    submenus: [
+      { title: "Emitir Factura", route: "/facturacion/emitir" },
+      { title: "Facturas Pendientes", route: "/facturacion/pendientes" },
+      { title: "Historial de Facturación", route: "/facturacion/historial" },
     ],
   },
 ];
