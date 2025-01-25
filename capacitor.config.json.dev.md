@@ -6,6 +6,15 @@
   "server": {
     "url": "http://192.168.1.93:3000",
     "cleartext": true
+  },
+  "plugins": {
+    "SplashScreen": {
+      "launchShowDuration": 3000,
+      "launchAutoHide": true,
+      "backgroundColor": "#FFFFFF",
+      "androidSplashResourceName": "splash",
+      "iosSplashResourceName": "Default"
+    }
   }
 }
 

@@ -7,7 +7,10 @@ export default function Home() {
         ¡Bienvenido a SoftByte Commerce!
       </h1>
       <p className="text-lg text-gray-600 mb-8">
-        La mejor solución para gestionar tu comercio de forma eficiente y moderna. prueba con direccción ip correcta
+        La mejor solución para gestionar tu comercio de forma eficiente y moderna. 
+      </p>
+      <p>
+        Prueba render 1
       </p>
       <button
         className="px-6 py-3 bg-cyan-500 text-white text-lg font-semibold rounded-lg shadow-md hover:bg-cyan-600 transition-all duration-200"
