@@ -1,11 +1,10 @@
 import RestfulHandler from '../../../module/handler/restfulHandler';
-//import RestfulHandler from '../../../../module/handler/restfulHandler';
 import enviroment from '../../../settings/enviroments';
 
-class CoursesService {
+class ArticlesService {
     constructor() {
         const { SoftByteCommerce } = enviroment.api;
-        this.service = new RestfulHandler(SoftByteCommerce.url, umgCollab.timeout);
+        this.service = new RestfulHandler(SoftByteCommerce.url, SoftByteCommerce.timeout);
         this.endpoint = SoftByteCommerce.endpoint.articles;
         this.defaultHeaders = {
             'Content-Type': 'application/json',
@@ -21,6 +20,15 @@ class CoursesService {
         });
     };
 
+    getArticlesWholesale = () => {
+        const endpoint = this.endpoint.getArticlesWholesale;
+        return this.service.request({
+            method: 'GET',
+            endpoint,
+            headers: this.defaultHeaders,
+        });
+    };
+
 }
 
-export default CoursesService;
+export default ArticlesService;

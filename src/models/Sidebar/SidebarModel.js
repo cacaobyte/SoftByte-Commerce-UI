@@ -2,7 +2,7 @@
 export const sidebarItems = [
   {
     title: "Dashboard",
-    icon: "home",
+    icon: "RiDashboard3Fill",
     route: "/dashboard",
     submenus: [
       { title: "Resumen", route: "/dashboard/overview" },
@@ -12,7 +12,7 @@ export const sidebarItems = [
   },
   {
     title: "Ventas",
-    icon: "cash",
+    icon: "FcSalesPerformance",
     route: "/ventas",
     submenus: [
       { title: "Nueva Venta", route: "/ventas/nueva" },
@@ -27,12 +27,26 @@ export const sidebarItems = [
     route: "/productos",
     submenus: [
       { title: "Catálogo", route: "/productos/catalogo" },
-      { title: "Inventario", route: "/productos/inventario" },
       { title: "Categorías", route: "/productos/categorias" },
-      { title: "Proveedores", route: "/productos/proveedores" },
+      { title: "Subcategorías", route: "/productos/subcategorias" },
       { title: "Etiquetas", route: "/productos/etiquetas" },
+      { title: "Clasificación", route: "/productos/clasificacion" },
     ],
   },
+  {
+    title: "Inventario",
+    icon: "warehouse",
+    route: "/inventario",
+    submenus: [
+      { title: "Artículos", route: "/Articles/ViewArticles" },
+      { title: "Nuevo artículo", route: "/inventario/crear-articulo" },
+      { title: "Recuento", route: "/inventario/tomar-inventario" },
+      { title: "Bodegas", route: "/inventario/bodegas" },
+      { title: "Nueva bodega", route: "/inventario/crear-bodega" },
+      { title: "Asignaciones", route: "/inventario/asignar-articulo-bodega" },
+    ],
+  },
+  
   {
     title: "Clientes",
     icon: "users",
@@ -97,7 +111,7 @@ export const sidebarItems = [
   },
   {
     title: "Usuarios",
-    icon: "usersAdmin",
+    icon: "FaUsersViewfinder",
     route: "/admin/usuarios",
     submenus: [
       { title: "Administrar Roles", route: "/admin/usuarios/roles" },

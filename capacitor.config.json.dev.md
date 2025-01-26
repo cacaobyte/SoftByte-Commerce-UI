@@ -18,10 +18,20 @@
   }
 }
 
-para compilar{
+para compilar
+{
   "appId": "com.cacaobyte.softbytecommerce",
   "appName": "SoftByte Commerce",
-  "webDir": "out"
+  "webDir": "out",
+  "plugins": {
+    "SplashScreen": {
+      "launchShowDuration": 3000,
+      "launchAutoHide": true,
+      "backgroundColor": "#FFFFFF",
+      "androidSplashResourceName": "splash",
+      "iosSplashResourceName": "Default"
+    }
+  }
 }
 
 

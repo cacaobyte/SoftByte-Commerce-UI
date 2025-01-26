@@ -1,5 +1,5 @@
 
-const environment = "https://apiumgcollab.onrender.com";
+const environment = "https://localhost:32769/api/cc/warehouse/";
 
 
 module.exports = {
@@ -9,16 +9,17 @@ module.exports = {
             timeout: 900000,
             endpoint: {
                 articles:{
-                    getArticles: "/articulos",
+                    getArticles: "articulos",
+                    getArticlesWholesale: "articulosMayoreo",
                 },
                 categories:{
-                    getCategories: "/categorias",
+                    getCategories: "categorias",
                 },
                 users:{
-                    getUsers: "/usuarios",
+                    getUsers: "usuarios",
                 },
                 sales:{
-                    getSales: "/ventas",
+                    getSales: "ventas",
                 },
 
             }
