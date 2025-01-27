@@ -9,6 +9,10 @@ export default {
   ],
   theme: {
   	extend: {
+		animation: {
+			'spin-slow': 'spin 4s linear infinite',
+			'progress': 'progress 2s infinite',
+		  },
   		colors: {
   			background: 'hsl(var(--background))',
   			foreground: 'hsl(var(--foreground))',
@@ -57,6 +61,10 @@ export default {
   			sm: 'calc(var(--radius) - 4px)'
   		},
   		keyframes: {
+			progress: {
+				'0%': { transform: 'translateX(-100%)' },
+				'100%': { transform: 'translateX(100%)' },
+			  },
   			'accordion-down': {
   				from: {
   					height: '0'

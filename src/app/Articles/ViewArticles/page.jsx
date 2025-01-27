@@ -2,22 +2,21 @@
 import React, { useState, useEffect } from "react";
 import ArticlesService from "../../../service/SoftbyteCommerce/Article/articleService";
 import ArticlesChart from "../../../components/Articles/ArticlesChart";
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
-import { Button } from "@/components/ui/button";
-import { Dialog, DialogTrigger, DialogContent, DialogHeader, DialogTitle, DialogDescription } from "@/components/ui/dialog";
-import { Input } from "@/components/ui/input";
-import { Badge } from "@/components/ui/badge";
-import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
-import { Search } from "lucide-react";
+import ArticlesTable from "../../../components/Articles/ArticlesTable";
+import SummaryCard from "../../../components/Articles/SummaryCard";
+import CategoriesCard from "../../../components/Articles/CategoriesCard";
+import RecentArticlesCard from "../../../components/Articles/RecentArticlesCard";
+import { useHasMounted } from '../../../hooks/useHasMounted';
+import LoadingScreen from "../../../components/UseHasMounted/LoadingScreen"
 
 const ArticlesPage = () => {
   const [articles, setArticles] = useState([]);
   const [filteredArticles, setFilteredArticles] = useState([]);
-  const [selectedArticle, setSelectedArticle] = useState(null);
   const [search, setSearch] = useState("");
   const [filter, setFilter] = useState("all");
-  const [loading, setLoading] = useState(true);
+  //const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const hasMounted = useHasMounted();
 
   const articlesService = new ArticlesService();
 
@@ -29,7 +28,7 @@ const ArticlesPage = () => {
     } catch (err) {
       setError("Error al cargar los artículos.");
     } finally {
-      setLoading(false);
+     // setLoading(false);
     }
   };
 
@@ -56,203 +55,55 @@ const ArticlesPage = () => {
     setFilteredArticles(filtered);
   }, [search, filter, articles]);
 
-  if (loading) return <div className="text-center p-4">Cargando artículos...</div>;
+
   if (error) return <div className="text-center text-red-500 p-4">{error}</div>;
-
-  const openDetails = (article) => {
-    setSelectedArticle(article);
-  };
-
-  const closeDetails = () => {
-    setSelectedArticle(null);
-  };
 
   const totalValue = articles.reduce((sum, article) => sum + article.precio, 0);
   const mostExpensive = articles.reduce((prev, current) => (prev.precio > current.precio ? prev : current), {});
   const cheapest = articles.reduce((prev, current) => (prev.precio < current.precio ? prev : current), {});
   const categories = [...new Set(articles.map((article) => article.categoria))];
   const recentArticles = articles.slice(-3);
-
+    if(!hasMounted) {
+        return  <div className="">
+        <div className=""><LoadingScreen message="Preparando tu experiencia..."/></div>
+      </div>;
+      }
   return (
     <div className="p-6 space-y-6">
       {/* Panel de resumen */}
       <div className="grid grid-cols-1 sm:grid-cols-4 gap-4">
-        <Card className="shadow-lg p-4 hover:shadow-xl transition">
-          <CardHeader>
-            <CardTitle>Total de Artículos</CardTitle>
-          </CardHeader>
-          <CardContent>
-            <p className="text-2xl font-semibold text-gray-800">{articles.length}</p>
-          </CardContent>
-        </Card>
-        <Card className="shadow-lg p-4 hover:shadow-xl transition">
-          <CardHeader>
-            <CardTitle>Más Caro</CardTitle>
-          </CardHeader>
-          <CardContent>
-            <p className="text-lg font-semibold text-blue-600">{mostExpensive.descripcion || "N/A"}</p>
-            <p className="text-sm text-gray-500">Q{mostExpensive.precio?.toFixed(2) || "0.00"}</p>
-          </CardContent>
-        </Card>
-        <Card className="shadow-lg p-4 hover:shadow-xl transition">
-          <CardHeader>
-            <CardTitle>Más Económico</CardTitle>
-          </CardHeader>
-          <CardContent>
-            <p className="text-lg font-semibold text-green-600">{cheapest.descripcion || "N/A"}</p>
-            <p className="text-sm text-gray-500">Q{cheapest.precio?.toFixed(2) || "0.00"}</p>
-          </CardContent>
-        </Card>
-        <Card className="shadow-lg p-4 hover:shadow-xl transition">
-          <CardHeader>
-            <CardTitle>Valor Total</CardTitle>
-          </CardHeader>
-          <CardContent>
-            <p className="text-2xl font-semibold text-blue-600">Q{totalValue.toFixed(2)}</p>
-          </CardContent>
-        </Card>
+        <SummaryCard title="Total de Artículos" value={articles.length} />
+        <SummaryCard
+          title="Más Caro"
+          value={mostExpensive.descripcion || "N/A"}
+          additionalInfo={`Q${mostExpensive.precio?.toFixed(2) || "0.00"}`}
+          valueColor="text-blue-600"
+        />
+        <SummaryCard
+          title="Más Económico"
+          value={cheapest.descripcion || "N/A"}
+          additionalInfo={`Q${cheapest.precio?.toFixed(2) || "0.00"}`}
+          valueColor="text-green-600"
+        />
+        <SummaryCard title="Valor Total" value={`Q${totalValue.toFixed(2)}`} valueColor="text-blue-600" />
       </div>
 
-{/* Categorías y recientes */}
-<div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-        <Card className="shadow-lg p-4 hover:shadow-xl transition">
-          <CardHeader>
-            <CardTitle>Artículos por Categoría</CardTitle>
-          </CardHeader>
-          <CardContent>
-            {categories.map((category, index) => (
-              <Badge key={index} variant="outline" className="mr-2">
-                {category} ({articles.filter((a) => a.categoria === category).length})
-              </Badge>
-            ))}
-          </CardContent>
-        </Card>
-        <Card className="shadow-lg p-4 hover:shadow-xl transition">
-          <CardHeader>
-            <CardTitle>Recientes</CardTitle>
-          </CardHeader>
-          <CardContent>
-            {recentArticles.map((article, index) => (
-              <p key={index} className="text-sm text-gray-800">
-                {article.descripcion} - Q{article.precio.toFixed(2)}
-              </p>
-            ))}
-          </CardContent>
-        </Card>
+      {/* Categorías y recientes */}
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
+        <CategoriesCard categories={categories} articles={articles} />
+        <RecentArticlesCard recentArticles={recentArticles} />
       </div>
-      
+
       {/* Gráfico y tabla */}
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
-        <div className="lg:col-span-1">
-          <ArticlesChart articles={articles} />
-        </div>
-        <div className="lg:col-span-2 bg-white shadow-md rounded-lg p-6 space-y-4">
-          <div className="flex flex-col sm:flex-row sm:items-center justify-between space-y-2 sm:space-y-0">
-            <Input
-              placeholder="Buscar por descripción..."
-              value={search}
-              onChange={(e) => setSearch(e.target.value)}
-              className="w-full"
-            />
-            <div className="flex space-x-2">
-              <Button
-                variant={filter === "all" ? "default" : "outline"}
-                onClick={() => setFilter("all")}
-                className={filter === "all" ? "bg-blue-600 text-white" : ""}
-              >
-                Todos
-              </Button>
-              <Button
-                variant={filter === "active" ? "default" : "outline"}
-                onClick={() => setFilter("active")}
-                className={filter === "active" ? "bg-green-600 text-white" : ""}
-              >
-                Activos
-              </Button>
-              <Button
-                variant={filter === "inactive" ? "default" : "outline"}
-                onClick={() => setFilter("inactive")}
-                className={filter === "inactive" ? "bg-red-600 text-white" : ""}
-              >
-                Inactivos
-              </Button>
-            </div>
-          </div>
-          <Table className="w-full">
-            <TableHeader>
-              <TableRow>
-                <TableHead>Código</TableHead>
-                <TableHead>Descripción</TableHead>
-                <TableHead>Precio</TableHead>
-                <TableHead>Estado</TableHead>
-                <TableHead>Acciones</TableHead>
-              </TableRow>
-            </TableHeader>
-            <TableBody>
-              {filteredArticles.map((article, index) => (
-                <TableRow key={index}>
-                  <TableCell>{article.articulo1}</TableCell>
-                  <TableCell>{article.descripcion}</TableCell>
-                  <TableCell>Q{article.precio.toFixed(2)}</TableCell>
-                  <TableCell>
-                    <Badge variant={article.activo ? "success" : "destructive"}>
-                      {article.activo ? "Activo" : "Inactivo"}
-                    </Badge>
-                  </TableCell>
-                  <TableCell>
-                    <Dialog>
-                      <DialogTrigger asChild>
-                        <Button variant="outline" size="sm" onClick={() => openDetails(article)}>
-                          Ver Detalles
-                        </Button>
-                      </DialogTrigger>
-                      {selectedArticle && selectedArticle.articulo1 === article.articulo1 && (
-                        <DialogContent className="max-w-lg">
-                          <DialogHeader>
-                            <DialogTitle>{selectedArticle.descripcion}</DialogTitle>
-                            <DialogDescription>
-                              Detalles completos del artículo.
-                            </DialogDescription>
-                          </DialogHeader>
-                          <div className="space-y-4">
-                            {/* Imagen del artículo */}
-                            <div className="flex justify-center">
-                              <img
-                                src={selectedArticle.foto || "/placeholder.png"}
-                                alt={selectedArticle.descripcion}
-                                className="rounded-lg shadow-md w-full h-60 object-cover"
-                              />
-                            </div>
-                            {/* Información adicional */}
-                            <div className="text-sm space-y-2">
-                              <p>
-                                <strong>Código:</strong> {selectedArticle.articulo1}
-                              </p>
-                              <p>
-                                <strong>Precio:</strong> Q{selectedArticle.precio.toFixed(2)}
-                              </p>
-                              <p>
-                                <strong>Peso Neto:</strong> {selectedArticle.pesoNeto} kg
-                              </p>
-                              <p>
-                                <strong>Volumen:</strong> {selectedArticle.volumen} m³
-                              </p>
-                            </div>
-                          </div>
-                          <div className="mt-4 flex justify-end">
-                            <Button variant="outline" onClick={closeDetails}>
-                              Cerrar
-                            </Button>
-                          </div>
-                        </DialogContent>
-                      )}
-                    </Dialog>
-                  </TableCell>
-                </TableRow>
-              ))}
-            </TableBody>
-          </Table>
-        </div>
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
+        <ArticlesChart articles={articles} />
+        <ArticlesTable
+          articles={filteredArticles}
+          filter={filter}
+          setFilter={setFilter}
+          search={search}
+          setSearch={setSearch}
+        />
       </div>
     </div>
   );
