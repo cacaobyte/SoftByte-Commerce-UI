@@ -5,7 +5,11 @@
   "webDir": "out",
   "server": {
     "url": "http://192.168.1.93:3000",
-    "cleartext": true
+    "cleartext": true,
+    "allowNavigation": [
+      "192.168.1.93",
+      "https://192.168.1.93:32775"
+    ]
   },
   "plugins": {
     "SplashScreen": {
@@ -17,6 +21,7 @@
     }
   }
 }
+
 
 para compilar
 {
