@@ -71,6 +71,7 @@ const ArticlesPage = () => {
   const mostExpensive = articles.reduce((prev, current) => (prev.precio > current.precio ? prev : current), {});
   const cheapest = articles.reduce((prev, current) => (prev.precio < current.precio ? prev : current), {});
   const categories = [...new Set(articles.map((article) => article.categoria))];
+  const recentArticles = articles.slice(-3);
 
   return (
     <div className="p-6 space-y-6">
@@ -112,6 +113,34 @@ const ArticlesPage = () => {
         </Card>
       </div>
 
+{/* Categorías y recientes */}
+<div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+        <Card className="shadow-lg p-4 hover:shadow-xl transition">
+          <CardHeader>
+            <CardTitle>Artículos por Categoría</CardTitle>
+          </CardHeader>
+          <CardContent>
+            {categories.map((category, index) => (
+              <Badge key={index} variant="outline" className="mr-2">
+                {category} ({articles.filter((a) => a.categoria === category).length})
+              </Badge>
+            ))}
+          </CardContent>
+        </Card>
+        <Card className="shadow-lg p-4 hover:shadow-xl transition">
+          <CardHeader>
+            <CardTitle>Recientes</CardTitle>
+          </CardHeader>
+          <CardContent>
+            {recentArticles.map((article, index) => (
+              <p key={index} className="text-sm text-gray-800">
+                {article.descripcion} - Q{article.precio.toFixed(2)}
+              </p>
+            ))}
+          </CardContent>
+        </Card>
+      </div>
+      
       {/* Gráfico y tabla */}
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
         <div className="lg:col-span-1">

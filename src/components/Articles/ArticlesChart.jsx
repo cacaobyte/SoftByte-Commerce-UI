@@ -67,7 +67,7 @@ const ArticlesChart = ({ articles }) => {
   if (!chartData || !priceTrendData) return null;
 
   return (
-    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+    <div className="grid grid-cols-1 md:grid-cols-1 gap-4">
       {/* Gráfico de distribución */}
       <Card className="shadow-lg p-4">
         <CardHeader>
@@ -82,41 +82,7 @@ const ArticlesChart = ({ articles }) => {
         </CardContent>
       </Card>
 
-      {/* Gráfico de tendencia de precios */}
-      <Card className="shadow-lg p-4">
-        <CardHeader>
-          <CardTitle>Tendencia de Precios</CardTitle>
-        </CardHeader>
-        <CardContent>
-          <Line
-            data={priceTrendData}
-            options={{
-              responsive: true,
-              plugins: {
-                legend: {
-                  position: "top",
-                },
-              },
-              scales: {
-                x: {
-                  type: "category",
-                  title: {
-                    display: true,
-                    text: "Artículos",
-                  },
-                },
-                y: {
-                  title: {
-                    display: true,
-                    text: "Precio (Q)",
-                  },
-                  beginAtZero: true,
-                },
-              },
-            }}
-          />
-        </CardContent>
-      </Card>
+
     </div>
   );
 };
