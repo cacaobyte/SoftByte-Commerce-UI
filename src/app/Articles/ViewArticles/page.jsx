@@ -71,7 +71,6 @@ const ArticlesPage = () => {
   const mostExpensive = articles.reduce((prev, current) => (prev.precio > current.precio ? prev : current), {});
   const cheapest = articles.reduce((prev, current) => (prev.precio < current.precio ? prev : current), {});
   const categories = [...new Set(articles.map((article) => article.categoria))];
-  const recentArticles = articles.slice(-3);
 
   return (
     <div className="p-6 space-y-6">
@@ -113,46 +112,43 @@ const ArticlesPage = () => {
         </Card>
       </div>
 
-      {/* Categorías y recientes */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-        <Card className="shadow-lg p-4 hover:shadow-xl transition">
-          <CardHeader>
-            <CardTitle>Artículos por Categoría</CardTitle>
-          </CardHeader>
-          <CardContent>
-            {categories.map((category, index) => (
-              <Badge key={index} variant="outline" className="mr-2">
-                {category} ({articles.filter((a) => a.categoria === category).length})
-              </Badge>
-            ))}
-          </CardContent>
-        </Card>
-        <Card className="shadow-lg p-4 hover:shadow-xl transition">
-          <CardHeader>
-            <CardTitle>Recientes</CardTitle>
-          </CardHeader>
-          <CardContent>
-            {recentArticles.map((article, index) => (
-              <p key={index} className="text-sm text-gray-800">
-                {article.descripcion} - Q{article.precio.toFixed(2)}
-              </p>
-            ))}
-          </CardContent>
-        </Card>
-      </div>
-
       {/* Gráfico y tabla */}
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
         <div className="lg:col-span-1">
           <ArticlesChart articles={articles} />
         </div>
         <div className="lg:col-span-2 bg-white shadow-md rounded-lg p-6 space-y-4">
-          <Input
-            placeholder="Buscar por descripción..."
-            value={search}
-            onChange={(e) => setSearch(e.target.value)}
-            className="w-full"
-          />
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between space-y-2 sm:space-y-0">
+            <Input
+              placeholder="Buscar por descripción..."
+              value={search}
+              onChange={(e) => setSearch(e.target.value)}
+              className="w-full"
+            />
+            <div className="flex space-x-2">
+              <Button
+                variant={filter === "all" ? "default" : "outline"}
+                onClick={() => setFilter("all")}
+                className={filter === "all" ? "bg-blue-600 text-white" : ""}
+              >
+                Todos
+              </Button>
+              <Button
+                variant={filter === "active" ? "default" : "outline"}
+                onClick={() => setFilter("active")}
+                className={filter === "active" ? "bg-green-600 text-white" : ""}
+              >
+                Activos
+              </Button>
+              <Button
+                variant={filter === "inactive" ? "default" : "outline"}
+                onClick={() => setFilter("inactive")}
+                className={filter === "inactive" ? "bg-red-600 text-white" : ""}
+              >
+                Inactivos
+              </Button>
+            </div>
+          </div>
           <Table className="w-full">
             <TableHeader>
               <TableRow>
@@ -160,6 +156,7 @@ const ArticlesPage = () => {
                 <TableHead>Descripción</TableHead>
                 <TableHead>Precio</TableHead>
                 <TableHead>Estado</TableHead>
+                <TableHead>Acciones</TableHead>
               </TableRow>
             </TableHeader>
             <TableBody>
@@ -172,6 +169,55 @@ const ArticlesPage = () => {
                     <Badge variant={article.activo ? "success" : "destructive"}>
                       {article.activo ? "Activo" : "Inactivo"}
                     </Badge>
+                  </TableCell>
+                  <TableCell>
+                    <Dialog>
+                      <DialogTrigger asChild>
+                        <Button variant="outline" size="sm" onClick={() => openDetails(article)}>
+                          Ver Detalles
+                        </Button>
+                      </DialogTrigger>
+                      {selectedArticle && selectedArticle.articulo1 === article.articulo1 && (
+                        <DialogContent className="max-w-lg">
+                          <DialogHeader>
+                            <DialogTitle>{selectedArticle.descripcion}</DialogTitle>
+                            <DialogDescription>
+                              Detalles completos del artículo.
+                            </DialogDescription>
+                          </DialogHeader>
+                          <div className="space-y-4">
+                            {/* Imagen del artículo */}
+                            <div className="flex justify-center">
+                              <img
+                                src={selectedArticle.foto || "/placeholder.png"}
+                                alt={selectedArticle.descripcion}
+                                className="rounded-lg shadow-md w-full h-60 object-cover"
+                              />
+                            </div>
+                            {/* Información adicional */}
+                            <div className="text-sm space-y-2">
+                              <p>
+                                <strong>Código:</strong> {selectedArticle.articulo1}
+                              </p>
+                              <p>
+                                <strong>Precio:</strong> Q{selectedArticle.precio.toFixed(2)}
+                              </p>
+                              <p>
+                                <strong>Peso Neto:</strong> {selectedArticle.pesoNeto} kg
+                              </p>
+                              <p>
+                                <strong>Volumen:</strong> {selectedArticle.volumen} m³
+                              </p>
+                            </div>
+                          </div>
+                          <div className="mt-4 flex justify-end">
+                            <Button variant="outline" onClick={closeDetails}>
+                              Cerrar
+                            </Button>
+                          </div>
+                        </DialogContent>
+                      )}
+                    </Dialog>
                   </TableCell>
                 </TableRow>
               ))}

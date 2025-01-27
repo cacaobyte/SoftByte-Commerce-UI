@@ -1,5 +1,5 @@
 
-const environment = "https://localhost:32778/api/cc/warehouse/";
+const environment = "https://localhost:32769/api/cc/warehouse/";
 //Produccion
 //const environment = "https://softbyte-commerce-api.onrender.com/api/cc/warehouse/";
 
