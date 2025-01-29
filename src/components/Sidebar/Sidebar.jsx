@@ -1,7 +1,8 @@
 "use client";
 import React, { useState } from "react";
+import Link from "next/link"; // Importa Link de Next.js
 import { sidebarItems } from "../../models/Sidebar/SidebarModel";
-import { Sheet, SheetContent, SheetTrigger, SheetTitle } from "@/components/ui/sheet";
+import { Sheet, SheetContent, SheetTitle } from "@/components/ui/sheet";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Icons } from "@/components/ui/icons"; // Importa tus iconos personalizados
@@ -12,6 +13,10 @@ const Sidebar = () => {
 
   const toggleSubMenu = (menu) => {
     setOpenMenu(openMenu === menu ? null : menu); // Alterna submenú
+  };
+
+  const handleSidebarClose = () => {
+    setIsSidebarOpen(false); // Cierra el sidebar al hacer clic en una opción
   };
 
   return (
@@ -27,7 +32,7 @@ const Sidebar = () => {
 
       {/* Sidebar */}
       <Sheet open={isSidebarOpen} onOpenChange={setIsSidebarOpen}>
-        <SheetContent className="w-72 max-h-screen overflow-y-auto" side="left">
+        <SheetContent className="w-72 max-h-screen overflow-y-auto pointer-events-auto" side="left">
           {/* Título accesible */}
           <SheetTitle className="sr-only">Menú lateral</SheetTitle>
 
@@ -35,7 +40,6 @@ const Sidebar = () => {
           <div className="p-4 flex items-center space-x-3 border-b cursor-pointer">
             <Icons.logo className="w-6 h-6 text-cyan-500" />
             <span className="text-lg font-semibold">SoftByte</span>
-            {/* Botón para cerrar el sidebar */}
           </div>
 
           {/* Menú dinámico */}
@@ -48,7 +52,13 @@ const Sidebar = () => {
                   <Button
                     variant="ghost"
                     className="w-full justify-start text-left"
-                    onClick={() => toggleSubMenu(item.title)}
+                    onClick={() => {
+                      if (item.submenus.length === 0) {
+                        handleSidebarClose(); // Cierra el sidebar si no hay submenús
+                      } else {
+                        toggleSubMenu(item.title); // Alterna el submenú
+                      }
+                    }}
                   >
                     {IconComponent && (
                       <IconComponent className="mr-3 w-5 h-5 text-cyan-500" />
@@ -65,13 +75,14 @@ const Sidebar = () => {
                   {openMenu === item.title && item.submenus.length > 0 && (
                     <div className="ml-8 flex flex-col space-y-2 mt-2">
                       {item.submenus.map((submenu, subIndex) => (
-                        <a
+                        <Link
                           key={subIndex}
                           href={submenu.route}
                           className="text-sm text-gray-600 hover:text-cyan-500"
+                          onClick={handleSidebarClose} // Cierra el sidebar al hacer clic
                         >
                           {submenu.title}
-                        </a>
+                        </Link>
                       ))}
                     </div>
                   )}

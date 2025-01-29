@@ -31,7 +31,11 @@ const ArticlesPage = () => {
      // setLoading(false);
     }
   };
-
+  const truncateText = (text, maxLength = 50) => {
+    if (!text) return "N/A";
+    return text.length > maxLength ? text.substring(0, maxLength) + "..." : text;
+  };
+  
   useEffect(() => {
     fetchArticles();
   }, []);
@@ -71,21 +75,21 @@ const ArticlesPage = () => {
   return (
     <div className="p-6 space-y-6">
       {/* Panel de resumen */}
-      <div className="grid grid-cols-1 sm:grid-cols-4 gap-4">
+      <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
         <SummaryCard title="Total de Artículos" value={articles.length} />
         <SummaryCard
-          title="Más Caro"
-          value={mostExpensive.descripcion || "N/A"}
-          additionalInfo={`Q${mostExpensive.precio?.toFixed(2) || "0.00"}`}
-          valueColor="text-blue-600"
-        />
+  title="Más Caro"
+  value={mostExpensive.descripcion ? truncateText(mostExpensive.descripcion, 60) : "N/A"}
+  additionalInfo={`Q${mostExpensive.precio?.toFixed(2) || "0.00"}`}
+  valueColor="text-blue-600"
+/>
+
         <SummaryCard
           title="Más Económico"
           value={cheapest.descripcion || "N/A"}
           additionalInfo={`Q${cheapest.precio?.toFixed(2) || "0.00"}`}
           valueColor="text-green-600"
         />
-        <SummaryCard title="Valor Total" value={`Q${totalValue.toFixed(2)}`} valueColor="text-blue-600" />
       </div>
 
       {/* Categorías y recientes */}
