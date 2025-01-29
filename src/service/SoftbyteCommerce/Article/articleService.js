@@ -43,7 +43,18 @@ class ArticlesService {
     };
     
 
-        
+          /**
+     * Obtiene todos los artículos activos
+     * @returns {Promise} Lista de artículos activos
+     */
+    getAllArticles = () => {
+        const endpoint = this.endpoint.getAllArticles; // Usa el nuevo endpoint definido
+        return this.service.request({
+            method: 'GET',
+            endpoint,
+            headers: this.defaultHeaders,
+        });
+    };  
 
 }
 

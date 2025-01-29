@@ -11,6 +11,7 @@ module.exports = {
             timeout: 900000,
             endpoint: {
                 articles:{
+                    getAllArticles: "articulosTodos",
                     getArticles: "articulos",
                     getArticlesWholesale: "articulosMayoreo",
                     postArticles: "crearArticulos",
