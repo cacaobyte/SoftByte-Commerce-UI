@@ -39,7 +39,7 @@ export const sidebarItems = [
     route: "/inventario",
     submenus: [
       { title: "Artículos", route: "/Articles/ViewArticles" },
-      { title: "Nuevo artículo", route: "/inventario/crear-articulo" },
+      { title: "Nuevo artículo", route: "/Articles/CreateArticles" },
       { title: "Recuento", route: "/inventario/tomar-inventario" },
       { title: "Bodegas", route: "/inventario/bodegas" },
       { title: "Nueva bodega", route: "/inventario/crear-bodega" },

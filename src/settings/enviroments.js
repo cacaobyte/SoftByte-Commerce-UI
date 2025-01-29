@@ -13,6 +13,7 @@ module.exports = {
                 articles:{
                     getArticles: "articulos",
                     getArticlesWholesale: "articulosMayoreo",
+                    postArticles: "crearArticulos",
                 },
                 categories:{
                     getCategories: "categorias",
