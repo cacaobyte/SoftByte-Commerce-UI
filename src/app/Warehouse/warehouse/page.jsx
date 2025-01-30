@@ -2,17 +2,26 @@
 import { useState, useEffect } from "react";
 import WarehouseService from "../../../service/SoftbyteCommerce/Sales/Warehouse/warehouseService";
 import DataTable from "@/components/shared/DataTable/DataTable";
-import { Eye, Pencil, Trash, ToggleLeft, ToggleRight } from "lucide-react";
+import { warehouseColumns } from "@/models/Warehouse/warehouse/warehouseModel";
+import { getWarehouseActions  } from "@/models/Warehouse/warehouse/warehouseProps";
+import GenericModal from "@/components/shared/Modal/Modal";
+
 
 const WarehousePage = () => {
     const [warehouse, setWarehouse] = useState([]);
     const [error, setError] = useState(null);
+    const [modalOpen, setModalOpen] = useState(false);
+    const [selectedWarehouse, setSelectedWarehouse] = useState(null);
 
     const warehouseService = new WarehouseService();
 
-    useEffect(() => {
-        fetchWarehouse();
-    }, []);
+    const handleView = (row) => {
+        setSelectedWarehouse(row);  
+        setModalOpen(true);         
+    };
+    
+    const handleEdit = (row) => alert(`Editar ${row.descripcion}`);
+    const handleToggle = (row) => alert(`Desactivar ${row.descripcion}`);
 
     const fetchWarehouse = async () => {
         try {
@@ -28,22 +37,32 @@ const WarehousePage = () => {
         } 
     };
 
-    const columns = [
-        { key: "bodega1", label: "Bodega" },
-        { key: "descripcion", label: "Descripción" },
-        { key: "departamento", label: "Departamento" },
-        { key: "municipio", label: "Municipio" },
-        { key: "direccion", label: "Dirección" },
-        { key: "telefono", label: "Teléfono" }
-    ];
+    const actions = getWarehouseActions({
+        onView: handleView,
+        onEdit: handleEdit,
+        onToggle: handleToggle
+    });
 
-    const actions = [
-        { label: "Ver", icon: Eye, variant: "ghost", onClick: (row) => alert(`Ver detalles de ${row.descripcion}`) },
-        { label: "Editar", icon: Pencil, variant: "outline", onClick: (row) => alert(`Editar ${row.descripcion}`) },
-        { label: "Desactivar", icon: ToggleLeft, variant: "destructive", onClick: (row) => alert(`Eliminar ${row.descripcion}`) },
-    ];
+    useEffect(() => {
+        fetchWarehouse();
+    }, []);
 
-    return <DataTable columns={columns} data={warehouse} searchField="descripcion" showActions={true} actions={actions} />;
+
+    return (
+    <div>
+        <DataTable columns={warehouseColumns} data={warehouse} searchField="descripcion" showActions={true} actions={actions} />
+        {selectedWarehouse && (
+                <GenericModal 
+                    isOpen={modalOpen}
+                    onClose={() => setModalOpen(false)}
+                    title="Detalles de Bodega"
+                    data={selectedWarehouse}
+                    model={warehouseColumns}
+                    hasImage={false} 
+                />
+            )}
+    </div>
+    )
 };
 
 export default WarehousePage;
