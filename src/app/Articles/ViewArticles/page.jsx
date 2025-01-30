@@ -27,9 +27,7 @@ const ArticlesPage = () => {
       setFilteredArticles(response.data);
     } catch (err) {
       setError("Error al cargar los artículos.");
-    } finally {
-     // setLoading(false);
-    }
+    } 
   };
   const truncateText = (text, maxLength = 50) => {
     if (!text) return "N/A";

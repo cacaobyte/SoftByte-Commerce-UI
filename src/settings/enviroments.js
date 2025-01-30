@@ -1,3 +1,4 @@
+const { Warehouse } = require("lucide-react");
 
 const environment = "https://localhost:32769/api/cc/warehouse/";
 //Produccion
@@ -15,6 +16,10 @@ module.exports = {
                     getArticles: "articulos",
                     getArticlesWholesale: "articulosMayoreo",
                     postArticles: "crearArticulos",
+                    /*Pendientes
+                    Actualizar articulos
+                    desactivar acticulos
+                    */
                 },
                 categories:{
                     getCategories: "categorias",
@@ -25,6 +30,12 @@ module.exports = {
                 sales:{
                     getSales: "ventas",
                 },
+                Warehouse:{
+                    getWarehouse: "bodegas",
+                    postWarehouse: "crearBodega",
+                    putWarehouse: "editarBodega",
+                    deleteWarehouse: "desactivarBodega",
+                }
 
             }
         }
