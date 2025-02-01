@@ -32,7 +32,7 @@ module.exports = {
                 },
                 Warehouse:{
                     getWarehouse: "bodegas",
-                    postWarehouse: "crearBodega",
+                    CreateWarehouse: "logistic/addWarehouse",
                     putWarehouse: "logistic/updateWarehouse/{0}",
                 }
 

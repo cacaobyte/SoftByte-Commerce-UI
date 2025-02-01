@@ -6,12 +6,16 @@ import { warehouseColumns } from "@/models/Warehouse/warehouse/warehouseModel";
 import { getWarehouseActions } from "@/models/Warehouse/warehouse/warehouseProps";
 import GenericModal from "@/components/shared/Modal/Modal";
 import { toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+import ConfirmationModal from "../../../components/shared/Modal/ConfirmationModal";
 
 const WarehousePage = () => {
     const [warehouse, setWarehouse] = useState([]);
     const [error, setError] = useState(null);
     const [modalOpen, setModalOpen] = useState(false);
+    const [confirmModalOpen, setConfirmModalOpen] = useState(false);
     const [selectedWarehouse, setSelectedWarehouse] = useState(null);
+    const [loading, setLoading] = useState(false);
 
     const warehouseService = new WarehouseService();
 
@@ -40,26 +44,38 @@ const WarehousePage = () => {
 
     const handleEdit = (row) => alert(`Editar ${row.descripcion}`);
 
-    const handleToggle = async (row) => {
-        const newStatus = !row.activo;
+    const handleConfirmToggle = (row) => {
+        setSelectedWarehouse(row);
+        setConfirmModalOpen(true);
+    };
+
+    const handleToggle = async () => {
+        if (!selectedWarehouse) return;
+        setLoading(true);
+
         try {
-            await warehouseService.putWarehouseId(row.bodega1);
+            const response = await warehouseService.putWarehouseId(selectedWarehouse.bodega1);
+            const message = response.data?.message || "Estado actualizado con éxito.";
+
             setWarehouse(prev =>
                 prev.map(bodega =>
-                    bodega.bodega1 === row.bodega1 ? { ...bodega, activo: newStatus } : bodega
+                    bodega.bodega1 === selectedWarehouse.bodega1 ? { ...bodega, activo: !bodega.activo } : bodega
                 )
             );
-            toast.success(`Bodega ${row.descripcion} ${newStatus ? "activada" : "desactivada"} con éxito.`);
+
+            toast.success(message);
         } catch (error) {
             toast.error("Error al cambiar el estado de la bodega.");
+        } finally {
+            setConfirmModalOpen(false);
+            setLoading(false);
         }
     };
 
-    // Se generan las acciones una sola vez para evitar llamadas innecesarias
     const actions = getWarehouseActions({
         onView: handleView,
         onEdit: handleEdit,
-        onToggle: handleToggle
+        onToggle: handleConfirmToggle
     });
 
     return (
@@ -69,8 +85,9 @@ const WarehousePage = () => {
                 data={warehouse}
                 searchField="descripcion"
                 showActions={true}
-                actions={actions} // Aquí se pasa correctamente
+                actions={actions}
             />
+
             {selectedWarehouse && (
                 <GenericModal 
                     isOpen={modalOpen}
@@ -81,6 +98,16 @@ const WarehousePage = () => {
                     hasImage={false} 
                 />
             )}
+
+            <ConfirmationModal
+                isOpen={confirmModalOpen}
+                onClose={() => setConfirmModalOpen(false)}
+                onConfirm={handleToggle}
+                title="Confirmar acción"
+                description={`¿Estás seguro de que deseas ${selectedWarehouse?.activo ? "desactivar" : "activar"} la bodega "${selectedWarehouse?.descripcion}"?`}
+                confirmText={selectedWarehouse?.activo ? "Desactivar" : "Activar"}
+                loading={loading}
+            />
         </div>
     );
 };

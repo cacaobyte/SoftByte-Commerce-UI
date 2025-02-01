@@ -3,6 +3,8 @@ import Sidebar from "@/components/sidebar/Sidebar"; // Sidebar mejorado
 import Topbar from "@/components/sidebar/Topbar"; // Topbar mejorado
 import { Geist, Azeret_Mono as Geist_Mono } from "next/font/google";
 import "../styles/globals.css";
+import { ToastContainer } from "react-toastify"; // Importa ToastContainer
+import "react-toastify/dist/ReactToastify.css"; // Asegura los estilos de Toastify
 
 // Configuración de las fuentes
 const geistSans = Geist({
@@ -42,6 +44,29 @@ export default function RootLayout({ children }) {
           <div className="flex-1 flex flex-col overflow-hidden">
             {/* Topbar */}
             <Topbar />
+
+            {/* Contenedor de Toasts */}
+            <ToastContainer
+              position="top-center"
+              autoClose={3000}
+              hideProgressBar={false}
+              newestOnTop={true}
+              closeOnClick
+              rtl={false}
+              pauseOnFocusLoss
+              draggable
+              pauseOnHover
+              style={{
+                top: "50%",
+                left: "50%",
+                transform: "translate(-50%, -50%)",
+                width: "90%",
+                maxWidth: "400px"
+              }}
+            />
+
+
+
 
             {/* Contenido dinámico */}
             <main className="flex-1 overflow-y-auto bg-gray-100 dark:bg-gray-900 p-6">

@@ -30,7 +30,15 @@ class WarehouseService {
         });
     };
     
-
+    createWarehouse = (warehouse) => {
+        const endpoint = this.endpoint.CreateWarehouse; 
+        return this.service.request({
+            method: 'POST',
+            endpoint,
+            data: warehouse,
+            headers: this.defaultHeaders, 
+        });
+    };
 
 }
 
