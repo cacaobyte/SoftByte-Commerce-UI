@@ -33,8 +33,7 @@ module.exports = {
                 Warehouse:{
                     getWarehouse: "bodegas",
                     postWarehouse: "crearBodega",
-                    putWarehouse: "editarBodega",
-                    deleteWarehouse: "desactivarBodega",
+                    putWarehouse: "logistic/updateWarehouse/{0}",
                 }
 
             }

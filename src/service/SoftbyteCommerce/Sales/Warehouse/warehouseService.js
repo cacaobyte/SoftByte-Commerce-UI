@@ -21,6 +21,16 @@ class WarehouseService {
         });
     };
 
+    putWarehouseId = (warehouseId) => {
+        const endpoint = this.endpoint.putWarehouse.replace("{0}", warehouseId); 
+        return this.service.request({
+            method: 'PUT',
+            endpoint,
+            headers: this.defaultHeaders, 
+        });
+    };
+    
+
 
 }
 
