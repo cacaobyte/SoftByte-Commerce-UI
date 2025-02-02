@@ -41,9 +41,9 @@ export const sidebarItems = [
       { title: "Artículos", route: "/Articles/ViewArticles" },
       { title: "Nuevo artículo", route: "/Articles/CreateArticles" },
       { title: "Recuento", route: "/inventario/tomar-inventario" },
-      { title: "Bodegas", route: "/inventario/bodegas" },
-      { title: "Nueva bodega", route: "/inventario/crear-bodega" },
-      { title: "Asignaciones", route: "/inventario/asignar-articulo-bodega" },
+      { title: "Bodegas", route: "/Warehouse/warehouse" },
+      { title: "Nueva bodega", route: "/Warehouse/newWarehouse" },
+      { title: "Asignaciones", route: "/Warehouse/assignWarehouse" },
     ],
   },
   

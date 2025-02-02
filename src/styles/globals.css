@@ -65,3 +65,18 @@
   }
 }
 
+
+.Toastify__toast-container--top-center {
+  top: 50% !important;
+  left: 50% !important;
+  transform: translate(-50%, -50%) !important;
+  width: 90% !important; /* Que no sea demasiado ancho en móviles */
+  max-width: 400px !important; /* No debe ser muy grande en pantallas grandes */
+}
+
+@media (max-width: 768px) {
+  .Toastify__toast-container--top-center {
+    top: 55% !important; /* Lo ajustamos un poco más abajo */
+    width: 95% !important; /* Más estrecho en móviles */
+  }
+}
