@@ -27,9 +27,7 @@ const ArticlesPage = () => {
       setFilteredArticles(response.data);
     } catch (err) {
       setError("Error al cargar los artículos.");
-    } finally {
-     // setLoading(false);
-    }
+    } 
   };
   const truncateText = (text, maxLength = 50) => {
     if (!text) return "N/A";
@@ -67,11 +65,13 @@ const ArticlesPage = () => {
   const cheapest = articles.reduce((prev, current) => (prev.precio < current.precio ? prev : current), {});
   const categories = [...new Set(articles.map((article) => article.categoria))];
   const recentArticles = articles.slice(-3);
+
     if(!hasMounted) {
         return  <div className="">
         <div className=""><LoadingScreen message="Preparando tu experiencia..."/></div>
       </div>;
       }
+      
   return (
     <div className="p-6 space-y-6">
       {/* Panel de resumen */}
