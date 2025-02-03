@@ -34,8 +34,10 @@ module.exports = {
                     getWarehouse: "bodegas",
                     CreateWarehouse: "logistic/addWarehouse",
                     putWarehouse: "logistic/updateWarehouse/{0}",
+                },
+                Regions:{
+                    getRegions: "logistic/regions",
                 }
-
             }
         }
     }

@@ -1,5 +1,5 @@
 "use client";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
@@ -7,10 +7,12 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { toast } from "react-toastify";
 import { Loader2, PlusCircle } from "lucide-react";
 import WarehouseService from "../../../service/SoftbyteCommerce/Sales/Warehouse/warehouseService";
+import RegionsService from "../../../service/SoftbyteCommerce/Sales/Warehouse/regionsService"; // Importa el servicio de regiones
 import { Checkbox } from "@/components/ui/checkbox"; // Importar checkbox de ShadCN
 
 const NewWarehousePage = () => {
     const warehouseService = new WarehouseService();
+    const regionsService = new RegionsService();
 
     const [warehouse, setWarehouse] = useState({
         descripcion: "",
@@ -23,7 +25,21 @@ const NewWarehousePage = () => {
         bodegacentral: false, // Es Bodega Principal
     });
 
+    const [regions, setRegions] = useState([]); // Estado para almacenar las regiones
     const [loading, setLoading] = useState(false);
+
+    useEffect(() => {
+        const fetchRegions = async () => {
+            try {
+                const response = await regionsService.getRegions();
+                setRegions(response.data);
+            } catch (error) {
+                console.error("Error al obtener las regiones:", error);
+            }
+        };
+
+        fetchRegions();
+    }, []);
 
     const handleChange = (e) => {
         const { name, value } = e.target;
@@ -45,17 +61,7 @@ const NewWarehousePage = () => {
         setLoading(true);
 
         try {
-            // Simulación de usuario autenticado (esto debe tomarse del contexto de autenticación si existe)
-            const usuarioActual = "Admin123";
-
-            // Construir el objeto que se enviará al backend
-            const warehouseData = {
-                ...warehouse,
-                createdby: usuarioActual, // Asigna el usuario creador
-                updatedby: usuarioActual, // Asigna el usuario actualizador
-            };
-
-            const response = await warehouseService.createWarehouse(warehouseData);
+            const response = await warehouseService.createWarehouse(warehouse);
             toast.success(response.data.message);
 
             setWarehouse({
@@ -137,14 +143,23 @@ const NewWarehousePage = () => {
                             />
                         </div>
 
+                        {/* Select para Región */}
                         <div>
                             <Label>Región</Label>
-                            <Input
-                                type="text"
+                            <select
                                 name="region"
                                 value={warehouse.region}
                                 onChange={handleChange}
-                            />
+                                className="w-full p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                                required
+                            >
+                                <option value="" disabled>Seleccione una región</option>
+                                {regions.map((region) => (
+                                    <option key={region.idRegion} value={region.nombre}>
+                                        {region.nombre}
+                                    </option>
+                                ))}
+                            </select>
                         </div>
 
                         <div>
