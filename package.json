@@ -42,6 +42,7 @@
     "tailwind-variants": "^0.3.1",
     "tailwindcss-accessibility": "^1.0.0",
     "tailwindcss-animate": "^1.0.7",
+    "territory-gt": "^1.0.5",
     "xlsx": "^0.18.5"
   },
   "devDependencies": {

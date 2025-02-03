@@ -7,8 +7,9 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { toast } from "react-toastify";
 import { Loader2, PlusCircle } from "lucide-react";
 import WarehouseService from "../../../service/SoftbyteCommerce/Sales/Warehouse/warehouseService";
-import RegionsService from "../../../service/SoftbyteCommerce/Sales/Warehouse/regionsService"; // Importa el servicio de regiones
-import { Checkbox } from "@/components/ui/checkbox"; // Importar checkbox de ShadCN
+import RegionsService from "../../../service/SoftbyteCommerce/Sales/Warehouse/regionsService"; // Servicio de regiones
+import { Checkbox } from "@/components/ui/checkbox";
+import GT from "territory-gt"; // 📌 Importar librería de departamentos y municipios
 
 const NewWarehousePage = () => {
     const warehouseService = new WarehouseService();
@@ -25,21 +26,27 @@ const NewWarehousePage = () => {
         bodegacentral: false, // Es Bodega Principal
     });
 
-    const [regions, setRegions] = useState([]); // Estado para almacenar las regiones
+    const [departments, setDepartments] = useState([]);
+    const [municipalities, setMunicipalities] = useState([]);
+    const [regions, setRegions] = useState([]);
     const [loading, setLoading] = useState(false);
 
     useEffect(() => {
-        const fetchRegions = async () => {
-            try {
-                const response = await regionsService.getRegions();
-                setRegions(response.data);
-            } catch (error) {
-                console.error("Error al obtener las regiones:", error);
-            }
-        };
+        // Obtener departamentos desde `territory-gt`
+        setDepartments(GT.departamentos());
 
+        // Obtener regiones desde el servicio
         fetchRegions();
     }, []);
+
+    const fetchRegions = async () => {
+        try {
+            const response = await regionsService.getRegions();
+            setRegions(response.data);
+        } catch (error) {
+            console.error("Error al obtener regiones:", error);
+        }
+    };
 
     const handleChange = (e) => {
         const { name, value } = e.target;
@@ -47,6 +54,12 @@ const NewWarehousePage = () => {
             ...prev,
             [name]: value,
         }));
+
+        // Si cambia el departamento, actualizar municipios dinámicamente
+        if (name === "departamento") {
+            setMunicipalities(GT.municipios(value) || []);
+            setWarehouse((prev) => ({ ...prev, municipio: "" })); // Reset municipio al cambiar departamento
+        }
     };
 
     const handleCheckboxChange = () => {
@@ -101,26 +114,43 @@ const NewWarehousePage = () => {
                             />
                         </div>
 
+                        {/* Select para Departamento */}
                         <div>
                             <Label>Departamento</Label>
-                            <Input
-                                type="text"
+                            <select
                                 name="departamento"
                                 value={warehouse.departamento}
                                 onChange={handleChange}
+                                className="w-full p-2 border border-gray-300 rounded-md"
                                 required
-                            />
+                            >
+                                <option value="" disabled>Seleccione un departamento</option>
+                                {departments.map((dep, index) => (
+                                    <option key={index} value={dep}>
+                                        {dep}
+                                    </option>
+                                ))}
+                            </select>
                         </div>
 
+                        {/* Select para Municipio */}
                         <div>
                             <Label>Municipio</Label>
-                            <Input
-                                type="text"
+                            <select
                                 name="municipio"
                                 value={warehouse.municipio}
                                 onChange={handleChange}
+                                className="w-full p-2 border border-gray-300 rounded-md"
                                 required
-                            />
+                                disabled={!warehouse.departamento}
+                            >
+                                <option value="" disabled>Seleccione un municipio</option>
+                                {municipalities.map((mun, index) => (
+                                    <option key={index} value={mun}>
+                                        {mun}
+                                    </option>
+                                ))}
+                            </select>
                         </div>
 
                         <div>
@@ -150,13 +180,13 @@ const NewWarehousePage = () => {
                                 name="region"
                                 value={warehouse.region}
                                 onChange={handleChange}
-                                className="w-full p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                                className="w-full p-2 border border-gray-300 rounded-md"
                                 required
                             >
                                 <option value="" disabled>Seleccione una región</option>
-                                {regions.map((region) => (
-                                    <option key={region.idRegion} value={region.nombre}>
-                                        {region.nombre}
+                                {regions.map((reg, index) => (
+                                    <option key={index} value={reg.nombre}>
+                                        {reg.nombre}
                                     </option>
                                 ))}
                             </select>
@@ -182,27 +212,9 @@ const NewWarehousePage = () => {
                             <Label htmlFor="bodegacentral">Es Bodega Principal</Label>
                         </div>
 
-                        <div className="flex justify-between space-x-4 mt-4">
-                            <Button
-                                type="button"
-                                variant="outline"
-                                onClick={() => setWarehouse({
-                                    descripcion: "",
-                                    departamento: "",
-                                    municipio: "",
-                                    direccion: "",
-                                    telefono: "",
-                                    region: "",
-                                    correo: "",
-                                    bodegacentral: false,
-                                })}
-                            >
-                                Cancelar
-                            </Button>
-                            <Button type="submit" className="w-full flex items-center justify-center" disabled={loading}>
-                                {loading ? <Loader2 className="animate-spin mr-2" size={16} /> : "Crear Bodega"}
-                            </Button>
-                        </div>
+                        <Button type="submit" className="w-full flex items-center justify-center" disabled={loading}>
+                            {loading ? <Loader2 className="animate-spin mr-2" size={16} /> : "Crear Bodega"}
+                        </Button>
                     </form>
                 </CardContent>
             </Card>
