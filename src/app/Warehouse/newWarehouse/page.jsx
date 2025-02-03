@@ -1,14 +1,14 @@
 "use client";
 import { useState, useEffect } from "react";
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import WarehouseService from "../../../service/SoftbyteCommerce/Sales/Warehouse/warehouseService";
 import RegionsService from "../../../service/SoftbyteCommerce/Sales/Warehouse/regionsService";
 import DynamicForm from "@/components/shared/Forms/DynamicForm";
 import GT from "territory-gt";
 import createWarehouseModel from "@/models/Warehouse/createWarehouse/createWarehouseModel";
+import { toast } from "react-toastify";
 
-const NewWarehousePage = () => {
+const NewWarehousePage = ({ onClose }) => {
     const warehouseService = new WarehouseService();
     const regionsService = new RegionsService();
 
@@ -19,7 +19,6 @@ const NewWarehousePage = () => {
         departamento: "",
         municipio: "",
     });
-    const [open, setOpen] = useState(false);
 
     useEffect(() => {
         setDepartments(GT.departamentos());
@@ -54,31 +53,24 @@ const NewWarehousePage = () => {
     const warehouseModel = createWarehouseModel(departments, municipalities, regions, handleDepartmentChange);
 
     const handleSubmit = async (formData) => {
-        await warehouseService.createWarehouse(formData);
-        setOpen(false);
+        try {
+            await warehouseService.createWarehouse(formData);
+            toast.success("Bodega creada con éxito.");
+            onClose(); // Cierra el modal después de guardar
+        } catch (error) {
+            toast.error("Error al crear la bodega.");
+        }
     };
 
     return (
-        <div className="flex justify-end p-4">
-            <Dialog open={open} onOpenChange={setOpen}>
-                <DialogTrigger asChild>
-                    <Button className="bg-black text-white">Nueva Bodega</Button>
-                </DialogTrigger>
-                <DialogContent className="max-w-3xl p-6 rounded-lg shadow-md bg-white">
-                    <DialogHeader>
-                        <DialogTitle className="text-lg font-semibold">Nueva Bodega</DialogTitle>
-                    </DialogHeader>
-                    <div className="w-full max-w-2xl mx-auto">
-                        <DynamicForm
-                            model={warehouseModel}
-                            title=""
-                            onSubmit={handleSubmit}
-                            initialValues={warehouseData}
-                            columns={2} 
-                        />
-                    </div>
-                </DialogContent>
-            </Dialog>
+        <div className="w-full max-w-2xl mx-auto">
+            <DynamicForm
+                model={warehouseModel}
+                title=""
+                onSubmit={handleSubmit}
+                initialValues={warehouseData}
+                columns={2}
+            />
         </div>
     );
 };
