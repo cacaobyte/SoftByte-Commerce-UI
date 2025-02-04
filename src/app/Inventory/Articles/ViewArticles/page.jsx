@@ -1,13 +1,13 @@
 'use client';
 import React, { useState, useEffect } from "react";
-import ArticlesService from "../../../service/SoftbyteCommerce/Article/articleService";
-import ArticlesChart from "../../../components/Articles/ArticlesChart";
-import ArticlesTable from "../../../components/Articles/ArticlesTable";
-import SummaryCard from "../../../components/Articles/SummaryCard";
-import CategoriesCard from "../../../components/Articles/CategoriesCard";
-import RecentArticlesCard from "../../../components/Articles/RecentArticlesCard";
-import { useHasMounted } from '../../../hooks/useHasMounted';
-import LoadingScreen from "../../../components/UseHasMounted/LoadingScreen"
+import ArticlesService from "../../../../service/SoftbyteCommerce/Article/articleService";
+import ArticlesChart from "../../../../components/Articles/ArticlesChart";
+import ArticlesTable from "../.././../../components/Articles/ArticlesTable";
+import SummaryCard from "../../../../components/Articles/SummaryCard";
+import CategoriesCard from "../../../../components/Articles/CategoriesCard";
+import RecentArticlesCard from "../../../../components/Articles/RecentArticlesCard";
+import { useHasMounted } from '../../../../hooks/useHasMounted';
+import LoadingScreen from "../../../../components/UseHasMounted/LoadingScreen"
 
 const ArticlesPage = () => {
   const [articles, setArticles] = useState([]);

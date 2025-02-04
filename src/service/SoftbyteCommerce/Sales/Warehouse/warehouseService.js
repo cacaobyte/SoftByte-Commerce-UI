@@ -29,6 +29,20 @@ class WarehouseService {
             headers: this.defaultHeaders, 
         });
     };
+
+    putWarehouse = (warehouse, warehouseId) => {
+        if (!warehouseId) {
+            console.error("Error: warehouseId es inválido.");
+            return Promise.reject(new Error("warehouseId no puede ser nulo o indefinido"));
+        }
+        const endpoint = this.endpoint.editWarehouse.replace("{0}", warehouseId); 
+        return this.service.request({
+            method: 'PUT',
+            endpoint,
+            data: warehouse,
+            headers: this.defaultHeaders, 
+        });
+    };
     
     createWarehouse = (warehouse) => {
         const endpoint = this.endpoint.CreateWarehouse; 
