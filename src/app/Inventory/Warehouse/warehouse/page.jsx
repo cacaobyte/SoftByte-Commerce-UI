@@ -1,4 +1,5 @@
 "use client";
+
 import { useState, useEffect } from "react";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
@@ -9,8 +10,8 @@ import GenericModal from "@/components/shared/Modal/Modal";
 import ConfirmationModal from "@/components/shared/Modal/ConfirmationModal";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import WarehouseService from "../../../service/SoftbyteCommerce/Sales/Warehouse/warehouseService";
-import RegionsService from "../../../service/SoftbyteCommerce/Sales/Warehouse/regionsService";
+import WarehouseService from "../../../../service/SoftbyteCommerce/Sales/Warehouse/warehouseService";
+import RegionsService from "../../../../service/SoftbyteCommerce/Sales/Warehouse/regionsService";
 import DynamicForm from "@/components/shared/Forms/DynamicForm";
 import InfoCard from "@/components/shared/Cards/InfoCard";
 import { BuildingStorefrontIcon } from "@heroicons/react/24/outline";
@@ -119,7 +120,7 @@ const WarehousePage = () => {
             setWarehouse(prev => prev.map(bodega =>
                 bodega.bodega1 === selectedWarehouse.bodega1 ? { ...bodega, activo: !bodega.activo } : bodega
             ));
-            toast.success("Estado actualizado con éxito.");
+            toast.success(`Bodega ${selectedWarehouse?.activo ? "desactivada" : "activada"} con éxito.`);
         } catch (error) {
             toast.error("Error al cambiar el estado de la bodega.");
         } finally {
@@ -200,6 +201,17 @@ const WarehousePage = () => {
                     />
                 </DialogContent>
             </Dialog>
+
+            {/* 🔄 MODAL CONFIRMACIÓN DE ACTIVACIÓN/DESACTIVACIÓN */}
+            <ConfirmationModal
+                isOpen={confirmModalOpen}
+                onClose={() => setConfirmModalOpen(false)}
+                onConfirm={handleToggle}
+                title="Confirmar acción"
+                description={`¿Estás seguro de que deseas ${selectedWarehouse?.activo ? "desactivar" : "activar"} la bodega "${selectedWarehouse?.descripcion}"?`}
+                confirmText={selectedWarehouse?.activo ? "Desactivar" : "Activar"}
+                loading={loading}
+            />
         </div>
     );
 };

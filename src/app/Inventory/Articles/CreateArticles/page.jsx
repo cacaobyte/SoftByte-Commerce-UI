@@ -5,9 +5,9 @@ import { Button } from "@/components/ui/button";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import ArticleForm from "@/components/Articles/ArticleForm";
 import ArticlesService from "@/service/SoftbyteCommerce/Article/articleService";
-import { useHasMounted } from '../../../hooks/useHasMounted';
+import { useHasMounted } from '../../../../hooks/useHasMounted';
 import ArticleCarousel from "@/components/Articles/ArticleCarousel";
-import LoadingScreen from "../../../components/UseHasMounted/LoadingScreen"
+import LoadingScreen from "../../../../components/UseHasMounted/LoadingScreen"
 
 const articlesService = new ArticlesService();
 
