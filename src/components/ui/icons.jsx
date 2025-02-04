@@ -38,5 +38,5 @@ export const Icons = {
   help: FaQuestionCircle, // Ícono para Soporte
   RiDashboard3Fill,
   FcSalesPerformance,
-  FaUsersViewfinder
+  FaUsersViewfinder,
 };

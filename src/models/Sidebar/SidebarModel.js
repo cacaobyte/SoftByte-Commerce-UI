@@ -38,12 +38,11 @@ export const sidebarItems = [
     icon: "warehouse",
     route: "/inventario",
     submenus: [
-      { title: "Artículos", route: "/Articles/ViewArticles" },
-      { title: "Nuevo artículo", route: "/Articles/CreateArticles" },
+      { title: "Artículos", route: "/Inventory/Articles/ViewArticles" },
+      { title: "Nuevo artículo", route: "/Inventory/Articles/CreateArticles" },
       { title: "Recuento", route: "/inventario/tomar-inventario" },
-      { title: "Bodegas", route: "/Warehouse/warehouse" },
-      { title: "Nueva bodega", route: "/Warehouse/newWarehouse" },
-      { title: "Asignaciones", route: "/Warehouse/assignWarehouse" },
+      { title: "Bodegas", route: "/Inventory/Warehouse/warehouse" },
+      { title: "Asignaciones", route: "/Inventory/Warehouse/assignWarehouse" },
     ],
   },
   
