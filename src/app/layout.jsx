@@ -6,7 +6,6 @@ import "../styles/globals.css";
 import { ToastContainer } from "react-toastify"; // Importa ToastContainer
 import "react-toastify/dist/ReactToastify.css"; // Asegura los estilos de Toastify
 
-// Configuración de las fuentes
 const geistSans = Geist({
   variable: "--font-geist-sans",
   subsets: ["latin"],
