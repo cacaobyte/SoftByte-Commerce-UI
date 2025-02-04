@@ -1,6 +1,6 @@
 import React from "react";
-import Sidebar from "@/components/sidebar/Sidebar"; // Sidebar mejorado
-import Topbar from "@/components/sidebar/Topbar"; // Topbar mejorado
+import Sidebar from "../components/Sidebar/Sidebar"; // Sidebar mejorado
+import Topbar from "../components/sidebar/Topbar"; // Topbar mejorado
 import { Geist, Azeret_Mono as Geist_Mono } from "next/font/google";
 import "../styles/globals.css";
 import { ToastContainer } from "react-toastify"; // Importa ToastContainer
