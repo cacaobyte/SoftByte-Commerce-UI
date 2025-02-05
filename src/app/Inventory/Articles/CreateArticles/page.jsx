@@ -47,26 +47,27 @@ const CreateArticles = () => {
         }
     };
 
-    const handleCategoryChange = (categoryId) => {
-        const selectedCategory = categories.find(cat => cat.categoryId === parseInt(categoryId));
-
+    const handleCategoryChange = (categoryName) => {
+        const selectedCategory = categories.find(cat => cat.name === categoryName);
+    
         setFormData((prev) => ({
             ...prev,
             categoria: selectedCategory ? selectedCategory.name : "", // Guarda el nombre en lugar del ID
-            subCategoria: "", // Se resetea la subcategoría al cambiar la categoría
+            subCategoria: "", // Resetea la subcategoría al cambiar la categoría
         }));
-
+    
         setSubcategories(selectedCategory ? selectedCategory.subcategoriaList : []);
     };
-
-    const handleSubCategoryChange = (subCategoryId) => {
-        const selectedSubCategory = subcategories.find(sub => sub.idSubcategoria === parseInt(subCategoryId));
-
+    
+    const handleSubCategoryChange = (subCategoryName) => {
+        const selectedSubCategory = subcategories.find(sub => sub.name === subCategoryName);
+    
         setFormData((prev) => ({
             ...prev,
             subCategoria: selectedSubCategory ? selectedSubCategory.name : "", // Guarda el nombre en lugar del ID
         }));
     };
+    
 
     const handleCreateArticle = async (formData) => {
         try {
@@ -90,7 +91,6 @@ const CreateArticles = () => {
 
             await articlesService.createArticle(formDataToSend);
 
-            alert("Artículo creado con éxito");
             setIsOpen(false);
             fetchArticles();
         } catch (error) {
@@ -106,24 +106,36 @@ const CreateArticles = () => {
             label: "Categoría",
             type: "select",
             required: true,
-            options: categories.map(cat => ({ label: cat.name, value: cat.categoryId.toString() })),
-            onChange: (value) => handleCategoryChange(value)
+            options: categories.map(cat => ({ label: cat.name, value: cat.name })), // Se guarda el nombre
+            onChange: handleCategoryChange
         },
         {
             name: "subCategoria",
             label: "SubCategoría",
             type: "select",
             required: true,
-            options: subcategories.map(sub => ({ label: sub.name, value: sub.idSubcategoria.toString() })),
+            options: subcategories.map(sub => ({ label: sub.name, value: sub.name })), // Se guarda el nombre
             disabled: subcategories.length === 0,
-            onChange: (value) => handleSubCategoryChange(value)
+            onChange: handleSubCategoryChange
         },
-        { name: "clasificacion", label: "Clasificación", type: "text" },
+        {
+            name: "clasificacion",
+            label: "Clasificación",
+            type: "select",
+            required: true,
+            options: [
+                { label: "Ventas", value: "Ventas" },
+                { label: "Consumo", value: "Consumo" },
+                { label: "Marketing / Propaganda", value: "Marketing / Propaganda" }
+            ]
+        },
         { name: "precio", label: "Precio", type: "number", required: true },
         { name: "pesoNeto", label: "Peso Neto (kg)", type: "number", placeholder: "Ej: 5.5" },
         { name: "pesoBruto", label: "Peso Bruto (kg)", type: "number", placeholder: "Ej: 6.2" },
         { name: "imageFile", label: "Imagen", type: "file", accept: "image/*" },
     ];
+    
+    
 
     if (!hasMounted) {
         return (
