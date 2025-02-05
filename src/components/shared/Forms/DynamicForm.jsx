@@ -13,24 +13,33 @@ const DynamicForm = ({ model, title, onSubmit, initialValues = {}, columns = 1 }
     const [loading, setLoading] = useState(false);
 
     useEffect(() => {
-        setFormData(initialValues);
+        setFormData((prev) => ({
+            ...prev,
+            ...initialValues, 
+        }));
     }, [initialValues]);
+    
 
     const handleChange = (e) => {
         const { name, value, type, checked } = e.target;
+    
         setFormData((prev) => ({
             ...prev,
             [name]: type === "checkbox" ? checked : value,
         }));
     };
+    
 
     const handleFileChange = (e) => {
         const { name, files } = e.target;
-        setFormData((prev) => ({
-            ...prev,
-            [name]: files[0],
-        }));
+        if (files.length > 0) {
+            setFormData((prev) => ({
+                ...prev,
+                [name]: files[0],  
+            }));
+        }
     };
+    
 
     const handleSubmit = async (e) => {
         e.preventDefault();

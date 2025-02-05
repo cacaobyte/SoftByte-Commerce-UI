@@ -4,19 +4,19 @@ import { useState, useEffect } from "react";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import DataTable from "@/components/shared/DataTable/DataTable";
-import { warehouseColumns } from "@/models/Warehouse/warehouse/warehouseModel";
-import { getWarehouseActions } from "@/models/Warehouse/warehouse/warehouseProps";
-import GenericModal from "@/components/shared/Modal/Modal";
-import ConfirmationModal from "@/components/shared/Modal/ConfirmationModal";
+import { warehouseColumns } from "../../../../models/Warehouse/warehouse/warehouseModel";
+import { getWarehouseActions } from "../../../../models/Warehouse/warehouse/warehouseProps";
+import GenericModal from "../../../../components/shared/Modal/Modal";
+import ConfirmationModal from "../../../../components/shared/Modal/ConfirmationModal";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import WarehouseService from "../../../../service/SoftbyteCommerce/Sales/Warehouse/warehouseService";
 import RegionsService from "../../../../service/SoftbyteCommerce/Sales/Warehouse/regionsService";
-import DynamicForm from "@/components/shared/Forms/DynamicForm";
-import InfoCard from "@/components/shared/Cards/InfoCard";
+import DynamicForm from "../../../../components/shared/Forms/DynamicForm";
+import InfoCard from "../../../../components/shared/Cards/InfoCard";
 import { BuildingStorefrontIcon } from "@heroicons/react/24/outline";
 import GT from "territory-gt";
-import createWarehouseModel from "@/models/Warehouse/createWarehouse/createWarehouseModel";
+import createWarehouseModel from "../../../../models/Warehouse/createWarehouse/createWarehouseModel";
 
 const WarehousePage = () => {
     const [warehouse, setWarehouse] = useState([]);
