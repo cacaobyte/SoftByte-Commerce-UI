@@ -1,8 +1,8 @@
 const { Warehouse } = require("lucide-react");
 
-const environment = "https://localhost:32771/api/cc/warehouse/";
+const environment = "https://localhost:32769/";
 //Produccion
-//const environment = "https://softbyte-commerce-api.onrender.com/api/cc/warehouse/";
+//const environment = "https://softbyte-commerce-api.onrender.com/";
 
 
 module.exports = {
@@ -12,18 +12,18 @@ module.exports = {
             timeout: 900000,
             endpoint: {
                 articles:{
-                    getAllArticles: "articulosTodos",
-                    getArticles: "articulos",
-                    getArticlesWholesale: "articulosMayoreo",
-                    postArticles: "crearArticulos",
+                    getAllArticles: "api/cc/warehouse/articulosTodos",
+                    getArticles: "api/cc/warehouse/articulos",
+                    getArticlesWholesale: "api/cc/warehouse/articulosMayoreo",
+                    postArticles: "api/cc/warehouse/crearArticulos",
                     /*Pendientes
                     Actualizar articulos
                     desactivar acticulos
                     */
                 },
                 categories:{
-                    getCategories: "logistic/categories",
-                    getCategoriesSubCategories: "logistic/categoriesSubCategories",
+                    getCategories: "api/cc/warehouse/logistic/categories",
+                    getCategoriesSubCategories: "api/cc/warehouse/logistic/categoriesSubCategories",
                 },
                 users:{
                     getUsers: "usuarios",
@@ -32,13 +32,17 @@ module.exports = {
                     getSales: "ventas",
                 },
                 Warehouse:{
-                    getWarehouse: "bodegas",
-                    CreateWarehouse: "logistic/addWarehouse",
-                    putWarehouse: "logistic/updateWarehouse/{0}",
-                    editWarehouse: "logistic/editWarehouse/{0}",
+                    getWarehouse: "api/cc/warehouse/bodegas",
+                    CreateWarehouse: "api/cc/warehouse/logistic/addWarehouse",
+                    putWarehouse: "api/cc/warehouse/logistic/updateWarehouse/{0}",
+                    editWarehouse: "api/cc/warehouse/logistic/editWarehouse/{0}",
                 },
                 Regions:{
-                    getRegions: "logistic/regions",
+                    getRegions: "api/cc/warehouse/logistic/regions",
+                },
+                Support:{
+                    getGuia: "guia/allGuia",
+                    getFaqs: "faqs/allFaqs",
                 }
             }
         }

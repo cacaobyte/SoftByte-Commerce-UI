@@ -102,10 +102,10 @@ export const sidebarItems = [
     icon: "help",
     route: "/soporte",
     submenus: [
-      { title: "FAQs", route: "/soporte/faqs" },
+      { title: "FAQs", route: "/support/faqs/" },
       { title: "Tickets", route: "/soporte/tickets" },
       { title: "Contacto", route: "/soporte/contacto" },
-      { title: "Guías", route: "/soporte/guias" },
+      { title: "Guías", route: "/support/guia" },
     ],
   },
   {
