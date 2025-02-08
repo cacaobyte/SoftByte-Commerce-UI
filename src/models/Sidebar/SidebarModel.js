@@ -30,7 +30,7 @@ export const sidebarItems = [
       { title: "Categorías", route: "/product/categories/" },
       { title: "Subcategorías", route: "/productos/subcategorias" },
       { title: "Etiquetas", route: "/productos/etiquetas" },
-      { title: "Clasificación", route: "/productos/clasificacion" },
+      { title: "Clasificación", route: "/product/classification" },
     ],
   },
   {
