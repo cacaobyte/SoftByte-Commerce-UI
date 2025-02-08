@@ -41,7 +41,7 @@ export const sidebarItems = [
       { title: "Artículos", route: "/Inventory/Articles/ViewArticles" },
       { title: "Nuevo artículo", route: "/Inventory/Articles/CreateArticles" },
    //   { title: "Recuento", route: "/inventario/tomar-inventario" },
-      { title: "Regiones", route: "/inventario/tomar-inventario" },
+      { title: "Regiones", route: "/Inventory/Regions/" },
       { title: "Bodegas", route: "/Inventory/Warehouse/warehouse" },
   //    { title: "Asignaciones", route: "/Inventory/Warehouse/assignWarehouse" },
     ],
