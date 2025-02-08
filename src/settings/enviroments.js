@@ -24,6 +24,7 @@ module.exports = {
                 categories:{
                     getCategories: "api/cc/warehouse/logistic/categories",
                     getCategoriesSubCategories: "api/cc/warehouse/logistic/categoriesSubCategories",
+                    putInactiveCategory: "api/cc/warehouse/logistic/categories/toggleStatus/{0}",
                 },
                 users:{
                     getUsers: "usuarios",

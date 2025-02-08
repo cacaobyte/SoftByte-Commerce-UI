@@ -27,7 +27,7 @@ export const sidebarItems = [
     route: "/productos",
     submenus: [
       { title: "Catálogo", route: "/productos/catalogo" },
-      { title: "Categorías", route: "/productos/categorias" },
+      { title: "Categorías", route: "/product/categories/" },
       { title: "Subcategorías", route: "/productos/subcategorias" },
       { title: "Etiquetas", route: "/productos/etiquetas" },
       { title: "Clasificación", route: "/productos/clasificacion" },
