@@ -13,10 +13,9 @@ const DynamicForm = ({ model, title, onSubmit, initialValues = {}, columns = 1 }
     const [loading, setLoading] = useState(false);
 
     useEffect(() => {
-        setFormData((prev) => ({
-            ...prev,
-            ...initialValues, 
-        }));
+        if (initialValues && Object.keys(initialValues).length > 0) {
+            setFormData(initialValues); 
+        }
     }, [initialValues]);
     
 
