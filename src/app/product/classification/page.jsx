@@ -1,34 +1,78 @@
 "use client";
+import { useState } from "react";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
-import { ShoppingCart, Coffee, Megaphone } from "lucide-react";
-import { ToastContainer } from "react-toastify";
+import productClassifications from "../../../models/Articles/ProductClassificationModel";
+import ArticlesService from "../../../service/SoftbyteCommerce/Article/articleService";
+import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import Slider from "react-slick"; 
+import { Input } from "@/components/ui/input";
+import { ChevronLeft, ChevronRight } from "lucide-react";
 
-const classifications = [
-  {
-    title: "Ventas",
-    description:
-      "Todos los artículos destinados a la venta al cliente, como productos exhibidos en el inventario.",
-    icon: ShoppingCart,
-    bgColor: "bg-blue-500",
-  },
-  {
-    title: "Consumo",
-    description:
-      "Artículos de consumo interno para tiendas o empleados. Ejemplos: escobas, café, vasos, azúcar, leche, y otros suministros.",
-    icon: Coffee,
-    bgColor: "bg-green-500",
-  },
-  {
-    title: "Marketing / Propaganda",
-    description:
-      "Artículos utilizados para la promoción del negocio, como volantes, afiches, banners publicitarios, entre otros.",
-    icon: Megaphone,
-    bgColor: "bg-yellow-500",
-  },
-];
+const articlesService = new ArticlesService();
 
 export default function ClassificationPage() {
+  const [articles, setArticles] = useState([]);
+  const [loading, setLoading] = useState(false);
+  const [searchTerm, setSearchTerm] = useState("");
+
+  const handleClassificationClick = async (classification) => {
+    setLoading(true);
+    try {
+      const response = await articlesService.getAllArticles();
+      const filteredArticles = response.data.filter(
+        (article) => article.clasificación === classification
+      );
+      setArticles(filteredArticles);
+    } catch (error) {
+      toast.error("Error al obtener los artículos.");
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const filteredArticles = articles.filter((article) =>
+    article.descripcion.toLowerCase().includes(searchTerm.toLowerCase())
+  );
+
+  const truncateText = (text, maxLength) => {
+    return text.length > maxLength ? `${text.substring(0, maxLength)}...` : text;
+  };
+
+  const sliderSettings = {
+    infinite: true,
+    speed: 500,
+    slidesToShow: 3,
+    slidesToScroll: 1,
+    nextArrow: <CustomArrow direction="right" />,
+    prevArrow: <CustomArrow direction="left" />,
+    responsive: [
+      {
+        breakpoint: 1024,
+        settings: {
+          slidesToShow: 2,
+        },
+      },
+      {
+        breakpoint: 768,
+        settings: {
+          slidesToShow: 1,
+        },
+      },
+    ],
+  };
+
+  function CustomArrow({ direction, onClick }) {
+    return (
+      <div
+        className={`absolute ${direction === "left" ? "left-0" : "right-0"} top-1/2 transform -translate-y-1/2 cursor-pointer z-10 bg-gray-900 p-2 rounded-full`}
+        onClick={onClick}
+      >
+        {direction === "left" ? <ChevronLeft size={24} color="white" /> : <ChevronRight size={24} color="white" />}
+      </div>
+    );
+  }
+
   return (
     <div className="p-6 bg-gray-50 min-h-screen">
       <ToastContainer position="top-right" autoClose={3000} />
@@ -38,20 +82,80 @@ export default function ClassificationPage() {
           Aprende sobre las diferentes clasificaciones disponibles para dividir tus artículos de manera adecuada.
         </p>
       </div>
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-        {classifications.map((classification, index) => (
-          <Card key={index} className="hover:shadow-lg transition-shadow">
-            <div className={`w-full h-32 flex items-center justify-center ${classification.bgColor} text-white`}>
-              <classification.icon size={48} />
+
+      {/* Clasificaciones */}
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
+        {productClassifications.map(({ title, description, icon: Icon, bgColor }, index) => (
+          <Card
+            key={index}
+            className="hover:shadow-lg transition-shadow cursor-pointer"
+            onClick={() => handleClassificationClick(title)}
+          >
+            <div className={`w-full h-32 flex items-center justify-center ${bgColor} text-white`}>
+              <Icon size={48} />
             </div>
             <CardHeader>
-              <CardTitle className="text-xl font-semibold">{classification.title}</CardTitle>
+              <CardTitle className="text-xl font-semibold">{title}</CardTitle>
             </CardHeader>
             <CardContent>
-              <CardDescription>{classification.description}</CardDescription>
+              <CardDescription>{truncateText(description, 100)}</CardDescription>
             </CardContent>
           </Card>
         ))}
+      </div>
+
+      {/* Barra de búsqueda */}
+      <div className="mb-4">
+        <Input
+          type="text"
+          placeholder="Buscar artículos..."
+          value={searchTerm}
+          onChange={(e) => setSearchTerm(e.target.value)}
+        />
+      </div>
+
+      {/* Resultados */}
+      <div>
+        <h2 className="text-2xl font-bold mb-4">Artículos Encontrados</h2>
+        {loading ? (
+          <p className="text-gray-500">Cargando artículos...</p>
+        ) : filteredArticles.length > 0 ? (
+          searchTerm ? (
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+              {filteredArticles.map((article, index) => (
+                <Card key={index} className="shadow-md">
+                  <img src={article.foto} alt={article.descripcion} className="w-full h-48 object-cover" />
+                  <CardHeader>
+                    <CardTitle className="text-lg font-semibold">{truncateText(article.descripcion, 60)}</CardTitle>
+                  </CardHeader>
+                  <CardContent>
+                    <p className="text-gray-700">Categoría: {article.categoria}</p>
+                    <p className="text-gray-700">Precio: Q{article.precio.toFixed(2)}</p>
+                  </CardContent>
+                </Card>
+              ))}
+            </div>
+          ) : (
+            <Slider {...sliderSettings}>
+              {filteredArticles.map((article, index) => (
+                <div key={index} className="px-2">
+                  <Card className="shadow-md">
+                    <img src={article.foto} alt={article.descripcion} className="w-full h-48 object-cover" />
+                    <CardHeader>
+                      <CardTitle className="text-lg font-semibold">{truncateText(article.descripcion, 60)}</CardTitle>
+                    </CardHeader>
+                    <CardContent>
+                      <p className="text-gray-700">Categoría: {article.categoria}</p>
+                      <p className="text-gray-700">Precio: Q{article.precio.toFixed(2)}</p>
+                    </CardContent>
+                  </Card>
+                </div>
+              ))}
+            </Slider>
+          )
+        ) : (
+          <p className="text-gray-500">No se encontraron artículos para esta clasificación.</p>
+        )}
       </div>
     </div>
   );
