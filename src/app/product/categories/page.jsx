@@ -2,10 +2,11 @@
 import { useEffect, useState } from "react";
 import CategoriesService from "../../../service/SoftbyteCommerce/Sales/categories/categoriesService";
 import DataTable from "../../../components/shared/DataTable/DataTable";
-import { Eye, Edit, ToggleLeft, ToggleRight } from "lucide-react";
+import { Eye, Edit, PlusCircle, ToggleLeft, ToggleRight } from "lucide-react";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import ConfirmationModal from "../../../components/shared/Modal/ConfirmationModal";
+import DynamicForm from "../../../components/shared/Forms/DynamicForm";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
@@ -40,15 +41,19 @@ export default function CategoriesPage() {
   const [categories, setCategories] = useState([]);
   const [loading, setLoading] = useState(true);
   const [selectedCategory, setSelectedCategory] = useState(null);
+  const [addModalOpen, setAddModalOpen] = useState(false);
+  const [editModalOpen, setEditModalOpen] = useState(false);
+  const [editingCategory, setEditingCategory] = useState(null);
   const [confirmModalOpen, setConfirmModalOpen] = useState(false);
   const [confirmLoading, setConfirmLoading] = useState(false);
   const [categoryToToggle, setCategoryToToggle] = useState(null);
+
   const service = new CategoriesService();
 
   useEffect(() => {
     const fetchCategories = async () => {
       try {
-        const response = await service.getAllCategories();
+        const response = await service.getCategories();
         const formattedData = response.data.map((category) => ({
           ...category,
           fechaCreacion: category.fechaCreacion
@@ -68,6 +73,44 @@ export default function CategoriesPage() {
     };
     fetchCategories();
   }, []);
+
+  const categoryModel = [
+    { name: "nombre", label: "Nombre", type: "text", required: true },
+    { name: "descripcion", label: "Descripción", type: "text" },
+  ];
+
+  const handleAddCategory = async (newCategory) => {
+    try {
+      const response = await service.createCategory(newCategory);
+      setCategories((prevCategories) => [...prevCategories, response.data]);
+      toast.success("Categoría creada con éxito.");
+      setAddModalOpen(false);
+    } catch (error) {
+      console.error("Error al crear la categoría:", error.response || error.message);
+      toast.error("Error al crear la categoría.");
+    }
+  };
+
+  const handleEditCategory = (category) => {
+    setEditingCategory(category);
+    setEditModalOpen(true);
+  };
+
+  const handleSaveCategory = async (updatedCategory) => {
+    try {
+      const response = await service.putCategories(updatedCategory);
+      setCategories((prevCategories) =>
+        prevCategories.map((cat) =>
+          cat.idCategoria === updatedCategory.idCategoria ? { ...cat, ...updatedCategory } : cat
+        )
+      );
+      toast.success("Categoría actualizada con éxito.");
+      setEditModalOpen(false);
+    } catch (error) {
+      console.error("Error al actualizar la categoría:", error.response || error.message);
+      toast.error("Error al actualizar la categoría.");
+    }
+  };
 
   const handleViewSubcategories = (category) => {
     setSelectedCategory(category);
@@ -113,7 +156,7 @@ export default function CategoriesPage() {
       label: "Editar",
       icon: Edit,
       variant: "outline",
-      onClick: (row) => alert(`Editar categoría: ${row.nombre}`),
+      onClick: handleEditCategory,
     },
     {
       label: (row) => (row.estatus ? "Desactivar" : "Activar"),
@@ -126,11 +169,16 @@ export default function CategoriesPage() {
   return (
     <div className="p-6 bg-gray-50 min-h-screen">
       <ToastContainer position="top-right" autoClose={3000} />
-      <div className="bg-gray-900 text-white p-6 rounded-lg shadow-lg mb-6">
-        <h1 className="text-4xl font-bold">Categorías</h1>
-        <p className="mt-2 text-lg text-gray-300">
-          Explora y administra las categorías disponibles en el sistema.
-        </p>
+      <div className="bg-gray-900 text-white p-6 rounded-lg shadow-lg mb-6 flex justify-between items-center">
+        <div>
+          <h1 className="text-4xl font-bold">Categorías</h1>
+          <p className="mt-2 text-lg text-gray-300">
+            Explora y administra las categorías disponibles en el sistema.
+          </p>
+        </div>
+        <Button onClick={() => setAddModalOpen(true)} className="bg-green-500 hover:bg-green-600">
+          <PlusCircle className="mr-2" size={20} /> Crear Categoría
+        </Button>
       </div>
       <div className="bg-white p-4 rounded-lg shadow-lg">
         <h2 className="text-2xl font-bold mb-4">Listado de Categorías</h2>
@@ -143,6 +191,23 @@ export default function CategoriesPage() {
           actions={actions}
         />
       </div>
+
+      {/* Modal para crear categoría */}
+      {addModalOpen && (
+        <Dialog open={true} onOpenChange={() => setAddModalOpen(false)}>
+          <DialogContent>
+            <DialogHeader>
+              <DialogTitle>Crear Categoría</DialogTitle>
+            </DialogHeader>
+            <DynamicForm
+              model={categoryModel}
+              title="Nueva Categoría"
+              onSubmit={handleAddCategory}
+              columns={2}
+            />
+          </DialogContent>
+        </Dialog>
+      )}
 
       {/* Modal para mostrar subcategorías */}
       {selectedCategory && (
@@ -167,6 +232,24 @@ export default function CategoriesPage() {
             <div className="flex justify-end mt-4">
               <Button onClick={handleCloseModal}>Cerrar</Button>
             </div>
+          </DialogContent>
+        </Dialog>
+      )}
+
+      {/* Modal para editar categoría */}
+      {editModalOpen && (
+        <Dialog open={true} onOpenChange={() => setEditModalOpen(false)}>
+          <DialogContent>
+            <DialogHeader>
+              <DialogTitle>Editar Categoría</DialogTitle>
+            </DialogHeader>
+            <DynamicForm
+              model={categoryModel}
+              title="Editar Categoría"
+              onSubmit={handleSaveCategory}
+              initialValues={editingCategory}
+              columns={2}
+            />
           </DialogContent>
         </Dialog>
       )}
