@@ -40,9 +40,10 @@ export const sidebarItems = [
     submenus: [
       { title: "Artículos", route: "/Inventory/Articles/ViewArticles" },
       { title: "Nuevo artículo", route: "/Inventory/Articles/CreateArticles" },
-      { title: "Recuento", route: "/inventario/tomar-inventario" },
+   //   { title: "Recuento", route: "/inventario/tomar-inventario" },
+      { title: "Regiones", route: "/inventario/tomar-inventario" },
       { title: "Bodegas", route: "/Inventory/Warehouse/warehouse" },
-      { title: "Asignaciones", route: "/Inventory/Warehouse/assignWarehouse" },
+  //    { title: "Asignaciones", route: "/Inventory/Warehouse/assignWarehouse" },
     ],
   },
   
@@ -103,8 +104,7 @@ export const sidebarItems = [
     route: "/soporte",
     submenus: [
       { title: "FAQs", route: "/support/faqs/" },
-      { title: "Tickets", route: "/soporte/tickets" },
-      { title: "Contacto", route: "/soporte/contacto" },
+      { title: "Contacto", route: "/support/contact" },
       { title: "Guías", route: "/support/guia" },
     ],
   },

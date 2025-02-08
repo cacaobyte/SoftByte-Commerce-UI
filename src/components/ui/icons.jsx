@@ -12,6 +12,9 @@ import {
   FaChartLine,
   FaFileInvoice,
   FaQuestionCircle,
+  FaEnvelope, // Ícono de correo electrónico
+  FaPhone, // Ícono de teléfono
+  FaGlobe, // Ícono de sitio web
 } from "react-icons/fa";
 import { MdDashboard, MdSettings, MdOutlineSell } from "react-icons/md";
 import { RiDashboard3Fill } from "react-icons/ri";
@@ -39,4 +42,7 @@ export const Icons = {
   RiDashboard3Fill,
   FcSalesPerformance,
   FaUsersViewfinder,
+  contactEmail: FaEnvelope, // Nuevo ícono de correo
+  contactPhone: FaPhone, // Nuevo ícono de teléfono
+  contactWebsite: FaGlobe, // Nuevo ícono de sitio web
 };
