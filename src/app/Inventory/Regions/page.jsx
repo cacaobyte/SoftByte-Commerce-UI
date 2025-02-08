@@ -1,5 +1,5 @@
 "use client";
-import { useEffect, useState, useRef } from "react";
+import { useEffect, useState } from "react";
 import RegionsService from "../../../service/SoftbyteCommerce/Sales/Warehouse/regionsService";
 import { MapContainer, TileLayer, Marker, Popup, useMap } from "react-leaflet";
 import "leaflet/dist/leaflet.css";
@@ -72,35 +72,35 @@ export default function RegionsPage() {
 
   return (
     <div className="p-6 bg-gray-50 min-h-screen">
-      {/* Hero Section */}
-      <div className="bg-blue-600 text-white p-6 rounded-lg shadow-lg mb-6">
-        <h1 className="text-4xl font-bold">Regiones de Guatemala</h1>
-        <p className="mt-2 text-lg">Explora y visualiza las distintas regiones del país, su ubicación geográfica y detalles relevantes.</p>
-      </div>
+ {/* Hero Section */}
+<div className="bg-gray-900 text-white p-6 rounded-lg shadow-lg mb-6">
+  <h1 className="text-4xl font-bold">Regiones de Guatemala</h1>
+  <p className="mt-2 text-lg text-gray-300">Explora y visualiza las distintas regiones del país, su ubicación geográfica y detalles relevantes.</p>
+</div>
+
 
       {/* Mapa principal */}
       <div className="mt-4 h-[400px] w-full border rounded-lg overflow-hidden shadow-md bg-white">
-      <MapContainer
-        center={[14.6349, -90.5069]}
-        zoom={7}
-        className="h-full w-full relative z-10" // Añadido z-10 para asegurarlo por debajo del sidebar
+        <MapContainer
+          center={[14.6349, -90.5069]}
+          zoom={7}
+          className="h-full w-full relative z-10"
         >
-        <TileLayer
+          <TileLayer
             url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
             attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-        />
-        <ResizeMap />
-        {regions.map((region) => (
+          />
+          <ResizeMap />
+          {regions.map((region) => (
             <Marker key={region.idRegion} position={[region.latitud, region.longitud]} icon={defaultIcon}>
-            <Popup>
+              <Popup>
                 <strong>{region.nombre}</strong>
                 <br />
                 {region.descripcion}
-            </Popup>
+              </Popup>
             </Marker>
-        ))}
+          ))}
         </MapContainer>
-
       </div>
 
       {/* Tabla de regiones */}
