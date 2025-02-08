@@ -29,6 +29,27 @@ class CategoriesService {
         });
     };
 
+putCategories = (categorie) => {
+    const endpoint = this.endpoint.putCategorie;
+    const cleanCategory = {
+        idCategoria: categorie.idCategoria,
+        nombre: categorie.nombre,
+        descripcion: categorie.descripcion || null
+    };
+
+    return this.service.request({
+        method: "PUT",
+        endpoint,
+        data: cleanCategory, 
+        headers: this.defaultHeaders,
+    });
+};
+
+      
+      
+      
+
+
     getCategoriesSubCategories = () => {
         const endpoint = this.endpoint.getCategoriesSubCategories;
         return this.service.request({

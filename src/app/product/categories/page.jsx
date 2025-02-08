@@ -6,6 +6,7 @@ import { Eye, Edit, ToggleLeft, ToggleRight } from "lucide-react";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import ConfirmationModal from "../../../components/shared/Modal/ConfirmationModal";
+import DynamicForm from "../../../components/shared/Forms/DynamicForm";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
@@ -43,6 +44,9 @@ export default function CategoriesPage() {
   const [confirmModalOpen, setConfirmModalOpen] = useState(false);
   const [confirmLoading, setConfirmLoading] = useState(false);
   const [categoryToToggle, setCategoryToToggle] = useState(null);
+  const [editModalOpen, setEditModalOpen] = useState(false);
+const [editingCategory, setEditingCategory] = useState(null);
+
   const service = new CategoriesService();
 
   useEffect(() => {
@@ -69,6 +73,11 @@ export default function CategoriesPage() {
     fetchCategories();
   }, []);
 
+  const categoryModel = [
+    { name: "nombre", label: "Nombre", type: "text", required: true },
+    { name: "descripcion", label: "Descripción", type: "text" },
+  ];
+  
   const handleViewSubcategories = (category) => {
     setSelectedCategory(category);
   };
@@ -101,7 +110,34 @@ export default function CategoriesPage() {
       setConfirmLoading(false);
     }
   };
+  const handleEditCategory = (category) => {
+    setEditingCategory(category);
+    setEditModalOpen(true);
+  };
+  
+  const handleSaveCategory = async (updatedCategory) => {
+    try {
+      console.log("Datos a enviar:", updatedCategory);
+  
+      const response = await service.putCategories(updatedCategory);
+      console.log("Respuesta del servidor:", response);
+  
+      setCategories((prevCategories) =>
+        prevCategories.map((cat) =>
+          cat.idCategoria === updatedCategory.idCategoria ? { ...cat, ...updatedCategory } : cat
+        )
+      );
+      toast.success("Categoría actualizada con éxito.");
+      setEditModalOpen(false);
+    } catch (error) {
+      console.error("Error al actualizar la categoría:", error.response || error.message);
+      toast.error("Error al actualizar la categoría.");
+    }
+  };
+  
+  
 
+  
   const actions = [
     {
       label: "Ver",
@@ -113,7 +149,7 @@ export default function CategoriesPage() {
       label: "Editar",
       icon: Edit,
       variant: "outline",
-      onClick: (row) => alert(`Editar categoría: ${row.nombre}`),
+      onClick: handleEditCategory,
     },
     {
       label: (row) => (row.estatus ? "Desactivar" : "Activar"),
@@ -122,6 +158,7 @@ export default function CategoriesPage() {
       onClick: handleToggleStatus,
     },
   ];
+  
 
   return (
     <div className="p-6 bg-gray-50 min-h-screen">
@@ -170,6 +207,23 @@ export default function CategoriesPage() {
           </DialogContent>
         </Dialog>
       )}
+
+{editModalOpen && (
+  <Dialog open={true} onOpenChange={() => setEditModalOpen(false)}>
+    <DialogContent>
+      <DialogHeader>
+        <DialogTitle>Editar Categoría</DialogTitle>
+      </DialogHeader>
+      <DynamicForm
+        model={categoryModel}
+        title="Editar Categoría"
+        onSubmit={handleSaveCategory}
+        initialValues={editingCategory}
+        columns={2}
+      />
+    </DialogContent>
+  </Dialog>
+)}
 
       {/* Modal de confirmación */}
       <ConfirmationModal
