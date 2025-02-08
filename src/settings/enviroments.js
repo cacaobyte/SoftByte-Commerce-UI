@@ -25,6 +25,7 @@ module.exports = {
                     getCategoriesActive: "api/cc/warehouse/logistic/categoriesActive",
                     getCategorie: "api/cc/warehouse/logistic/categories",
                     putCategorie: "api/cc/warehouse/logistic/categoriesUpdate",
+                    createCategorie: "api/cc/warehouse/logistic/createCategory",
                     getCategoriesSubCategories: "api/cc/warehouse/logistic/categoriesSubCategories",
                     putInactiveCategory: "api/cc/warehouse/logistic/categories/toggleStatus/{0}",
                 },

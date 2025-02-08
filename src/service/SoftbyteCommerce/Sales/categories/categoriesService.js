@@ -46,7 +46,21 @@ putCategories = (categorie) => {
 };
 
       
-      
+createCategory = (newCategory) => {
+    const endpoint = this.endpoint.createCategorie;
+    const cleanCategory = {
+        nombre: newCategory.nombre,
+        descripcion: newCategory.descripcion || null
+    };
+
+    return this.service.request({
+        method: "POST",
+        endpoint,
+        data: cleanCategory,
+        headers: this.defaultHeaders,
+    });
+};
+ 
       
 
 
