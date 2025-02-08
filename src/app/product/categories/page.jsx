@@ -48,7 +48,7 @@ export default function CategoriesPage() {
   useEffect(() => {
     const fetchCategories = async () => {
       try {
-        const response = await service.getAllCategories();
+        const response = await service.getCategories();
         const formattedData = response.data.map((category) => ({
           ...category,
           fechaCreacion: category.fechaCreacion

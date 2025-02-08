@@ -10,9 +10,18 @@ class CategoriesService {
             'Content-Type': 'application/json',
         };
     }
-
+// Listar las categorias activas
     getAllCategories = () => {
-        const endpoint = this.endpoint.getCategories;
+        const endpoint = this.endpoint.getCategoriesActive;
+        return this.service.request({
+            method: 'GET',
+            endpoint,
+            headers: this.defaultHeaders,
+        });
+    };
+// Listar todas las categorias
+    getCategories = () => {
+        const endpoint = this.endpoint.getCategorie;
         return this.service.request({
             method: 'GET',
             endpoint,
