@@ -28,6 +28,19 @@ class CategoriesService {
             headers: this.defaultHeaders,
         });
     };
+
+    putInactiveCategory = (categoryId) => {
+        if (!categoryId) {
+            console.error("Error: categoryId es inválido.");
+            return Promise.reject(new Error("categoryId no puede ser nulo o indefinido"));
+        }
+        const endpoint = this.endpoint.putInactiveCategory.replace("{0}", categoryId); 
+        return this.service.request({
+            method: 'PUT',
+            endpoint,
+            headers: this.defaultHeaders,
+        });
+    };
     
 
 }

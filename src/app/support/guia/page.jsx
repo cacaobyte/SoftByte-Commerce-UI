@@ -1,20 +1,19 @@
 "use client";
 
-import { useEffect, useState, useRef } from "react";
+import { useEffect, useState } from "react";
 import GuiaService from "../../../service/SoftbyteCommerce/Sales/supports/guia/guiaService";
-import { FaVideo, FaPlay, FaPause, FaExpand, FaVolumeUp, FaVolumeMute, FaDownload, FaFilter } from "react-icons/fa";
+import { FaVideo } from "react-icons/fa";
 import { Dialog, DialogContent, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { BsDownload } from "react-icons/bs";
 
 export default function GuiasPage() {
     const [guias, setGuias] = useState([]);
-    const [filteredGuias, setFilteredGuias] = useState([]);
     const [selectedGuia, setSelectedGuia] = useState(null);
-    const [selectedCategory, setSelectedCategory] = useState("Todas");
-    const videoRef = useRef(null);
-    const [isPlaying, setIsPlaying] = useState(false);
-    const [volume, setVolume] = useState(1);
-    const [isMuted, setIsMuted] = useState(false);
+    const [categorias, setCategorias] = useState([]);
+    const [categoriaSeleccionada, setCategoriaSeleccionada] = useState("Todas");
+    const [esMovil, setEsMovil] = useState(false);
+
+    const cloudinaryCloudName = "dhhtmdjmt"; // Reemplázalo con tu Cloudinary Cloud Name
     const guiaService = new GuiaService();
 
     useEffect(() => {
@@ -23,7 +22,8 @@ export default function GuiasPage() {
                 const response = await guiaService.getAllGuia();
                 if (response.data) {
                     setGuias(response.data);
-                    setFilteredGuias(response.data); // Inicialmente mostramos todas las guías
+                    const categoriasUnicas = ["Todas", ...new Set(response.data.map((g) => g.categoria))];
+                    setCategorias(categoriasUnicas);
                 }
             } catch (error) {
                 console.error("Error cargando guías:", error);
@@ -31,118 +31,130 @@ export default function GuiasPage() {
         };
 
         fetchGuias();
+
+        // Detectar si el usuario está en móvil
+        const verificarDispositivo = () => {
+            setEsMovil(window.innerWidth <= 768); // Pantallas menores a 768px se consideran móviles
+        };
+
+        verificarDispositivo();
+        window.addEventListener("resize", verificarDispositivo);
+        return () => window.removeEventListener("resize", verificarDispositivo);
     }, []);
 
-    // Filtrar por categoría
-    const handleCategoryChange = (value) => {
-        setSelectedCategory(value);
-        if (value === "Todas") {
-            setFilteredGuias(guias);
-        } else {
-            setFilteredGuias(guias.filter((guia) => guia.categoria === value));
+    // Filtrar guías según la categoría seleccionada
+    const guiasFiltradas = categoriaSeleccionada === "Todas"
+        ? guias
+        : guias.filter((guia) => guia.categoria === categoriaSeleccionada);
+
+    // Generar miniatura de Cloudinary para el video
+    const getCloudinaryThumbnail = (videoUrl) => {
+        if (!videoUrl) return "/default-thumbnail.jpg"; // Imagen por defecto si no hay video
+
+        const videoPublicId = videoUrl
+            .split("/")
+            .slice(-1)[0]
+            .split(".")[0];
+
+        return `https://res.cloudinary.com/${cloudinaryCloudName}/video/upload/w_300,h_200,c_fill/${videoPublicId}.jpg`;
+    };
+
+    // Descargar video directamente sin redirigir
+    const handleDownload = async (videoUrl, titulo) => {
+        try {
+            const response = await fetch(videoUrl);
+            const blob = await response.blob();
+            const url = window.URL.createObjectURL(blob);
+            const a = document.createElement("a");
+            a.href = url;
+            a.download = `${titulo}.mp4`;
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            window.URL.revokeObjectURL(url);
+        } catch (error) {
+            console.error("Error al descargar el video:", error);
         }
     };
 
     return (
         <div className="max-w-6xl mx-auto p-6">
-            {/* Información sobre la página */}
-            <div className="text-gray-700 text-lg">
-                <h1 className="text-black text-3xl font-bold flex items-center gap-3">
-                    <FaVideo className="text-4xl" /> Guías de Capacitación
-                </h1>
-                <p className="mt-2">
-                    En esta sección encontrarás guías en video para capacitar a tu equipo sobre el uso del sistema.
-                    Asegúrate de revisar estos recursos para maximizar el rendimiento y eficiencia en tu empresa.
-                </p>
+            <div className="flex items-center gap-3 text-black text-3xl font-bold">
+                <FaVideo className="text-4xl" />
+                <h1>Guías de Capacitación</h1>
             </div>
 
-            {/* Barra de filtrado */}
-            <div className="mt-6 flex items-center gap-4">
-                <FaFilter className="text-gray-500 text-lg" />
-                <Select onValueChange={handleCategoryChange} value={selectedCategory}>
-                    <SelectTrigger className="w-full md:w-1/3 border border-gray-300 rounded-lg p-3 shadow-sm">
-                        <SelectValue placeholder="Seleccionar categoría" />
-                    </SelectTrigger>
-                    <SelectContent>
-                        <SelectItem value="Todas">Todas</SelectItem>
-                        {[...new Set(guias.map((guia) => guia.categoria))].map((categoria) => (
-                            <SelectItem key={categoria} value={categoria}>
-                                {categoria}
-                            </SelectItem>
-                        ))}
-                    </SelectContent>
-                </Select>
+            <p className="text-gray-600 mt-2">
+                En esta sección encontrarás guías en video para capacitar a tu equipo sobre el uso del sistema.
+                Asegúrate de revisar estos recursos para maximizar el rendimiento y eficiencia en tu empresa.
+            </p>
+
+            {/* Selector de categoría */}
+            <div className="mt-4">
+                <label className="text-gray-700 font-semibold">Filtrar por categoría:</label>
+                <select
+                    className="border border-gray-300 rounded-md p-2 w-full sm:w-auto"
+                    value={categoriaSeleccionada}
+                    onChange={(e) => setCategoriaSeleccionada(e.target.value)}
+                >
+                    {categorias.map((categoria) => (
+                        <option key={categoria} value={categoria}>
+                            {categoria}
+                        </option>
+                    ))}
+                </select>
             </div>
 
-            {/* Contenedor de las guías en formato de grid */}
             <div className="mt-6 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
-                {filteredGuias.length > 0 ? (
-                    filteredGuias.map((guia) => (
+                {guiasFiltradas.length > 0 ? (
+                    guiasFiltradas.map((guia) => (
                         <Dialog key={guia.id}>
                             <DialogTrigger asChild>
                                 <div
                                     className="cursor-pointer border border-gray-300 rounded-lg shadow-md p-4 hover:bg-gray-100 transition duration-300 flex flex-col items-center text-center"
                                     onClick={() => setSelectedGuia(guia)}
                                 >
-                                    {/* Miniatura del video */}
                                     <div className="w-full h-40 rounded-md overflow-hidden">
-                                        <video className="w-full h-full object-cover" muted>
-                                            <source src={guia.urlExterna} type="video/mp4" />
-                                        </video>
+                                        <img
+                                            src={getCloudinaryThumbnail(guia.urlExterna)}
+                                            alt={guia.titulo}
+                                            className="w-full h-full object-cover"
+                                            onError={(e) => {
+                                                console.error("Error cargando miniatura:", e.target.src);
+                                                e.target.src = "/default-thumbnail.jpg"; // Imagen por defecto si falla
+                                            }}
+                                        />
                                     </div>
                                     <h2 className="mt-3 font-semibold text-lg text-black">{guia.titulo}</h2>
                                     <p className="text-sm text-gray-600">{guia.categoria} • {guia.version}</p>
                                 </div>
                             </DialogTrigger>
 
-                            {/* Modal con el video */}
-                            <DialogContent className="max-w-2xl p-4">
+                            <DialogContent className="max-w-2xl">
                                 <DialogTitle>{selectedGuia?.titulo}</DialogTitle>
                                 <p className="text-gray-600 mb-3">{selectedGuia?.contenido}</p>
-                                
-                                {/* Contenedor de video con controles personalizados */}
-                                <div className="relative w-full h-60 md:h-96 bg-black rounded-lg overflow-hidden">
-                                    <video ref={videoRef} className="w-full h-full" controls>
+                                <div className="w-full h-60 md:h-96">
+                                    <video controls className="w-full h-full rounded-lg">
                                         <source src={selectedGuia?.urlExterna} type="video/mp4" />
                                         Tu navegador no soporta la reproducción de videos.
                                     </video>
-
-                                    {/* Controles personalizados */}
-                                    <div className="absolute bottom-2 left-2 right-2 flex items-center justify-between bg-black bg-opacity-50 p-2 rounded-md">
-                                        {/* Botón de Play/Pausa */}
-                                        <button onClick={() => videoRef.current?.paused ? videoRef.current.play() : videoRef.current.pause()} className="text-white text-lg">
-                                            {videoRef.current?.paused ? <FaPlay /> : <FaPause />}
-                                        </button>
-
-                                        {/* Control de volumen */}
-                                        <div className="flex items-center gap-2">
-                                            <button onClick={() => {videoRef.current.muted = !videoRef.current.muted; setIsMuted(videoRef.current.muted)}} className="text-white text-lg">
-                                                {isMuted ? <FaVolumeMute /> : <FaVolumeUp />}
-                                            </button>
-                                            <input 
-                                                type="range"
-                                                min="0"
-                                                max="1"
-                                                step="0.1"
-                                                value={volume}
-                                                onChange={(event) => {videoRef.current.volume = parseFloat(event.target.value); setVolume(parseFloat(event.target.value))}}
-                                                className="cursor-pointer w-24"
-                                            />
-                                        </div>
-
-                                        {/* Botón de pantalla completa */}
-                                        <button onClick={() => videoRef.current?.requestFullscreen()} className="text-white text-lg">
-                                            <FaExpand />
-                                        </button>
-
-                                      
-                                    </div>
                                 </div>
+
+                                {/* Mostrar el botón de descarga solo en PC */}
+                                {!esMovil && (
+                                    <button
+                                        className="mt-4 px-4 py-2 bg-blue-600 text-white rounded-lg flex items-center gap-2"
+                                        onClick={() => handleDownload(selectedGuia?.urlExterna, selectedGuia?.titulo)}
+                                    >
+                                        <BsDownload />
+                                        Descargar
+                                    </button>
+                                )}
                             </DialogContent>
                         </Dialog>
                     ))
                 ) : (
-                    <p className="text-gray-500 text-center col-span-3">No hay guías disponibles.</p>
+                    <p className="text-gray-500 text-center col-span-3">No hay guías disponibles en esta categoría.</p>
                 )}
             </div>
         </div>

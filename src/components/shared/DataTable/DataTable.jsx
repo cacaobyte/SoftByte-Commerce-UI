@@ -60,7 +60,7 @@ const DataTable = ({ columns, data, searchField, actions = [], showActions = fal
         const ws = XLSX.utils.json_to_sheet(filteredData);
         const wb = XLSX.utils.book_new();
         XLSX.utils.book_append_sheet(wb, ws, "Datos");
-        XLSX.writeFile(wb, "tabla_bodegas.xlsx");
+        XLSX.writeFile(wb, "tabla_excel.xlsx");
     };
 
     return (
