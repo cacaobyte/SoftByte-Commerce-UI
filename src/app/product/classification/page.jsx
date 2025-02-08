@@ -1,6 +1,7 @@
 "use client";
 import { useState } from "react";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from "@/components/ui/dialog";
 import productClassifications from "../../../models/Articles/ProductClassificationModel";
 import ArticlesService from "../../../service/SoftbyteCommerce/Article/articleService";
 import { ToastContainer, toast } from "react-toastify";
@@ -15,6 +16,8 @@ export default function ClassificationPage() {
   const [articles, setArticles] = useState([]);
   const [loading, setLoading] = useState(false);
   const [searchTerm, setSearchTerm] = useState("");
+  const [selectedArticle, setSelectedArticle] = useState(null);
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
   const handleClassificationClick = async (classification) => {
     setLoading(true);
@@ -31,9 +34,10 @@ export default function ClassificationPage() {
     }
   };
 
-  const filteredArticles = articles.filter((article) =>
-    article.descripcion.toLowerCase().includes(searchTerm.toLowerCase())
-  );
+  const handleCardClick = (article) => {
+    setSelectedArticle(article);
+    setIsModalOpen(true);
+  };
 
   const truncateText = (text, maxLength) => {
     return text.length > maxLength ? `${text.substring(0, maxLength)}...` : text;
@@ -74,7 +78,7 @@ export default function ClassificationPage() {
   }
 
   return (
-    <div className="p-6 bg-gray-50 min-h-screen">
+    <div className="p-6 bg-gray-50 min-h-screen dark:bg-gray-900">
       <ToastContainer position="top-right" autoClose={3000} />
       <div className="bg-gray-900 text-white p-6 rounded-lg shadow-lg mb-6">
         <h1 className="text-4xl font-bold">Clasificación de Artículos</h1>
@@ -119,34 +123,34 @@ export default function ClassificationPage() {
         <h2 className="text-2xl font-bold mb-4">Artículos Encontrados</h2>
         {loading ? (
           <p className="text-gray-500">Cargando artículos...</p>
-        ) : filteredArticles.length > 0 ? (
+        ) : articles.length > 0 ? (
           searchTerm ? (
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-              {filteredArticles.map((article, index) => (
-                <Card key={index} className="shadow-md">
+              {articles.filter(article => article.descripcion.toLowerCase().includes(searchTerm.toLowerCase())).map((article, index) => (
+                <Card key={index} className="shadow-md min-h-[300px] flex flex-col" onClick={() => handleCardClick(article)}>
                   <img src={article.foto} alt={article.descripcion} className="w-full h-48 object-cover" />
                   <CardHeader>
-                    <CardTitle className="text-lg font-semibold">{truncateText(article.descripcion, 60)}</CardTitle>
+                    <CardTitle className="text-lg font-semibold dark:text-white">{truncateText(article.descripcion, 60)}</CardTitle>
                   </CardHeader>
                   <CardContent>
-                    <p className="text-gray-700">Categoría: {article.categoria}</p>
-                    <p className="text-gray-700">Precio: Q{article.precio.toFixed(2)}</p>
+                    <p className="text-gray-700 dark:text-white">Categoría: {article.categoria}</p>
+                    <p className="text-gray-700 dark:text-white">Precio: Q{article.precio.toFixed(2)}</p>
                   </CardContent>
                 </Card>
               ))}
             </div>
           ) : (
             <Slider {...sliderSettings}>
-              {filteredArticles.map((article, index) => (
+              {articles.map((article, index) => (
                 <div key={index} className="px-2">
-                  <Card className="shadow-md">
+                  <Card className="shadow-md min-h-[300px] flex flex-col" onClick={() => handleCardClick(article)}>
                     <img src={article.foto} alt={article.descripcion} className="w-full h-48 object-cover" />
                     <CardHeader>
                       <CardTitle className="text-lg font-semibold">{truncateText(article.descripcion, 60)}</CardTitle>
                     </CardHeader>
                     <CardContent>
-                      <p className="text-gray-700">Categoría: {article.categoria}</p>
-                      <p className="text-gray-700">Precio: Q{article.precio.toFixed(2)}</p>
+                      <p className="text-gray-700 dark:text-white">Categoría: {article.categoria}</p>
+                      <p className="text-gray-700 dark:text-white">Precio: Q{article.precio.toFixed(2)}</p>
                     </CardContent>
                   </Card>
                 </div>
@@ -157,6 +161,24 @@ export default function ClassificationPage() {
           <p className="text-gray-500">No se encontraron artículos para esta clasificación.</p>
         )}
       </div>
+
+      {/* Modal */}
+      {selectedArticle && (
+        <Dialog open={isModalOpen} onOpenChange={setIsModalOpen}>
+          <DialogContent>
+            <DialogHeader>
+              <DialogTitle>{selectedArticle.descripcion}</DialogTitle>
+              <div className="mt-4">
+                <img src={selectedArticle.foto} alt={selectedArticle.descripcion} className="w-full h-64 object-cover mb-4" />
+                <div className="space-y-2">
+                  <p><strong>Categoría:</strong> {selectedArticle.categoria}</p>
+                  <p><strong>Precio:</strong> Q{selectedArticle.precio.toFixed(2)}</p>
+                </div>
+              </div>
+            </DialogHeader>
+          </DialogContent>
+        </Dialog>
+      )}
     </div>
   );
 }
