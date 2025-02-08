@@ -1,7 +1,9 @@
 const { Warehouse } = require("lucide-react");
 
 
-//const environment = "https://localhost:32769/";
+//const environment = "https://localhost:32771/";
+
+
 //Produccion
 const environment = "https://softbyte-commerce-api.onrender.com/";
 
@@ -27,6 +29,7 @@ module.exports = {
                 categories:{
                     getCategories: "api/cc/warehouse/logistic/categories",
                     getCategoriesSubCategories: "api/cc/warehouse/logistic/categoriesSubCategories",
+                    putInactiveCategory: "api/cc/warehouse/logistic/categories/toggleStatus/{0}",
                 },
                 users:{
                     getUsers: "usuarios",

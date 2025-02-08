@@ -24,7 +24,7 @@ const Sidebar = () => {
       {/* Botón para abrir el sidebar */}
       <Button
         variant="outline"
-        className="fixed top-4 left-4 z-50"
+        className="absolute top-4 left-4 z-40" // Cambiado de z-50 a z-40 para evitar conflictos
         onClick={() => setIsSidebarOpen(!isSidebarOpen)}
       >
         <Icons.menu className="w-5 h-5" />
