@@ -22,11 +22,11 @@ export const sidebarItems = [
     ],
   },
   {
-    title: "Productos",
+    title: "Clasificación Productos",
     icon: "box",
     route: "/productos",
     submenus: [
-      { title: "Catálogo", route: "/productos/catalogo" },
+     // { title: "Catálogo", route: "/productos/catalogo" },
       { title: "Categorías", route: "/product/categories/" },
       { title: "Subcategorías", route: "/product/subcategories" },
       { title: "Etiquetas", route: "/product/tags" },
@@ -40,10 +40,10 @@ export const sidebarItems = [
     submenus: [
       { title: "Artículos", route: "/Inventory/Articles/ViewArticles" },
       { title: "Nuevo artículo", route: "/Inventory/Articles/CreateArticles" },
-   //   { title: "Recuento", route: "/inventario/tomar-inventario" },
+   //   { title: "Recuento", route: "/inventario/tomar-inventario" },//Pendiente
       { title: "Regiones", route: "/Inventory/Regions/" },
       { title: "Bodegas", route: "/Inventory/Warehouse/warehouse" },
-  //    { title: "Asignaciones", route: "/Inventory/Warehouse/assignWarehouse" },
+  //    { title: "Asignaciones", route: "/Inventory/Warehouse/assignWarehouse" },//Pendiente
     ],
   },
   
