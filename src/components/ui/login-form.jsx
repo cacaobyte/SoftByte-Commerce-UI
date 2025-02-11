@@ -31,13 +31,11 @@ export function LoginForm() {
       if (token) {
         document.cookie = `token=${token}; path=/; max-age=5400; SameSite=Lax`;
         toast.success('Inicio de sesión exitoso', { position: 'top-center' });
-        router.push('/');
+        router.push('/Home/welcome'); // Redirige al dashboard
       } else {
         throw new Error('Token no recibido.');
       }
     } catch (error) {
-      console.error('Error al iniciar sesión:', error);
-
       if (error.response?.status === 401) {
         toast.error('Credenciales incorrectas. Verifica tu usuario o contraseña.', { position: 'top-center' });
       } else {
