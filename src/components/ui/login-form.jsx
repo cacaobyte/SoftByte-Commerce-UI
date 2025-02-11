@@ -5,12 +5,14 @@ import SecurityService from '../../service/SoftbyteCommerce/Security/securitySer
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import { FaEye, FaEyeSlash } from 'react-icons/fa'; 
+import { FaEye, FaEyeSlash } from 'react-icons/fa';
+import { toast } from 'react-toastify'; // Importar react-toastify
+import 'react-toastify/dist/ReactToastify.css'; // Importar los estilos de toastify
 
 export function LoginForm() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const [showPassword, setShowPassword] = useState(false); // Estado para mostrar/ocultar contraseña
+  const [showPassword, setShowPassword] = useState(false);
   const [loading, setLoading] = useState(false);
   const router = useRouter();
   const securityService = new SecurityService();
@@ -23,24 +25,27 @@ export function LoginForm() {
         UserNameOrEmail: email,
         Password: password,
       });
-  
-      // Verifica si response.data existe y contiene el token
+
       const token = response?.data?.token;
-  
+
       if (token) {
-        document.cookie = `token=${token}; path=/; max-age=5400`; // Guardar el token en cookies
-        router.push('/'); // Redirigir después del login
+        document.cookie = `token=${token}; path=/; max-age=5400`;
+        toast.success('Inicio de sesión exitoso', { position: 'top-center' });
+        router.push('/');
       } else {
         throw new Error('Token no recibido.');
       }
     } catch (error) {
       console.error('Error al iniciar sesión:', error);
-      alert('Error al iniciar sesión. Verifica tus credenciales.');
+      if (error.response && error.response.status === 401) {
+        toast.error('Credenciales incorrectas. Verifica tu usuario o contraseña.', { position: 'top-center' });
+      } else {
+        toast.error('Ocurrió un error inesperado. Intenta de nuevo.', { position: 'top-center' });
+      }
     } finally {
       setLoading(false);
     }
   };
-  
 
   return (
     <form
