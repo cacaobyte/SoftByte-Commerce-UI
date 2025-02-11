@@ -47,6 +47,10 @@ module.exports = {
                 Support:{
                     getGuia: "guia/allGuia",
                     getFaqs: "faqs/allFaqs",
+                },
+                Security:{
+                    "login": "security/login",
+                    "register": "security/register",
                 }
             }
         }
