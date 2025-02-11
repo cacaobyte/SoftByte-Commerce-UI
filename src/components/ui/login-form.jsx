@@ -6,8 +6,7 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { FaEye, FaEyeSlash } from 'react-icons/fa';
-import { toast } from 'react-toastify'; // Importar react-toastify
-import 'react-toastify/dist/ReactToastify.css'; // Importar los estilos de toastify
+import { toast } from 'react-toastify'; // Asegúrate de importar toast
 
 export function LoginForm() {
   const [email, setEmail] = useState('');
@@ -20,6 +19,7 @@ export function LoginForm() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
+
     try {
       const response = await securityService.login({
         UserNameOrEmail: email,
@@ -29,7 +29,7 @@ export function LoginForm() {
       const token = response?.data?.token;
 
       if (token) {
-        document.cookie = `token=${token}; path=/; max-age=5400`;
+        document.cookie = `token=${token}; path=/; max-age=5400; SameSite=Lax`;
         toast.success('Inicio de sesión exitoso', { position: 'top-center' });
         router.push('/');
       } else {
@@ -37,7 +37,8 @@ export function LoginForm() {
       }
     } catch (error) {
       console.error('Error al iniciar sesión:', error);
-      if (error.response && error.response.status === 401) {
+
+      if (error.response?.status === 401) {
         toast.error('Credenciales incorrectas. Verifica tu usuario o contraseña.', { position: 'top-center' });
       } else {
         toast.error('Ocurrió un error inesperado. Intenta de nuevo.', { position: 'top-center' });
@@ -48,15 +49,10 @@ export function LoginForm() {
   };
 
   return (
-    <form
-      onSubmit={handleSubmit}
-      className="flex flex-col gap-6 p-8 md:p-10 bg-white rounded-lg shadow-lg"
-    >
+    <form onSubmit={handleSubmit} className="flex flex-col gap-6 p-8 md:p-10 bg-white rounded-lg shadow-lg">
       <div className="flex flex-col items-center gap-2 text-center">
         <h1 className="text-3xl font-bold">Login to your account</h1>
-        <p className="text-muted-foreground text-sm">
-          Enter your email below to login to your account
-        </p>
+        <p className="text-muted-foreground text-sm">Enter your email below to login to your account</p>
       </div>
       <div className="grid gap-6">
         <div className="grid gap-2">
