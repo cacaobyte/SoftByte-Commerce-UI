@@ -1,8 +1,16 @@
 import { NextResponse } from 'next/server';
 
 export function middleware(request) {
-  const token = request.cookies.get('token')?.value;
+  const { pathname } = request.nextUrl;
+  
+  // Redirige desde la raíz a /Home/welcome
+  if (pathname === '/') {
+    return NextResponse.redirect(new URL('/Home/welcome', request.url));
+  }
 
+  // Verifica el token para las rutas protegidas
+  const token = request.cookies.get('token')?.value;
+  
   if (!token) {
     console.log('Token no encontrado, redirigiendo al login...');
     return NextResponse.redirect(new URL('/auth/login', request.url));
@@ -13,5 +21,5 @@ export function middleware(request) {
 }
 
 export const config = {
-  matcher: ['/Inventory/:path*', '/product/:path*', '/support/:path*'],  // Ajusta según las rutas que deseas proteger
+  matcher: ['/', '/Inventory/:path*', '/product/:path*', '/support/:path*', '/Home/:path*'],
 };
