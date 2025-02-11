@@ -1,5 +1,6 @@
 import RestfulHandler from '../../../module/handler/restfulHandler';
 import enviroment from '../../../settings/enviroments';
+import { getHeaders } from '.././../../module/headers'; 
 
 class SecurityService {
     constructor() {
@@ -17,7 +18,7 @@ class SecurityService {
           method: 'POST',
           endpoint,
           data, 
-          headers: this.defaultHeaders,
+          headers: getHeaders(),
         });
     };
 
@@ -27,7 +28,7 @@ class SecurityService {
             method: 'POST',
             endpoint,
             data:data,
-            headers: this.defaultHeaders,
+            headers: getHeaders(),
         });
     };
 

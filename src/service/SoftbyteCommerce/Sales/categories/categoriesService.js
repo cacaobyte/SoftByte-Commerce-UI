@@ -1,5 +1,6 @@
 import RestfulHandler from '../../../../module/handler/restfulHandler';
 import enviroment from '../../../../settings/enviroments';
+import { getHeaders } from '.././../../../module/headers'; 
 
 class CategoriesService {
     constructor() {
@@ -16,7 +17,7 @@ class CategoriesService {
         return this.service.request({
             method: 'GET',
             endpoint,
-            headers: this.defaultHeaders,
+            headers: getHeaders(),
         });
     };
 // Listar todas las categorias
@@ -25,7 +26,7 @@ class CategoriesService {
         return this.service.request({
             method: 'GET',
             endpoint,
-            headers: this.defaultHeaders,
+            headers: getHeaders(),
         });
     };
 
@@ -41,7 +42,7 @@ putCategories = (categorie) => {
         method: "PUT",
         endpoint,
         data: cleanCategory, 
-        headers: this.defaultHeaders,
+        headers: getHeaders(),
     });
 };
 
@@ -57,7 +58,7 @@ createCategory = (newCategory) => {
         method: "POST",
         endpoint,
         data: cleanCategory,
-        headers: this.defaultHeaders,
+        headers: getHeaders(),
     });
 };
  
@@ -69,7 +70,7 @@ createCategory = (newCategory) => {
         return this.service.request({
             method: 'GET',
             endpoint,
-            headers: this.defaultHeaders,
+            headers: getHeaders(),
         });
     };
 
@@ -82,7 +83,7 @@ createCategory = (newCategory) => {
         return this.service.request({
             method: 'PUT',
             endpoint,
-            headers: this.defaultHeaders,
+            headers: getHeaders(),
         });
     };
     

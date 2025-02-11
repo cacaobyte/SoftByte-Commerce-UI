@@ -1,5 +1,6 @@
 import RestfulHandler from '../../../../module/handler/restfulHandler';
 import enviroment from '../../../../settings/enviroments';
+import { getHeaders } from '.././../../../module/headers'; 
 
 class WarehouseService {
     constructor() {
@@ -17,7 +18,7 @@ class WarehouseService {
         return this.service.request({
             method: 'GET',
             endpoint,
-            headers: this.defaultHeaders,
+            headers: getHeaders(),
         });
     };
 
@@ -26,7 +27,7 @@ class WarehouseService {
         return this.service.request({
             method: 'PUT',
             endpoint,
-            headers: this.defaultHeaders, 
+            headers: getHeaders(), 
         });
     };
 
@@ -40,7 +41,7 @@ class WarehouseService {
             method: 'PUT',
             endpoint,
             data: warehouse,
-            headers: this.defaultHeaders, 
+            headers: getHeaders(), 
         });
     };
     
@@ -50,7 +51,7 @@ class WarehouseService {
             method: 'POST',
             endpoint,
             data: warehouse,
-            headers: this.defaultHeaders, 
+            headers: getHeaders(), 
         });
     };
 
