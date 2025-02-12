@@ -9,6 +9,8 @@ import "react-toastify/dist/ReactToastify.css";
 import Slider from "react-slick"; 
 import { Input } from "@/components/ui/input";
 import { ChevronLeft, ChevronRight } from "lucide-react";
+import { useHasMounted } from '../../../hooks/useHasMounted';
+import LoadingScreen from "../../../components/UseHasMounted/LoadingScreen"
 
 const articlesService = new ArticlesService();
 
@@ -18,6 +20,7 @@ export default function ClassificationPage() {
   const [searchTerm, setSearchTerm] = useState("");
   const [selectedArticle, setSelectedArticle] = useState(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const hasMounted = useHasMounted();
 
   const handleClassificationClick = async (classification) => {
     setLoading(true);
@@ -75,6 +78,11 @@ export default function ClassificationPage() {
         {direction === "left" ? <ChevronLeft size={24} color="white" /> : <ChevronRight size={24} color="white" />}
       </div>
     );
+  }
+  if(!hasMounted) {
+    return  <div className="">
+    <div className=""><LoadingScreen message="Preparando tu experiencia..."/></div>
+  </div>;
   }
 
   return (

@@ -1,6 +1,15 @@
-"use client"; // Esto convierte el componente en un Client Component
+"use client"; 
+import { useHasMounted } from '../../../hooks/useHasMounted';
+import LoadingScreen from "../../../components/UseHasMounted/LoadingScreen"
+
 
 export default function Home() {
+  const hasMounted = useHasMounted();
+  if(!hasMounted) {
+    return  <div className="">
+    <div className=""><LoadingScreen message="Preparando tu experiencia..."/></div>
+  </div>;
+  }
   return (
     <div className="flex flex-col items-center justify-center min-h-screen bg-gray-100 dark:bg-gray-900">
       <h1 className="text-4xl font-bold text-cyan-500 dark:text-cyan-300 mb-4">

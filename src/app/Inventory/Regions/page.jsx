@@ -8,6 +8,8 @@ import { regionsColumns } from "../../../models/Warehouse/regions/regionsModel";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import { Eye, MapPin, Info, CheckCircle, XCircle } from "lucide-react";
+import { useHasMounted } from '../../../hooks/useHasMounted';
+import LoadingScreen from "../../../components/UseHasMounted/LoadingScreen"
 
 const MapContainer = dynamic(() => import("react-leaflet").then(mod => mod.MapContainer), { ssr: false });
 const TileLayer = dynamic(() => import("react-leaflet").then(mod => mod.TileLayer), { ssr: false });
@@ -20,6 +22,7 @@ export default function RegionsPage() {
   const [selectedRegion, setSelectedRegion] = useState(null);
   const [modalOpen, setModalOpen] = useState(false);
   const [defaultIcon, setDefaultIcon] = useState(null);
+  const hasMounted = useHasMounted();
 
   // Carga dinámica del icono de Leaflet
   useEffect(() => {
@@ -66,6 +69,11 @@ export default function RegionsPage() {
     },
   ];
 
+  if(!hasMounted) {
+    return  <div className="">
+    <div className=""><LoadingScreen message="Preparando tu experiencia..."/></div>
+  </div>;
+  }
   return (
     <div className="p-6 bg-gray-50 min-h-screen">
       <div className="bg-gray-900 text-white p-6 rounded-lg shadow-lg mb-6">

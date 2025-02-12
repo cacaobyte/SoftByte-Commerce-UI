@@ -1,6 +1,12 @@
 // Models/Sidebar/SidebarModel.js
 export const sidebarItems = [
   {
+    title: "Home",
+    icon: "bell",
+    route: "/Home/elcome",
+    submenus: [],
+  },
+  {
     title: "Dashboard",
     icon: "RiDashboard3Fill",
     route: "/dashboard",

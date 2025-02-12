@@ -10,6 +10,7 @@ import { useHasMounted } from '../../../../hooks/useHasMounted';
 import ArticleCarousel from "../../../../components/Articles/ArticleCarousel";
 import LoadingScreen from "../../../../components/UseHasMounted/LoadingScreen";
 
+
 const articlesService = new ArticlesService();
 const categoriesService = new CategoriesService();
 

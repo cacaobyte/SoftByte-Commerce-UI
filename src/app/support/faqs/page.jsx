@@ -5,11 +5,14 @@ import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import FaqsService from "../../../service/SoftbyteCommerce/Sales/supports/faqs/faqsService";
 import { FaQuestionCircle } from "react-icons/fa";
+import { useHasMounted } from '../../../hooks/useHasMounted';
+import LoadingScreen from "../../../components/UseHasMounted/LoadingScreen"
 
 export default function FaqsPage() {
     const [faqs, setFaqs] = useState([]);
     const [filteredFaqs, setFilteredFaqs] = useState([]);
     const [selectedCategory, setSelectedCategory] = useState("Todos");
+    const hasMounted = useHasMounted();
 
     const faqsService = new FaqsService();
 
@@ -38,6 +41,11 @@ export default function FaqsPage() {
         }
     };
 
+    if(!hasMounted) {
+        return  <div className="">
+        <div className=""><LoadingScreen message="Preparando tu experiencia..."/></div>
+      </div>;
+      }
     return (
         <div className="max-w-6xl mx-auto p-6">
             {/* Sección Introductoria */}

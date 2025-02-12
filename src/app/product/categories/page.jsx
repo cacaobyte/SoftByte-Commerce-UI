@@ -9,6 +9,8 @@ import ConfirmationModal from "../../../components/shared/Modal/ConfirmationModa
 import DynamicForm from "../../../components/shared/Forms/DynamicForm";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import { useHasMounted } from '../../../hooks/useHasMounted';
+import LoadingScreen from "../../../components/UseHasMounted/LoadingScreen"
 
 const categoriesColumns = [
   {
@@ -47,6 +49,7 @@ export default function CategoriesPage() {
   const [confirmModalOpen, setConfirmModalOpen] = useState(false);
   const [confirmLoading, setConfirmLoading] = useState(false);
   const [categoryToToggle, setCategoryToToggle] = useState(null);
+  const hasMounted = useHasMounted();
 
   const service = new CategoriesService();
 
@@ -165,7 +168,11 @@ export default function CategoriesPage() {
       onClick: handleToggleStatus,
     },
   ];
-
+  if(!hasMounted) {
+    return  <div className="">
+    <div className=""><LoadingScreen message="Preparando tu experiencia..."/></div>
+  </div>;
+  }
   return (
     <div className="p-6 bg-gray-50 min-h-screen">
       <ToastContainer position="top-right" autoClose={3000} />

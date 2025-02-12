@@ -17,6 +17,8 @@ import InfoCard from "../../../../components/shared/Cards/InfoCard";
 import { BuildingStorefrontIcon } from "@heroicons/react/24/outline";
 import GT from "territory-gt";
 import createWarehouseModel from "../../../../models/Warehouse/createWarehouse/createWarehouseModel";
+import { useHasMounted } from '../../../../hooks/useHasMounted';
+import LoadingScreen from "../../../../components/UseHasMounted/LoadingScreen"
 
 const WarehousePage = () => {
     const [warehouse, setWarehouse] = useState([]);
@@ -26,6 +28,7 @@ const WarehousePage = () => {
     const [selectedWarehouse, setSelectedWarehouse] = useState(null);
     const [loading, setLoading] = useState(false);
     const [editMode, setEditMode] = useState(false);
+     const hasMounted = useHasMounted();
 
     const warehouseService = new WarehouseService();
     const regionsService = new RegionsService();
@@ -153,6 +156,11 @@ const WarehousePage = () => {
         onToggle: handleConfirmToggle
     });
 
+    if(!hasMounted) {
+        return  <div className="">
+        <div className=""><LoadingScreen message="Preparando tu experiencia..."/></div>
+      </div>;
+      }
     return (
         <div className="p-6">
             {/* 📌 SECCIÓN DE TARJETAS CON ESTADÍSTICAS */}
