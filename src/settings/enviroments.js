@@ -51,6 +51,9 @@ module.exports = {
                 Security:{
                     "login": "security/login",
                     "register": "security/register",
+                },
+                Users:{
+                    "profile": "security/profile",
                 }
             }
         }

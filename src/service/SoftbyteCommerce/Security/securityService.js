@@ -32,7 +32,15 @@ class SecurityService {
         });
     };
 
-    
+    getProfile = (d) => {
+        const endpoint = this.endpoint.login; 
+        return this.service.request({
+          method: 'GET',
+          endpoint,
+          data, 
+          headers: getHeaders(),
+        });
+    };
 
 }
 
