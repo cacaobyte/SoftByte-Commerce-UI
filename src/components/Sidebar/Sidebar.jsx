@@ -6,10 +6,14 @@ import { Sheet, SheetContent, SheetTitle } from "@/components/ui/sheet";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Icons } from "@/components/ui/icons"; // Importa tus iconos personalizados
+import { useRouter } from "next/navigation";
+import { isPlatform } from '@ionic/react';
+import { Preferences } from '@capacitor/preferences';
 
 const Sidebar = () => {
   const [openMenu, setOpenMenu] = useState(null); // Controla qué submenú está desplegado
   const [isSidebarOpen, setIsSidebarOpen] = useState(false); // Controla el estado del Sidebar
+  const router = useRouter();
 
   const toggleSubMenu = (menu) => {
     setOpenMenu(openMenu === menu ? null : menu); // Alterna submenú

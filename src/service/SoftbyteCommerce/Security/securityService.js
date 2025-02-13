@@ -18,27 +18,29 @@ class SecurityService {
           method: 'POST',
           endpoint,
           data, 
-          headers: getHeaders(),
+          headers: this.defaultHeaders,
         });
     };
 
-    register = (data) => {
+    register = async(data) => {
         const endpoint = this.endpoint.register;
+        const headers = await getHeaders()
         return this.service.request({
             method: 'POST',
             endpoint,
             data:data,
-            headers: getHeaders(),
+            headers: headers,
         });
     };
 
-    getProfile = (d) => {
+    getProfile = async () => {
         const endpoint = this.endpoint.login; 
+        const headers = await getHeaders();
         return this.service.request({
           method: 'GET',
           endpoint,
           data, 
-          headers: getHeaders(),
+          headers: headers,
         });
     };
 

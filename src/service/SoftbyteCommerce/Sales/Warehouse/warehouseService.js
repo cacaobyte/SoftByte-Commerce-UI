@@ -13,45 +13,49 @@ class WarehouseService {
     }
 
 
-    getWarehouse = () => {
+    getWarehouse = async() => {
         const endpoint = this.endpoint.getWarehouse;
+        const headers = await getHeaders()
         return this.service.request({
             method: 'GET',
             endpoint,
-            headers: getHeaders(),
+            headers: headers,
         });
     };
 
-    putWarehouseId = (warehouseId) => {
+    putWarehouseId = async(warehouseId) => {
         const endpoint = this.endpoint.putWarehouse.replace("{0}", warehouseId); 
+        const headers = await getHeaders()
         return this.service.request({
             method: 'PUT',
             endpoint,
-            headers: getHeaders(), 
+            headers: headers, 
         });
     };
 
-    putWarehouse = (warehouse, warehouseId) => {
+    putWarehouse = async(warehouse, warehouseId) => {
         if (!warehouseId) {
             console.error("Error: warehouseId es inválido.");
             return Promise.reject(new Error("warehouseId no puede ser nulo o indefinido"));
         }
         const endpoint = this.endpoint.editWarehouse.replace("{0}", warehouseId); 
+        const headers = await getHeaders()
         return this.service.request({
             method: 'PUT',
             endpoint,
             data: warehouse,
-            headers: getHeaders(), 
+            headers: headers, 
         });
     };
     
-    createWarehouse = (warehouse) => {
+    createWarehouse = async(warehouse) => {
         const endpoint = this.endpoint.CreateWarehouse; 
+        const headers = await getHeaders()
         return this.service.request({
             method: 'POST',
             endpoint,
             data: warehouse,
-            headers: getHeaders(), 
+            headers: headers, 
         });
     };
 

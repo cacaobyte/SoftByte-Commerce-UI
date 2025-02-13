@@ -13,12 +13,13 @@ class UserService {
     }
 
 
-    getProfile = () => {
+    getProfile = async() => {
         const endpoint = this.endpoint.profile; 
+        const headers = await getHeaders()
         return this.service.request({
           method: 'GET',
           endpoint,
-          headers: getHeaders(),
+          headers: headers,
         });
     };
 

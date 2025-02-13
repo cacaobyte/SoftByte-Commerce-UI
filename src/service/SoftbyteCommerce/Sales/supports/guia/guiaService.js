@@ -11,12 +11,13 @@ class GuiaService {
         };
     }
 
-    getAllGuia = () => {
+    getAllGuia = async() => {
         const endpoint = this.endpoint.getGuia;
+        const headers = await getHeaders()
         return this.service.request({
             method: 'GET',
             endpoint,
-            headers: this.defaultHeaders,
+            headers: headers,
         });
     };
 
