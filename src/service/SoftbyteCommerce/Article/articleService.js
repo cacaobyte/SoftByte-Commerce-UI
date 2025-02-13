@@ -1,5 +1,6 @@
 import RestfulHandler from '../../../module/handler/restfulHandler';
 import enviroment from '../../../settings/enviroments';
+import { getHeaders } from '.././../../module/headers'; 
 
 class ArticlesService {
     constructor() {
@@ -16,7 +17,7 @@ class ArticlesService {
         return this.service.request({
             method: 'GET',
             endpoint,
-            headers: this.defaultHeaders,
+            headers: getHeaders(),
         });
     };
 
@@ -25,7 +26,7 @@ class ArticlesService {
         return this.service.request({
             method: 'GET',
             endpoint,
-            headers: this.defaultHeaders,
+            headers: getHeaders(),
         });
     };
 
@@ -38,7 +39,7 @@ class ArticlesService {
             method: 'POST',
             endpoint: this.endpoint.postArticles, 
             data: articleData,
-            headers: {}, // No especificamos Content-Type, Axios lo manejará automáticamente
+            headers: getHeaders(), // No especificamos Content-Type, Axios lo manejará automáticamente
         });
     };
     
@@ -52,7 +53,7 @@ class ArticlesService {
         return this.service.request({
             method: 'GET',
             endpoint,
-            headers: this.defaultHeaders,
+            headers: getHeaders(),
         });
     };  
 

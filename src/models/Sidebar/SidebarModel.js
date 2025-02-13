@@ -1,6 +1,12 @@
 // Models/Sidebar/SidebarModel.js
 export const sidebarItems = [
   {
+    title: "Home",
+    icon: "bell",
+    route: "/Home/elcome",
+    submenus: [],
+  },
+  {
     title: "Dashboard",
     icon: "RiDashboard3Fill",
     route: "/dashboard",
@@ -70,7 +76,7 @@ export const sidebarItems = [
     icon: "settings",
     route: "/configuracion",
     submenus: [
-      { title: "Perfil", route: "/configuracion/perfil" },
+      { title: "Perfil", route: "/setting/profile/" },
       { title: "Seguridad", route: "/configuracion/seguridad" },
       { title: "Tienda", route: "/configuracion/tienda" },
       { title: "Impuestos", route: "/configuracion/impuestos" },

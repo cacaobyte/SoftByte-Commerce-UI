@@ -11,12 +11,13 @@ class FaqsService {
         };
     }
 
-    getAllFaqs = () => {
+    getAllFaqs = async() => {
         const endpoint = this.endpoint.getFaqs;
+        const headers = await getHeaders()
         return this.service.request({
             method: 'GET',
             endpoint,
-            headers: this.defaultHeaders,
+            headers: headers,
         });
     };
 

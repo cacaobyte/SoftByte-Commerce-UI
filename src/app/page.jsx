@@ -1,7 +1,7 @@
 "use client"; 
-import { useHasMounted } from '../../../hooks/useHasMounted';
-import LoadingScreen from "../../../components/UseHasMounted/LoadingScreen"
-import ProtectedPage from '../../../components/ProtectedPage';
+import { useHasMounted } from '../hooks/useHasMounted';
+import LoadingScreen from "../components/UseHasMounted/LoadingScreen"
+import ProtectedPage from '../components/ProtectedPage';
 
 
 export default function Home() {

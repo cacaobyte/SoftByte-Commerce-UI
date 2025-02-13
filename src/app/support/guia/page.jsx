@@ -5,6 +5,9 @@ import GuiaService from "../../../service/SoftbyteCommerce/Sales/supports/guia/g
 import { FaVideo } from "react-icons/fa";
 import { Dialog, DialogContent, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import { BsDownload } from "react-icons/bs";
+import { useHasMounted } from '../../../hooks/useHasMounted';
+import LoadingScreen from "../../../components/UseHasMounted/LoadingScreen"
+import ProtectedPage from '../../../components/ProtectedPage';
 
 export default function GuiasPage() {
     const [guias, setGuias] = useState([]);
@@ -12,6 +15,7 @@ export default function GuiasPage() {
     const [categorias, setCategorias] = useState([]);
     const [categoriaSeleccionada, setCategoriaSeleccionada] = useState("Todas");
     const [esMovil, setEsMovil] = useState(false);
+    const hasMounted = useHasMounted();
 
     const cloudinaryCloudName = "dhhtmdjmt"; // Reemplázalo con tu Cloudinary Cloud Name
     const guiaService = new GuiaService();
@@ -77,7 +81,13 @@ export default function GuiasPage() {
         }
     };
 
+    if(!hasMounted) {
+        return  <div className="">
+        <div className=""><LoadingScreen message="Preparando tu experiencia..."/></div>
+      </div>;
+      }
     return (
+        <ProtectedPage>
         <div className="max-w-6xl mx-auto p-6">
             <div className="flex items-center gap-3 text-black text-3xl font-bold">
                 <FaVideo className="text-4xl" />
@@ -158,5 +168,6 @@ export default function GuiasPage() {
                 )}
             </div>
         </div>
+        </ProtectedPage>
     );
 }
