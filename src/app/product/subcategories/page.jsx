@@ -1,9 +1,11 @@
 "use client";
 import { motion } from "framer-motion";
 import { Construction, Clock } from "lucide-react";
+import ProtectedPage from '../../../components/ProtectedPage';
 
 export default function UnderConstruction() {
   return (
+    <ProtectedPage>
     <div className="flex items-center justify-center min-h-screen bg-gray-900 text-white">
       <motion.div
         initial={{ opacity: 0, y: 50 }}
@@ -33,5 +35,6 @@ export default function UnderConstruction() {
         </motion.div>
       </motion.div>
     </div>
+    </ProtectedPage>
   );
 }

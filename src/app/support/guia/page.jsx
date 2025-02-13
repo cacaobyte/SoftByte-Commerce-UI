@@ -7,6 +7,7 @@ import { Dialog, DialogContent, DialogTitle, DialogTrigger } from "@/components/
 import { BsDownload } from "react-icons/bs";
 import { useHasMounted } from '../../../hooks/useHasMounted';
 import LoadingScreen from "../../../components/UseHasMounted/LoadingScreen"
+import ProtectedPage from '../../../components/ProtectedPage';
 
 export default function GuiasPage() {
     const [guias, setGuias] = useState([]);
@@ -86,6 +87,7 @@ export default function GuiasPage() {
       </div>;
       }
     return (
+        <ProtectedPage>
         <div className="max-w-6xl mx-auto p-6">
             <div className="flex items-center gap-3 text-black text-3xl font-bold">
                 <FaVideo className="text-4xl" />
@@ -166,5 +168,6 @@ export default function GuiasPage() {
                 )}
             </div>
         </div>
+        </ProtectedPage>
     );
 }

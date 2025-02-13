@@ -9,7 +9,7 @@ import CategoriesService from "../../../../service/SoftbyteCommerce/Sales/catego
 import { useHasMounted } from '../../../../hooks/useHasMounted';
 import ArticleCarousel from "../../../../components/Articles/ArticleCarousel";
 import LoadingScreen from "../../../../components/UseHasMounted/LoadingScreen";
-
+import ProtectedPage from '../../../../components/ProtectedPage';
 
 const articlesService = new ArticlesService();
 const categoriesService = new CategoriesService();
@@ -149,6 +149,7 @@ const CreateArticles = () => {
     }
 
     return (
+        <ProtectedPage>
         <div>
             <div className="max-w-6xl mx-auto mt-10">
                 {/* Botón para agregar artículo */}
@@ -176,6 +177,7 @@ const CreateArticles = () => {
                 <ArticleCarousel />
             </div>
         </div>
+        </ProtectedPage>
     );
 };
 

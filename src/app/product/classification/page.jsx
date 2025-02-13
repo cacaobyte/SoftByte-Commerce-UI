@@ -11,6 +11,7 @@ import { Input } from "@/components/ui/input";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import { useHasMounted } from '../../../hooks/useHasMounted';
 import LoadingScreen from "../../../components/UseHasMounted/LoadingScreen"
+import ProtectedPage from '../../../components/ProtectedPage';
 
 const articlesService = new ArticlesService();
 
@@ -86,6 +87,7 @@ export default function ClassificationPage() {
   }
 
   return (
+    <ProtectedPage>
     <div className="p-6 bg-gray-50 min-h-screen dark:bg-gray-900">
       <ToastContainer position="top-right" autoClose={3000} />
       <div className="bg-gray-900 text-white p-6 rounded-lg shadow-lg mb-6">
@@ -188,5 +190,6 @@ export default function ClassificationPage() {
         </Dialog>
       )}
     </div>
+    </ProtectedPage>
   );
 }

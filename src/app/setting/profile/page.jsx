@@ -7,6 +7,7 @@ import { FaEnvelope, FaPhone, FaMapMarkerAlt, FaIdCard, FaShieldAlt } from 'reac
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
 import { Skeleton } from '@/components/ui/skeleton';
 import { toast } from 'react-toastify';
+import ProtectedPage from '../../../components/ProtectedPage';
 
 export default function ProfilePage() {
   const [profile, setProfile] = useState(null);
@@ -45,6 +46,7 @@ export default function ProfilePage() {
   }
 
   return (
+    <ProtectedPage>
     <div className="max-w-5xl mx-auto mt-10 space-y-8">
       <Card className="shadow-2xl border-none rounded-xl">
         <CardHeader className="relative bg-gradient-to-br from-blue-500 to-purple-700 text-white py-10 text-center">
@@ -96,6 +98,7 @@ export default function ProfilePage() {
         </CardContent>
       </Card>
     </div>
+    </ProtectedPage>
   );
 }
 

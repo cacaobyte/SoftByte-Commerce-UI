@@ -40,7 +40,7 @@ export function LoginForm() {
         }
 
         toast.success('Inicio de sesión exitoso', { position: 'top-center' });
-        router.push('/Home/welcome');
+        router.push('/');
       } else {
         throw new Error('Token no recibido.');
       }

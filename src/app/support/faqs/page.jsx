@@ -7,6 +7,7 @@ import FaqsService from "../../../service/SoftbyteCommerce/Sales/supports/faqs/f
 import { FaQuestionCircle } from "react-icons/fa";
 import { useHasMounted } from '../../../hooks/useHasMounted';
 import LoadingScreen from "../../../components/UseHasMounted/LoadingScreen"
+import ProtectedPage from '../../../components/ProtectedPage';
 
 export default function FaqsPage() {
     const [faqs, setFaqs] = useState([]);
@@ -47,6 +48,7 @@ export default function FaqsPage() {
       </div>;
       }
     return (
+        <ProtectedPage>
         <div className="max-w-6xl mx-auto p-6">
             {/* Sección Introductoria */}
             <div className="text-center mb-6">
@@ -95,5 +97,6 @@ export default function FaqsPage() {
                 )}
             </div>
         </div>
+        </ProtectedPage>
     );
 }

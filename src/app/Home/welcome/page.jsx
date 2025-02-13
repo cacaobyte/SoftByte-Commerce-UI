@@ -1,6 +1,7 @@
 "use client"; 
 import { useHasMounted } from '../../../hooks/useHasMounted';
 import LoadingScreen from "../../../components/UseHasMounted/LoadingScreen"
+import ProtectedPage from '../../../components/ProtectedPage';
 
 
 export default function Home() {
@@ -11,6 +12,7 @@ export default function Home() {
   </div>;
   }
   return (
+    <ProtectedPage>
     <div className="flex flex-col items-center justify-center min-h-screen bg-gray-100 dark:bg-gray-900">
       <h1 className="text-4xl font-bold text-cyan-500 dark:text-cyan-300 mb-4">
         ¡Bienvenido a SoftByte Commerce!
@@ -25,5 +27,6 @@ export default function Home() {
         Comenzar
       </button>
     </div>
+    </ProtectedPage>
   );
 }

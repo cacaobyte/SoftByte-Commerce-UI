@@ -8,6 +8,7 @@ import CategoriesCard from "../../../../components/Articles/CategoriesCard";
 import RecentArticlesCard from "../../../../components/Articles/RecentArticlesCard";
 import { useHasMounted } from '../../../../hooks/useHasMounted';
 import LoadingScreen from "../../../../components/UseHasMounted/LoadingScreen"
+import ProtectedPage from '../../../../components/ProtectedPage';
 
 const ArticlesPage = () => {
   const [articles, setArticles] = useState([]);
@@ -73,6 +74,7 @@ const ArticlesPage = () => {
       }
       
   return (
+    <ProtectedPage>
     <div className="p-6 space-y-6">
       {/* Panel de resumen */}
       <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
@@ -110,6 +112,7 @@ const ArticlesPage = () => {
         />
       </div>
     </div>
+    </ProtectedPage>
   );
 };
 
