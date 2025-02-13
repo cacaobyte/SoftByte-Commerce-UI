@@ -1,5 +1,6 @@
 import RestfulHandler from '../../../../module/handler/restfulHandler';
 import enviroment from '../../../../settings/enviroments';
+import { getHeaders } from '.././../../../module/headers'; 
 
 class CategoriesService {
     constructor() {
@@ -11,26 +12,29 @@ class CategoriesService {
         };
     }
 // Listar las categorias activas
-    getAllCategories = () => {
+    getAllCategories = async() => {
         const endpoint = this.endpoint.getCategoriesActive;
+        const headers = await getHeaders()
         return this.service.request({
             method: 'GET',
             endpoint,
-            headers: this.defaultHeaders,
+            headers: headers,
         });
     };
 // Listar todas las categorias
-    getCategories = () => {
+    getCategories = async() => {
         const endpoint = this.endpoint.getCategorie;
+        const headers = await getHeaders()
         return this.service.request({
             method: 'GET',
             endpoint,
-            headers: this.defaultHeaders,
+            headers: headers,
         });
     };
 
-putCategories = (categorie) => {
+putCategories = async(categorie) => {
     const endpoint = this.endpoint.putCategorie;
+    const headers = await getHeaders()
     const cleanCategory = {
         idCategoria: categorie.idCategoria,
         nombre: categorie.nombre,
@@ -41,13 +45,14 @@ putCategories = (categorie) => {
         method: "PUT",
         endpoint,
         data: cleanCategory, 
-        headers: this.defaultHeaders,
+        headers: headers,
     });
 };
 
       
-createCategory = (newCategory) => {
+createCategory = async(newCategory) => {
     const endpoint = this.endpoint.createCategorie;
+    const headers = await getHeaders()
     const cleanCategory = {
         nombre: newCategory.nombre,
         descripcion: newCategory.descripcion || null
@@ -57,32 +62,34 @@ createCategory = (newCategory) => {
         method: "POST",
         endpoint,
         data: cleanCategory,
-        headers: this.defaultHeaders,
+        headers: headers,
     });
 };
  
       
 
 
-    getCategoriesSubCategories = () => {
+    getCategoriesSubCategories = async() => {
         const endpoint = this.endpoint.getCategoriesSubCategories;
+        const headers = await getHeaders()
         return this.service.request({
             method: 'GET',
             endpoint,
-            headers: this.defaultHeaders,
+            headers: headers,
         });
     };
 
-    putInactiveCategory = (categoryId) => {
+    putInactiveCategory = async(categoryId) => {
         if (!categoryId) {
             console.error("Error: categoryId es inválido.");
             return Promise.reject(new Error("categoryId no puede ser nulo o indefinido"));
         }
-        const endpoint = this.endpoint.putInactiveCategory.replace("{0}", categoryId); 
+        const endpoint = this.endpoint.putInactiveCategory.replace("{0}", categoryId);
+        const headers = await getHeaders() 
         return this.service.request({
             method: 'PUT',
             endpoint,
-            headers: this.defaultHeaders,
+            headers: headers,
         });
     };
     

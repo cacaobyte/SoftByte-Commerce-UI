@@ -6,10 +6,14 @@ import { Sheet, SheetContent, SheetTitle } from "@/components/ui/sheet";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Icons } from "@/components/ui/icons"; // Importa tus iconos personalizados
+import { useRouter } from "next/navigation";
+import { isPlatform } from '@ionic/react';
+import { Preferences } from '@capacitor/preferences';
 
 const Sidebar = () => {
   const [openMenu, setOpenMenu] = useState(null); // Controla qué submenú está desplegado
   const [isSidebarOpen, setIsSidebarOpen] = useState(false); // Controla el estado del Sidebar
+  const router = useRouter();
 
   const toggleSubMenu = (menu) => {
     setOpenMenu(openMenu === menu ? null : menu); // Alterna submenú
@@ -17,6 +21,15 @@ const Sidebar = () => {
 
   const handleSidebarClose = () => {
     setIsSidebarOpen(false); // Cierra el sidebar al hacer clic en una opción
+  };
+
+  const handleLogout = async () => {
+    if (isPlatform("hybrid")) {
+      await Preferences.remove({ key: "token" });
+    } else {
+      document.cookie = "token=; path=/; max-age=0;";
+    }
+    router.push("/auth/login");
   };
 
   return (
@@ -96,7 +109,7 @@ const Sidebar = () => {
             <Button
               variant="ghost"
               className="w-full justify-start text-red-500"
-              onClick={() => alert("Sesión cerrada")}
+              onClick={handleLogout}
             >
               <Icons.logout className="mr-3 w-5 h-5" />
               Cerrar Sesión

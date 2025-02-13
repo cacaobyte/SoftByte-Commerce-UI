@@ -2,6 +2,7 @@ import "../styles/globals.css";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import ClientWrapper from "../components/shared/ClientWrapper";
+import AppWrapper from "../components/AppWrapper"; // Importa el AppWrapper
 
 export const metadata = {
   title: "SoftByte Commerce",
@@ -19,25 +20,27 @@ export default function RootLayout({ children }) {
         <link rel="icon" href="/Logo_CacaoByte_S.A.png" type="image/png" />
       </head>
       <body className="min-h-screen antialiased bg-gray-50 dark:bg-gray-800">
-        <ClientWrapper>{children}</ClientWrapper>
-        <ToastContainer
-          position="top-center"
-          autoClose={3000}
-          hideProgressBar={false}
-          newestOnTop
-          closeOnClick
-          rtl={false}
-          pauseOnFocusLoss
-          draggable
-          pauseOnHover
-          style={{
-            top: "50%",
-            left: "50%",
-            transform: "translate(-50%, -50%)",
-            width: "90%",
-            maxWidth: "400px",
-          }}
-        />
+        <AppWrapper>
+          <ClientWrapper>{children}</ClientWrapper>
+          <ToastContainer
+            position="top-center"
+            autoClose={3000}
+            hideProgressBar={false}
+            newestOnTop
+            closeOnClick
+            rtl={false}
+            pauseOnFocusLoss
+            draggable
+            pauseOnHover
+            style={{
+              top: "50%",
+              left: "50%",
+              transform: "translate(-50%, -50%)",
+              width: "90%",
+              maxWidth: "400px",
+            }}
+          />
+        </AppWrapper>
       </body>
     </html>
   );

@@ -4,9 +4,19 @@ import Image from "next/image";
 import { FaEnvelope, FaPhone, FaGlobe, FaMapMarkerAlt } from "react-icons/fa";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
+import { useHasMounted } from '../../../hooks/useHasMounted';
+import LoadingScreen from "../../../components/UseHasMounted/LoadingScreen"
+import ProtectedPage from '../../../components/ProtectedPage';
 
 export default function ContactPage() {
+    const hasMounted = useHasMounted();
+    if(!hasMounted) {
+        return  <div className="">
+        <div className=""><LoadingScreen message="Preparando tu experiencia..."/></div>
+      </div>;
+      }
     return (
+        <ProtectedPage>
         <div className="max-w-6xl mx-auto p-6">
             {/* Encabezado con logo */}
             <div className="flex items-center gap-6 bg-white p-6 shadow-lg rounded-lg">
@@ -111,5 +121,6 @@ export default function ContactPage() {
                 </Button>
             </div>
         </div>
+        </ProtectedPage>
     );
 }

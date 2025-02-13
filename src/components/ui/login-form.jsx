@@ -6,7 +6,9 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { FaEye, FaEyeSlash } from 'react-icons/fa';
-import { toast } from 'react-toastify'; // Asegúrate de importar toast
+import { toast } from 'react-toastify'; 
+import { Preferences } from '@capacitor/preferences';
+import { isPlatform } from '@ionic/react';
 
 export function LoginForm() {
   const [email, setEmail] = useState('');
@@ -29,9 +31,16 @@ export function LoginForm() {
       const token = response?.data?.token;
 
       if (token) {
-        document.cookie = `token=${token}; path=/; max-age=5400; SameSite=Lax`;
+        if (isPlatform('hybrid')) {
+          // Guarda el token en Capacitor Preferences (iOS/Android)
+          await Preferences.set({ key: 'token', value: token });
+        } else {
+          // Guarda el token en cookies (para web)
+          document.cookie = `token=${token}; path=/; max-age=5400; SameSite=Lax`;
+        }
+
         toast.success('Inicio de sesión exitoso', { position: 'top-center' });
-        router.push('/Home/welcome'); // Redirige al dashboard
+        router.push('/');
       } else {
         throw new Error('Token no recibido.');
       }

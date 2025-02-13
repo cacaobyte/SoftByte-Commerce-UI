@@ -1,5 +1,6 @@
 import RestfulHandler from '../../../module/handler/restfulHandler';
 import enviroment from '../../../settings/enviroments';
+import { getHeaders } from '.././../../module/headers'; 
 
 class SecurityService {
     constructor() {
@@ -21,17 +22,27 @@ class SecurityService {
         });
     };
 
-    register = (data) => {
+    register = async(data) => {
         const endpoint = this.endpoint.register;
+        const headers = await getHeaders()
         return this.service.request({
             method: 'POST',
             endpoint,
             data:data,
-            headers: this.defaultHeaders,
+            headers: headers,
         });
     };
 
-    
+    getProfile = async () => {
+        const endpoint = this.endpoint.login; 
+        const headers = await getHeaders();
+        return this.service.request({
+          method: 'GET',
+          endpoint,
+          data, 
+          headers: headers,
+        });
+    };
 
 }
 
