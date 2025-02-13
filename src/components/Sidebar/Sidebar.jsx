@@ -19,6 +19,15 @@ const Sidebar = () => {
     setIsSidebarOpen(false); // Cierra el sidebar al hacer clic en una opción
   };
 
+  const handleLogout = async () => {
+    if (isPlatform("hybrid")) {
+      await Preferences.remove({ key: "token" });
+    } else {
+      document.cookie = "token=; path=/; max-age=0;";
+    }
+    router.push("/auth/login");
+  };
+
   return (
     <>
       {/* Botón para abrir el sidebar */}
@@ -96,7 +105,7 @@ const Sidebar = () => {
             <Button
               variant="ghost"
               className="w-full justify-start text-red-500"
-              onClick={() => alert("Sesión cerrada")}
+              onClick={handleLogout}
             >
               <Icons.logout className="mr-3 w-5 h-5" />
               Cerrar Sesión
