@@ -3,7 +3,7 @@ import { useEffect, useState } from "react";
 import dynamic from "next/dynamic";
 import RegionsService from "../../../service/SoftbyteCommerce/Sales/Warehouse/regionsService";
 import "leaflet/dist/leaflet.css";
-import DataTable from "../../../components/shared/DataTable/DataTable";
+import DataTable from "../../../components/DataTable/DataTable";
 import { regionsColumns } from "../../../models/Warehouse/regions/regionsModel";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
