@@ -32,6 +32,9 @@ module.exports = {
                 users:{
                     getUsers: "usuarios",
                 },
+                clients:{
+                    getClients: "clients/allClients",
+                },
                 sales:{
                     getSales: "ventas",
                 },
