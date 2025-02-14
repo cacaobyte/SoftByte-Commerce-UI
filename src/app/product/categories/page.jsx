@@ -1,7 +1,7 @@
 "use client";
 import { useEffect, useState } from "react";
 import CategoriesService from "../../../service/SoftbyteCommerce/Sales/categories/categoriesService";
-import DataTable from "../../../components/shared/DataTable/DataTable";
+import DataTable from "../../../components/DataTable/DataTable";
 import { Eye, Edit, PlusCircle, ToggleLeft, ToggleRight } from "lucide-react";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
@@ -152,23 +152,24 @@ export default function CategoriesPage() {
   const actions = [
     {
       label: "Ver",
-      icon: Eye,
+      icon: <Eye size={16} />,
       variant: "ghost",
       onClick: handleViewSubcategories,
     },
     {
       label: "Editar",
-      icon: Edit,
+      icon: <Edit size={16} />,
       variant: "outline",
       onClick: handleEditCategory,
     },
     {
-      label: (row) => (row.estatus ? "Desactivar" : "Activar"),
-      icon: (row) => (row.estatus ? <ToggleLeft size={16} /> : <ToggleRight size={16} />),
+      label: "Desactivar",
+      icon: <ToggleLeft size={16} />,
       variant: "destructive",
       onClick: handleToggleStatus,
     },
   ];
+  
   if(!hasMounted) {
     return  <div className="">
     <div className=""><LoadingScreen message="Preparando tu experiencia..."/></div>
@@ -178,14 +179,17 @@ export default function CategoriesPage() {
     <ProtectedPage>
     <div className="p-6 bg-gray-50 min-h-screen">
       <ToastContainer position="top-right" autoClose={3000} />
-      <div className="bg-gray-900 text-white p-6 rounded-lg shadow-lg mb-6 flex justify-between items-center">
-        <div>
+      <div className="bg-gray-900 text-white p-6 rounded-lg shadow-lg mb-6 flex flex-wrap items-start gap-4">
+        <div className="flex-1">
           <h1 className="text-4xl font-bold">Categorías</h1>
           <p className="mt-2 text-lg text-gray-300">
             Explora y administra las categorías disponibles en el sistema.
           </p>
         </div>
-        <Button onClick={() => setAddModalOpen(true)} className="bg-green-500 hover:bg-green-600">
+        <Button
+          onClick={() => setAddModalOpen(true)}
+          className="bg-green-500 hover:bg-green-600 whitespace-nowrap"
+        >
           <PlusCircle className="mr-2" size={20} /> Crear Categoría
         </Button>
       </div>
