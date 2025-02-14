@@ -12,21 +12,23 @@ class ArticlesService {
         };
     }
 
-    getArticles = () => {
+    getArticles = async() => {
         const endpoint = this.endpoint.getArticles;
+        const headers = await getHeaders()
         return this.service.request({
             method: 'GET',
             endpoint,
-            headers: getHeaders(),
+            headers: headers,
         });
     };
 
-    getArticlesWholesale = () => {
+    getArticlesWholesale = async() => {
         const endpoint = this.endpoint.getArticlesWholesale;
+        const headers = await getHeaders()
         return this.service.request({
             method: 'GET',
             endpoint,
-            headers: getHeaders(),
+            headers: headers,
         });
     };
 
@@ -34,12 +36,13 @@ class ArticlesService {
      * Crea un nuevo artículo
      * @param {FormData} articleData - Datos del artículo en FormData (incluye imagen)
      */
-    createArticle = (articleData) => {
+    createArticle = async(articleData) => {
+        const headers = await getHeaders()
         return this.service.request({
             method: 'POST',
             endpoint: this.endpoint.postArticles, 
             data: articleData,
-            headers: getHeaders(), // No especificamos Content-Type, Axios lo manejará automáticamente
+            headers: headers, 
         });
     };
     
@@ -48,12 +51,13 @@ class ArticlesService {
      * Obtiene todos los artículos activos
      * @returns {Promise} Lista de artículos activos
      */
-    getAllArticles = () => {
-        const endpoint = this.endpoint.getAllArticles; // Usa el nuevo endpoint definido
+    getAllArticles = async() => {
+        const endpoint = this.endpoint.getAllArticles;
+        const headers = await getHeaders()
         return this.service.request({
             method: 'GET',
             endpoint,
-            headers: getHeaders(),
+            headers: headers,
         });
     };  
 
