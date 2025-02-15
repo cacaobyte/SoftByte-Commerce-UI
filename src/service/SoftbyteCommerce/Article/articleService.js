@@ -1,6 +1,6 @@
 import RestfulHandler from '../../../module/handler/restfulHandler';
 import enviroment from '../../../settings/enviroments';
-import { getHeaders } from '.././../../module/headers'; 
+import { getHeaders, getToken } from '.././../../module/headers'; 
 
 class ArticlesService {
     constructor() {
@@ -32,19 +32,28 @@ class ArticlesService {
         });
     };
 
-    /**
-     * Crea un nuevo artículo
-     * @param {FormData} articleData - Datos del artículo en FormData (incluye imagen)
-     */
-    createArticle = async(articleData) => {
-        const headers = await getHeaders()
-        return this.service.request({
-            method: 'POST',
-            endpoint: this.endpoint.postArticles, 
-            data: articleData,
-            headers: headers, 
-        });
-    };
+/**
+ * Crea un nuevo artículo
+ * @param {FormData} articleData - Datos del artículo en FormData (incluye imagen)
+ */
+createArticle = async (articleData) => {
+    try {
+      const token = await getToken(); // Obtener el token directamente
+      return this.service.request({
+        method: 'POST',
+        endpoint: this.endpoint.postArticles,
+        data: articleData,
+        headers: {
+          Token: token, // Incluir el token directamente
+          // No incluyas 'Content-Type', Axios lo manejará automáticamente para FormData
+        },
+      });
+    } catch (error) {
+      console.error('Error al crear el artículo:', error);
+      throw error;
+    }
+  };
+  
     
 
           /**
