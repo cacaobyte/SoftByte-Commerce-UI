@@ -58,7 +58,7 @@ export const sidebarItems = [
     icon: "users",
     route: "/clientes",
     submenus: [
-      { title: "Lista de Clientes", route: "/clientes/lista" },
+      { title: "Lista de Clientes", route: "/clients/clientList/" },
       { title: "Créditos", route: "/clientes/creditos" },
       { title: "Contactos", route: "/clientes/contactos" },
       { title: "Estadísticas", route: "/clientes/estadisticas" },

@@ -3,7 +3,7 @@ import { useState, useEffect } from "react";
 import { Table, TableHeader, TableRow, TableHead, TableBody, TableCell } from "@/components/ui/table";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-import { ChevronUp, ChevronDown, ChevronRight, ChevronDown as ChevronExpand, FileSpreadsheet, CheckCircle, XCircle } from "lucide-react";
+import { ChevronUp, ChevronDown, ChevronRight, FileSpreadsheet, CheckCircle, XCircle } from "lucide-react";
 import * as XLSX from "xlsx";
 
 const DataTable = ({ columns, data, searchField, actions = [], showActions = false }) => {
@@ -30,8 +30,8 @@ const DataTable = ({ columns, data, searchField, actions = [], showActions = fal
 
   const handleSort = (column) => {
     const sortedData = [...filteredData].sort((a, b) => {
-      const valueA = a[column]?.toString().toLowerCase();
-      const valueB = b[column]?.toString().toLowerCase();
+      const valueA = a[column]?.toString().toLowerCase() || "";
+      const valueB = b[column]?.toString().toLowerCase() || "";
       return sortOrder === "asc" ? valueA.localeCompare(valueB) : valueB.localeCompare(valueA);
     });
 
@@ -88,29 +88,22 @@ const DataTable = ({ columns, data, searchField, actions = [], showActions = fal
                 <TableRow key={index} className="border-b bg-white dark:bg-gray-900">
                   {columns.map((col) => (
                     <TableCell key={col.key} className="px-4 py-2">
-                      {typeof row[col.key] === "boolean" ? (
-                        row[col.key] ? (
-                          <CheckCircle className="text-green-500 inline" size={18} />
-                        ) : (
-                          <XCircle className="text-red-500 inline" size={18} />
-                        )
-                      ) : (
-                        row[col.key] || "No disponible"
-                      )}
+                      {col.render ? col.render(row) : row[col.key] || "No disponible"}
                     </TableCell>
                   ))}
                   {showActions && (
                     <TableCell className="px-4 py-2 flex gap-2">
-                      {actions.map((action, idx) => (
-                        <Button
-                          key={idx}
-                          variant={action.variant}
-                          onClick={() => action.onClick(row)}
-                        >
-                          {action.label}
-                        </Button>
-                      ))}
-                    </TableCell>
+                    {actions.map((action, idx) => (
+                      <Button
+                        key={idx}
+                        variant={action.variant || "default"}
+                        onClick={() => typeof action.onClick === "function" && action.onClick(row)}
+                      >
+                        {action.label || "Acción"}
+                      </Button>
+                    ))}
+                  </TableCell>
+
                   )}
                 </TableRow>
               ))
@@ -123,61 +116,50 @@ const DataTable = ({ columns, data, searchField, actions = [], showActions = fal
             )}
           </TableBody>
         </Table>
-
         <div className="md:hidden">
-          {paginatedData.length > 0 ? (
-            paginatedData.map((row, index) => (
-              <div key={index} className="border-b border-gray-300 py-2">
-                <div className="flex justify-between items-center">
-                  <span className="font-bold">{row[columns[0].key]}</span>
-                  <Button variant="ghost" onClick={() => setExpandedRow(expandedRow === index ? null : index)}>
-                    {expandedRow === index ? <ChevronExpand size={20} /> : <ChevronRight size={20} />}
-                  </Button>
-                </div>
-                {expandedRow === index && (
-                  <div className="mt-2 p-4 bg-gray-100 dark:bg-gray-800 rounded-lg">
-                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 text-sm">
-                      {columns.map((col) => (
-                        <p key={col.key} className="flex justify-between">
-                          <span className="font-semibold">{col.label}:</span>{" "}
-                          <span>
-                            {typeof row[col.key] === "boolean" ? (
-                              row[col.key] ? (
-                                <CheckCircle className="text-green-500 inline" size={18} />
-                              ) : (
-                                <XCircle className="text-red-500 inline" size={18} />
-                              )
-                            ) : (
-                              row[col.key] || "No disponible"
-                            )}
-                          </span>
-                        </p>
-                      ))}
-                    </div>
-                    {showActions && (
-                      <div className="mt-4 border-t pt-4">
-                        <strong className="block mb-2">Acciones:</strong>
-                        <div className="flex gap-2">
-                          {actions.map((action, idx) => (
-                            <Button
-                              key={idx}
-                              variant={action.variant}
-                              onClick={() => action.onClick(row)}
-                            >
-                              {action.label}
-                            </Button>
-                          ))}
-                        </div>
-                      </div>
-                    )}
-                  </div>
-                )}
-              </div>
-            ))
-          ) : (
-            <p className="text-center py-4">No hay registros.</p>
-          )}
+  {paginatedData.length > 0 ? (
+    paginatedData.map((row, index) => (
+      <div key={index} className="border-b border-gray-300 py-4">
+        <div className="flex justify-between items-center">
+          <span className="font-bold">{row[columns[0].key]}</span>
+          <Button variant="ghost" onClick={() => setExpandedRow(expandedRow === index ? null : index)}>
+            {expandedRow === index ? <ChevronDown size={20} /> : <ChevronRight size={20} />}
+          </Button>
         </div>
+        {expandedRow === index && (
+          <div className="mt-2 p-4 bg-gray-100 dark:bg-gray-800 rounded-lg">
+            <div className="grid grid-cols-1 gap-4 text-sm">
+              {columns.map((col) => (
+                <p key={col.key} className="flex justify-between">
+                  <span className="font-semibold">{col.label}:</span>
+                  <span>{col.render ? col.render(row) : row[col.key] || "No disponible"}</span>
+                </p>
+              ))}
+            </div>
+            {/* 📌 Sección de Acciones para Móvil */}
+            {showActions && (
+              <div className="mt-4 flex flex-wrap gap-2">
+                {actions.map((action, idx) => (
+                  <Button
+                    key={idx}
+                    variant={action.variant || "default"}
+                    onClick={() => typeof action.onClick === "function" && action.onClick(row)}
+                  >
+                    {action.label || "Acción"}
+                  </Button>
+                ))}
+              </div>
+            )}
+          </div>
+        )}
+      </div>
+    ))
+  ) : (
+    <p className="text-center py-4">No hay registros.</p>
+  )}
+</div>
+
+
       </div>
 
       {totalPages > 1 && (
