@@ -6,10 +6,16 @@ import {
   IoMoon,
   IoSunny,
 } from "react-icons/io5";
+import { isPlatform } from '@ionic/react';
+import { Preferences } from '@capacitor/preferences';
+import { Icons } from "@/components/ui/icons";
+import { Button } from "@/components/ui/button";
+import { useRouter } from "next/navigation";
 
 const Topbar = () => {
   const [darkMode, setDarkMode] = useState(false);
   const [userMenuOpen, setUserMenuOpen] = useState(false);
+    const router = useRouter();
 
   // Alternar entre claro y oscuro
   const toggleDarkMode = () => {
@@ -19,6 +25,15 @@ const Topbar = () => {
     } else {
       document.documentElement.classList.remove("dark");
     }
+  };
+
+  const handleLogout = async () => {
+    if (isPlatform("hybrid")) {
+      await Preferences.remove({ key: "token" });
+    } else {
+      document.cookie = "token=; path=/; max-age=0;";
+    }
+    router.push("/auth/login");
   };
 
   return (
@@ -62,6 +77,7 @@ const Topbar = () => {
 
           {/* Menú desplegable */}
           {userMenuOpen && (
+            
             <div
               className={`absolute right-0 mt-2 w-48 rounded-md shadow-lg bg-white dark:bg-gray-800 text-gray-800 dark:text-gray-200`}
             >
@@ -85,6 +101,17 @@ const Topbar = () => {
                   Dashboard
                 </li>
               </ul>
+             
+                          <div className="p-4 border-t">
+                            <Button
+                              variant="ghost"
+                              className="w-full justify-start text-red-500"
+                              onClick={handleLogout}
+                            >
+                              <Icons.logout className="mr-3 w-5 h-5" />
+                              Cerrar Sesión
+                            </Button>
+                          </div>
             </div>
           )}
         </div>

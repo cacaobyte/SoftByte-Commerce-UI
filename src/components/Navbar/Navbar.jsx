@@ -1,10 +1,22 @@
 import React, { useState } from "react";
 import { FaBars } from "react-icons/fa"; // Ícono de menú hamburguesa
 import { IoMoon, IoSunny } from "react-icons/io5"; // Íconos de tema oscuro/claro
+import { isPlatform } from '@ionic/react';
+import { Preferences } from '@capacitor/preferences';
+import { Button } from "@/components/ui/button";
+import { Icons } from "@/components/ui/icons";
 
 export default function Navbar({ toggleTheme, isDarkTheme }) {
   const [menuOpen, setMenuOpen] = useState(false);
 
+  const handleLogout = async () => {
+    if (isPlatform("hybrid")) {
+      await Preferences.remove({ key: "token" });
+    } else {
+      document.cookie = "token=; path=/; max-age=0;";
+    }
+    router.push("/auth/login");
+  };
   return (
     <header className="bg-background border-b border-gray-200 dark:border-gray-800">
       <nav className="container mx-auto px-4 py-2 flex justify-between items-center">
@@ -43,7 +55,7 @@ export default function Navbar({ toggleTheme, isDarkTheme }) {
               <a href="/" className="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-700">
                 Dashboard
               </a>
-              <a href="/account" className="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-700">
+              <a href="/setting/profile/" className="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-700">
                 Mi Cuenta
               </a>
               <a href="/settings" className="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-700">
@@ -67,6 +79,7 @@ export default function Navbar({ toggleTheme, isDarkTheme }) {
 
       {/* Menú Responsive */}
       {menuOpen && (
+        <div>
         <div className="md:hidden bg-background border-t border-gray-200 dark:border-gray-800">
           <a href="/" className="block px-4 py-2 text-foreground hover:bg-gray-200">
             Dashboard
@@ -77,6 +90,18 @@ export default function Navbar({ toggleTheme, isDarkTheme }) {
           <a href="/categories" className="block px-4 py-2 text-foreground hover:bg-gray-200">
             Categories
           </a>
+        </div>
+        <div>
+
+        </div>
+              <Button
+                      variant="ghost"
+                      className="w-full justify-start text-red-500"
+                      onClick={handleLogout}
+                    >
+                      <Icons.logout className="mr-3 w-5 h-5" />
+                      Cerrar Sesión
+                    </Button>
         </div>
       )}
     </header>

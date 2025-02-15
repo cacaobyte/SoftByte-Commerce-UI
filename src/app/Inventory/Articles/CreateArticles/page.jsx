@@ -90,13 +90,23 @@ const CreateArticles = () => {
     try {
       const formDataToSend = new FormData();
       Object.entries(formData).forEach(([key, value]) => {
-        formDataToSend.append(key, value);
+        if (value) formDataToSend.append(key, value);
       });
 
       await articlesService.createArticle(formDataToSend);
       toast.success("Artículo creado con éxito.");
       setIsOpen(false);
-      fetchArticles();
+      setFormData({  // Resetea el formulario después de crear el artículo
+        descripcion: "",
+        categoria: "",
+        subCategoria: "",
+        clasificacion: "",
+        precio: "",
+        pesoNeto: "",
+        pesoBruto: "",
+        imageFile: null,
+      });
+      fetchArticles();  // Actualiza el carrusel de artículos
     } catch (error) {
       console.error("Error al crear el artículo:", error.response?.data || error.message);
       toast.error("Error al crear el artículo.");
@@ -181,8 +191,6 @@ const CreateArticles = () => {
                   >
                     <option value="">Seleccionar clasificación</option>
                     <option value="Ventas">Ventas</option>
-                    <option value="Consumo">Consumo</option>
-                    <option value="Marketing / Propaganda">Marketing / Propaganda</option>
                   </select>
                 </div>
                 <div>

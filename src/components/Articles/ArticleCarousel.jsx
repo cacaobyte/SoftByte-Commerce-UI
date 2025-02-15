@@ -92,12 +92,12 @@ const ArticleCarousel = () => {
                         <CardHeader className="relative">
                             <Dialog>
                                 <DialogTrigger asChild>
-                                    <img 
-                                        src={article.foto} 
-                                        alt={article.descripcion} 
-                                        className="w-full h-[200px] object-cover rounded-md cursor-pointer hover:opacity-80 transition"
-                                        onClick={() => setSelectedArticle(article)}
-                                    />
+                                <img 
+                                src={article.foto} 
+                                alt={article.descripcion} 
+                                className="w-full h-[200px] object-cover rounded-md cursor-pointer hover:opacity-80 transition"
+                                loading="lazy"
+                                />
                                 </DialogTrigger>
                                 <DialogContent>
                                     <DialogHeader>
