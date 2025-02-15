@@ -2,6 +2,21 @@ import { isPlatform } from '@ionic/react';
 import { Preferences } from '@capacitor/preferences';
 
 let cachedToken = null; // Token almacenado en memoria
+export const getToken = async () => {
+  if (!cachedToken) {
+    if (isPlatform('hybrid')) {
+      const result = await Preferences.get({ key: 'token' });
+      cachedToken = result.value || '';
+    } else {
+      cachedToken = document.cookie
+        .split('; ')
+        .find(row => row.startsWith('token='))
+        ?.split('=')[1] || '';
+    }
+  }
+  return cachedToken;
+};
+
 
 export const getHeaders = async () => {
   if (!cachedToken) {
