@@ -88,9 +88,18 @@ const DataTable = ({ columns, data, searchField, actions = [], showActions = fal
                 <TableRow key={index} className="border-b bg-white dark:bg-gray-900">
                   {columns.map((col) => (
                     <TableCell key={col.key} className="px-4 py-2">
-                      {col.render ? col.render(row) : row[col.key] || "No disponible"}
+                      {col.type === "boolean" ? (
+                        row[col.key] ? (
+                          <CheckCircle className="text-green-500 w-5 h-5" />
+                        ) : (
+                          <XCircle className="text-red-500 w-5 h-5" />
+                        )
+                      ) : (
+                        col.render ? col.render(row) : row[col.key] || "No disponible"
+                      )}
                     </TableCell>
                   ))}
+
                   {showActions && (
                     <TableCell className="px-4 py-2 flex gap-2">
                     {actions.map((action, idx) => (
@@ -132,7 +141,17 @@ const DataTable = ({ columns, data, searchField, actions = [], showActions = fal
               {columns.map((col) => (
                 <p key={col.key} className="flex justify-between">
                   <span className="font-semibold">{col.label}:</span>
-                  <span>{col.render ? col.render(row) : row[col.key] || "No disponible"}</span>
+                  <span>
+                    {col.type === "boolean" ? (
+                      row[col.key] ? (
+                        <CheckCircle className="text-green-500 w-5 h-5" />
+                      ) : (
+                        <XCircle className="text-red-500 w-5 h-5" />
+                      )
+                    ) : (
+                      col.render ? col.render(row) : row[col.key] || "No disponible"
+                    )}
+                  </span>
                 </p>
               ))}
             </div>
@@ -158,6 +177,7 @@ const DataTable = ({ columns, data, searchField, actions = [], showActions = fal
     <p className="text-center py-4">No hay registros.</p>
   )}
 </div>
+
 
 
       </div>
