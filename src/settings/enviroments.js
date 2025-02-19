@@ -1,8 +1,8 @@
 const { Warehouse } = require("lucide-react");
 
-const environment = "https://localhost:32771/";
+//const environment = "https://localhost:32769/";
 //Produccion
-//const environment = "https://softbyte-commerce-api.onrender.com/";
+const environment = "https://softbyte-commerce-api.onrender.com/";
 
 
 module.exports = {
@@ -54,6 +54,46 @@ module.exports = {
                 Security:{
                     "login": "security/login",
                     "register": "security/register",
+                },
+                Accesses:{
+                    Actions: "security/action",
+                    Aplication: "Seguridad/Apps",
+                    Menu:{
+                        getMenuByApp: "Seguridad/Menu",
+                        getMenuAllApp: "Seguridad/Menu/AllMenu",
+                    },
+                    Options:{
+                        Options: "Seguridad/Option",
+                        getRollByUser: "Seguridad/Option/{0}",//UserId
+                        putStatusOption: "Seguridad/Option/{0}/{1}",//OptionId/Status
+                    },
+                    Roll:{
+                       getRoll: "Security/Roll",
+                       createRoll: "Security/Roll",
+                       putRoll: "Security/Roll/{0}/{1}",//RollId/Status
+                    },
+                    RollOption:{
+                        getRollOption: "Security/RoleOption",
+                        createRollOption: "Security/RoleOption",
+                        deleteRollOption: "Security/RoleOption/{0}",//RollOptionId
+                    },
+                    RoleUser:{
+                        getRoleByUserId: "Security/RoleUser/{0}",//UserId
+                        getUserWithRoles: "Security/RoleUser/GetUsersWithRoles",
+                        getRolesUsers: "Security/RoleUser",
+                        deleteRoleUser: "Security/RoleUser/{0}/{1}",//UserId/RoleUserId
+                        createRoleUser: "Security/RoleUser",
+                    },
+                    Users: "Security/User",//Todos los usuarios de la aplicación,
+                    UserOptionAction: "Security/UserOptionAction",
+                    UserOption: {
+                        getUserOption: "Security/UserOption",
+                        getUserOptionByUser: "Security/UserOption/{0}",//UserId
+                        postRolOpcionAccion: "Security/UserOption",
+                        getUsersWithOptions: "Security/UserOption/GetUsersWithOptions",
+                        putUserOption: "Security/UserOption",
+                        getOptionByUser: "Security/UserOption/GetOption/{0}",//UserId
+                    }
                 },
                 Users:{
                     "profile": "security/profile",
