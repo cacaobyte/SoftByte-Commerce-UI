@@ -13,21 +13,16 @@ import { useHasMounted } from "../../../hooks/useHasMounted";
 import LoadingScreen from "../../../components/UseHasMounted/LoadingScreen";
 import ProtectedPage from "../../../components/ProtectedPage";
 
+
 // Definir columnas para DataTable con key
-const roleColumns = [
-  { key: "idRol", accessorKey: "idRol", header: "ID" },
-  { key: "nombreMostrar", accessorKey: "nombreMostrar", header: "Nombre" },
-  {
-    key: "estado",
-    accessorKey: "estado",
-    header: "Estado",
-    cell: ({ row }) => (
-      <Badge variant={row.original.estado ? "success" : "destructive"}>
-        {row.original.estado ? "Activo" : "Inactivo"}
-      </Badge>
-    ),
-  },
-];
+export const roleColumns = [
+    { key: "nombreMostrar", label: "Nombre", type: "string" },   
+    { key: "estado", label: "Activo", type: "boolean" }, 
+    { key: "rol", label: "Rol", type: "string" },
+    { key: "aplicacion", label: "Aplicación", type: "string" },
+  ];
+  
+
 
 export default function RolesPage() {
   const hasMounted = useHasMounted();
@@ -75,7 +70,8 @@ export default function RolesPage() {
     setUpdating(true);
     try {
       const roleService = new RoleService();
-      await roleService.UpdateStatuRoll({ idRol: selectedRole.idRol, estado: !selectedRole.estado });
+      await roleService.UpdateStatuRoll(selectedRole.idRol, !selectedRole.estado);
+
 
       // Actualizar estado en la UI
       setRoles((prev) =>
