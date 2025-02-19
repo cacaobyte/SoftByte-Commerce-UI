@@ -115,13 +115,18 @@ export const sidebarItems = [
     ],
   },
   {
-    title: "Usuarios",
+    title: "Gestión de Accesos",
     icon: "FaUsersViewfinder",
     route: "/admin/usuarios",
     submenus: [
-      { title: "Administrar Roles", route: "/admin/usuarios/roles" },
-      { title: "Permisos", route: "/admin/usuarios/permisos" },
+      { title: "Perfiles de Usuario", route: "/admin/usuarios/roles" },
+      { title: "Opciones", route: "/admin/usuarios/permisos" },
       { title: "Lista de Usuarios", route: "/admin/usuarios/lista" },
+      { title: "Asignar rol a opción", route: "/admin/usuarios/lista" },
+      { title: "Asignar opción a usuario", route: "/admin/usuarios/lista" },
+      { title: "estado usuarios", route: "/admin/usuarios/lista" },
+      { title: "Asignar  acción a opción", route: "/admin/usuarios/lista" },
+      { title: "Historial de Cambios", route: "/admin/usuarios/historial" },
     ],
   },
   {
