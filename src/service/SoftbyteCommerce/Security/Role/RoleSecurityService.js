@@ -12,33 +12,36 @@ class RoleService {
         };
     }
 
-    getRolls = (data) => {
-        const endpoint = this.endpoint.getRolls; 
+    getRolls = async(data) => {
+        const endpoint = this.endpoint.getRoll; 
+        const headers = await getHeaders()
         return this.service.request({
-          method: 'POST',
+          method: 'GET',
           endpoint,
           data, 
-          headers: this.defaultHeaders,
+          headers: headers,
         });
     };
 
-    createRoll = (data) => {
+    createRoll = async(data) => {
         const endpoint = this.endpoint.createRoll; 
+        const headers = await getHeaders()
         return this.service.request({
           method: 'POST',
           endpoint,
           data, 
-          headers: this.defaultHeaders,
+          headers: headers,
         });
     };
 
-    UpdateStatuRoll = (data) => {
+    UpdateStatuRoll = async(data) => {
         const endpoint = this.endpoint.putRoll; 
+        const headers = await getHeaders()
         return this.service.request({
           method: 'PUT',
           endpoint,
           data, 
-          headers: this.defaultHeaders,
+          headers: headers,
         });
     };
 
