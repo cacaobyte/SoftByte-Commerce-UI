@@ -12,35 +12,45 @@ class RoleService {
         };
     }
 
-    getRolls = (data) => {
-        const endpoint = this.endpoint.getRolls; 
+    getRolls = async(data) => {
+        const endpoint = this.endpoint.getRoll; 
+        const headers = await getHeaders()
         return this.service.request({
-          method: 'POST',
+          method: 'GET',
           endpoint,
           data, 
-          headers: this.defaultHeaders,
+          headers: headers,
         });
     };
 
-    createRoll = (data) => {
+    createRoll = async(data) => {
         const endpoint = this.endpoint.createRoll; 
+        const headers = await getHeaders()
         return this.service.request({
           method: 'POST',
           endpoint,
           data, 
-          headers: this.defaultHeaders,
+          headers: headers,
         });
     };
 
-    UpdateStatuRoll = (data) => {
-        const endpoint = this.endpoint.putRoll; 
-        return this.service.request({
+    UpdateStatuRoll = async (idRol, estado) => {
+      if (!idRol || estado === undefined) {
+          console.error("Error: idRol o estado son inválidos.");
+          return Promise.reject(new Error("idRol y estado no pueden ser nulos o indefinidos"));
+      }
+  
+      // Reemplazar {0} con idRol y {1} con estado en la URL
+      const endpoint = this.endpoint.putRoll.replace("{0}", idRol).replace("{1}", estado);
+      const headers = await getHeaders();
+  
+      return this.service.request({
           method: 'PUT',
           endpoint,
-          data, 
-          headers: this.defaultHeaders,
-        });
-    };
+          headers: headers,
+      });
+  };
+  
 
 }
 
