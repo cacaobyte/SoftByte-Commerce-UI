@@ -20,6 +20,9 @@ export const optionColumns = [
     { key: "menu", label: "Menú", type: "string" }, 
     { key: "estado", label: "Activo", type: "boolean" }, 
     { key: "descripcion", label: "Descripción", type: "string" },
+    { key: "url", label: "URL", type: "string" },
+    { key: "agrupador", label: "Agrupador", type: "string" },
+    { key: "icons", label: "Ícono", type: "string" },
 ];
 
 export default function OptionsPage() {
@@ -28,10 +31,11 @@ export default function OptionsPage() {
     const [loading, setLoading] = useState(true);
     const [selectedOption, setSelectedOption] = useState(null);
     const [confirmModalOpen, setConfirmModalOpen] = useState(false);
+    const [viewModalOpen, setViewModalOpen] = useState(false);
     const [creating, setCreating] = useState(false);
     const [updating, setUpdating] = useState(false);
     const [isCreateOpen, setIsCreateOpen] = useState(false);
-    
+
     // 📌 Estado del formulario de nueva opción
     const [newOption, setNewOption] = useState({
         id: 0,
@@ -81,7 +85,6 @@ export default function OptionsPage() {
             const optionsService = new OptionsService();
             await optionsService.UpdateStatusOption(selectedOption.idOpcion, !selectedOption.estado);
 
-            // Actualizar estado en la UI
             setOptions((prev) =>
                 prev.map((o) => (o.idOpcion === selectedOption.idOpcion ? { ...o, estado: !o.estado } : o))
             );
@@ -96,6 +99,12 @@ export default function OptionsPage() {
         }
     };
 
+    // 📌 Modal de "Ver más" detalles de la opción
+    const handleViewOption = (option) => {
+        setSelectedOption(option);
+        setViewModalOpen(true);
+    };
+
     // 📌 Crear nueva opción
     const handleCreateOption = async () => {
         if (!newOption.name.trim() || !newOption.text.trim() || !newOption.menu.trim() || !newOption.url.trim()) {
@@ -107,7 +116,7 @@ export default function OptionsPage() {
         try {
             const optionsService = new OptionsService();
             await optionsService.createRoll({
-                id: 0, // ID se genera automáticamente en el backend
+                id: 0,
                 menu: parseInt(newOption.menu, 10),
                 grouper: newOption.grouper || null,
                 name: newOption.name,
@@ -115,7 +124,7 @@ export default function OptionsPage() {
                 pathIcon: newOption.pathIcon,
                 url: newOption.url,
                 orderShow: parseInt(newOption.orderShow, 10),
-                active: true, // Siempre activo por defecto
+                active: true,
             });
 
             setIsCreateOpen(false);
@@ -131,23 +140,22 @@ export default function OptionsPage() {
                 active: true,
             });
 
-            fetchOptions(); // Recargar la lista de opciones
+            fetchOptions();
             toast.success("Opción creada exitosamente.");
         } catch (error) {
             console.error("Error al crear opción:", error);
-            toast.error("Error al crear la opción.");
+            toast.error(error.response.json().then((data)=> data.error) || "Error al crear la opción.");
         } finally {
             setCreating(false);
         }
     };
 
-    // 📌 Acciones en la tabla
     const actions = [
         {
             label: "Ver",
             icon: Eye,
             variant: "outline",
-            onClick: (option) => setSelectedOption(option),
+            onClick: handleViewOption,
         },
         {
             label: "Activar/Desactivar",
@@ -166,63 +174,99 @@ export default function OptionsPage() {
                 <div className="flex justify-between items-center mb-6">
                     <h1 className="text-3xl font-bold text-gray-900 dark:text-white">Gestión de Opciones</h1>
                     <Dialog open={isCreateOpen} onOpenChange={setIsCreateOpen}>
-                        <DialogTrigger asChild>
-                            <Button className="bg-black text-white flex items-center gap-2">
-                                <PlusCircle className="w-5 h-5" /> Nueva Opción
-                            </Button>
-                        </DialogTrigger>
-                        <DialogContent className="p-6">
-                            <DialogHeader>
-                                <DialogTitle>Crear Nueva Opción</DialogTitle>
-                            </DialogHeader>
-                            <div className="space-y-4">
-                                <div>
-                                    <Label>Menú</Label>
-                                    <Input
-                                        type="number"
-                                        placeholder="Ingrese el menú"
-                                        value={newOption.menu}
-                                        onChange={(e) => setNewOption({ ...newOption, menu: e.target.value })}
-                                    />
-                                </div>
-                                <div>
-                                    <Label>Nombre</Label>
-                                    <Input
-                                        type="text"
-                                        placeholder="Ingrese el nombre"
-                                        value={newOption.name}
-                                        onChange={(e) => setNewOption({ ...newOption, name: e.target.value })}
-                                    />
-                                </div>
-                                <div>
-                                    <Label>Descripción</Label>
-                                    <Input
-                                        type="text"
-                                        placeholder="Ingrese la descripción"
-                                        value={newOption.text}
-                                        onChange={(e) => setNewOption({ ...newOption, text: e.target.value })}
-                                    />
-                                </div>
-                                <div>
-                                    <Label>URL</Label>
-                                    <Input
-                                        type="text"
-                                        placeholder="Ingrese la URL"
-                                        value={newOption.url}
-                                        onChange={(e) => setNewOption({ ...newOption, url: e.target.value })}
-                                    />
-                                </div>
-                                <Button onClick={handleCreateOption} disabled={creating} className="w-full bg-green-600 text-white">
-                                    {creating ? "Creando..." : "Crear Opción"}
-                                </Button>
-                            </div>
-                        </DialogContent>
-                    </Dialog>
+    <DialogTrigger asChild>
+        <Button className="bg-black text-white flex items-center gap-2">
+            <PlusCircle className="w-5 h-5" /> Nueva Opción
+        </Button>
+    </DialogTrigger>
+    <DialogContent className="p-6">
+        <DialogHeader>
+            <DialogTitle>Crear Nueva Opción</DialogTitle>
+        </DialogHeader>
+        <div className="space-y-4">
+            <div>
+                <Label>Menú</Label>
+                <Input
+                    type="text"
+                    placeholder="Ingrese el menú"
+                    value={newOption.menu}
+                    onChange={(e) => setNewOption({ ...newOption, menu: e.target.value })}
+                />
+            </div>
+            <div>
+                <Label>Nombre</Label>
+                <Input
+                    type="text"
+                    placeholder="Ingrese el nombre"
+                    value={newOption.name}
+                    onChange={(e) => setNewOption({ ...newOption, name: e.target.value })}
+                />
+            </div>
+            <div>
+                <Label>Descripción</Label>
+                <Input
+                    type="text"
+                    placeholder="Ingrese la descripción"
+                    value={newOption.text}
+                    onChange={(e) => setNewOption({ ...newOption, text: e.target.value })}
+                />
+            </div>
+            <div>
+                <Label>URL</Label>
+                <Input
+                    type="text"
+                    placeholder="Ingrese la URL"
+                    value={newOption.url}
+                    onChange={(e) => setNewOption({ ...newOption, url: e.target.value })}
+                />
+            </div>
+            <div>
+                <Label>Ícono</Label>
+                <Input
+                    type="text"
+                    placeholder="Ingrese el ícono"
+                    value={newOption.pathIcon}
+                    onChange={(e) => setNewOption({ ...newOption, pathIcon: e.target.value })}
+                />
+            </div>
+            <Button onClick={handleCreateOption} disabled={creating} className="w-full bg-green-600 text-white">
+                {creating ? "Creando..." : "Crear Opción"}
+            </Button>
+        </div>
+    </DialogContent>
+</Dialog>
+
                 </div>
 
                 <DataTable columns={optionColumns} data={options} searchField="nombreMostrar" actions={actions} showActions={true} />
 
-                <ConfirmationModal isOpen={confirmModalOpen} onClose={() => setConfirmModalOpen(false)} onConfirm={handleToggleStatus} title="Confirmar acción" description={`¿Desea ${selectedOption?.estado ? "desactivar" : "activar"} la opción "${selectedOption?.opcion}"?`} confirmText={selectedOption?.estado ? "Desactivar" : "Activar"} loading={updating} />
+                <ConfirmationModal 
+                    isOpen={confirmModalOpen} 
+                    onClose={() => setConfirmModalOpen(false)} 
+                    onConfirm={handleToggleStatus} 
+                    title="Confirmar acción" 
+                    description={`¿Desea ${selectedOption?.estado ? "desactivar" : "activar"} la opción "${selectedOption?.opcion}"?`} 
+                    confirmText={selectedOption?.estado ? "Desactivar" : "Activar"} 
+                    loading={updating} 
+                />
+
+                {/* 📌 Modal de "Ver más" */}
+                <Dialog open={viewModalOpen} onOpenChange={setViewModalOpen}>
+                    <DialogContent>
+                        <DialogHeader>
+                            <DialogTitle>Detalles de la Opción</DialogTitle>
+                        </DialogHeader>
+                        {selectedOption && (
+                            <div className="space-y-2">
+                                <p><strong>Menú:</strong> {selectedOption.menu}</p>
+                                <p><strong>Descripción:</strong> {selectedOption.descripcion}</p>
+                                <p><strong>URL:</strong> {selectedOption.url}</p>
+                                <p><strong>Ícono:</strong> {selectedOption.icons}</p>
+                                <p><strong>Agrupador:</strong> {selectedOption.agrupador || "N/A"}</p>
+                            </div>
+                        )}
+                    </DialogContent>
+                </Dialog>
             </div>
         </ProtectedPage>
     );

@@ -47,8 +47,8 @@ class OptionsService {
     };
 
     UpdateStatusOption = async (idOption, estado) => {
-      if (!idRol || estado === undefined) {
-          console.error("Error: idRol o estado son inválidos.");
+      if (!idOption || estado === undefined) {
+          console.error("Error: idoption o estado son inválidos.");
           return Promise.reject(new Error("idRol y estado no pueden ser nulos o indefinidos"));
       }
   
@@ -67,3 +67,4 @@ class OptionsService {
 }
 
 export default OptionsService;
+
