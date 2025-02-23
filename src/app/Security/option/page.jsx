@@ -1,6 +1,5 @@
 "use client";
-
-import { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { toast } from "react-toastify";
 import OptionsService from "../../../service/SoftbyteCommerce/Security/Option/OptionService";
 import GrouperService from "../../../service/SoftbyteCommerce/Security/grouper/grouperService";
@@ -18,7 +17,7 @@ import ProtectedPage from "../../../components/ProtectedPage";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { getIconComponent } from "../../../utils/getIconComponent";
 import GenericModal from "../../../components/shared/Modal/Modal";
-
+import IconPickerModal from "../../../components/shared/Icons/IconPickerModal"; 
 
 // 📌 Definir columnas para DataTable
 export const optionColumns = [
@@ -41,6 +40,7 @@ export default function OptionsPage() {
     const [confirmModalOpen, setConfirmModalOpen] = useState(false);
     const [viewModalOpen, setViewModalOpen] = useState(false);
     const [updating, setUpdating] = useState(false);
+    const [isIconPickerOpen, setIsIconPickerOpen] = useState(false); 
 
     // 📌 Estado del formulario de nueva opción
     const [newOption, setNewOption] = useState({
@@ -250,15 +250,27 @@ export default function OptionsPage() {
                 </div>
 
                 {/* 🔹 Ícono */}
-                <div>
-                    <Label>Ícono</Label>
-                    <Input
-                        type="text"
-                        placeholder="Ingrese el nombre del ícono"
-                        value={newOption.pathIcon}
-                        onChange={(e) => setNewOption({ ...newOption, pathIcon: e.target.value })}
-                    />
-                </div>
+                    {/* 🔹 Selección de Ícono */}
+                    <div>
+                        <Label>Ícono</Label>
+                        <div className="flex items-center gap-4">
+                            {/* 🔹 Vista previa del icono seleccionado */}
+                            {newOption.pathIcon ? (
+                                React.createElement(
+                                    require("react-icons/fa")[newOption.pathIcon] ||
+                                    require("react-icons/ri")[newOption.pathIcon], 
+                                    { size: 32, className: "text-blue-500" }
+                                )
+                            ) : (
+                                <span className="text-gray-400">Sin ícono</span>
+                            )}
+
+                            {/* 🔹 Botón para abrir el selector de íconos */}
+                            <Button onClick={() => setIsIconPickerOpen(true)} className="bg-gray-700 text-white">
+                                Seleccionar Ícono
+                            </Button>
+                        </div>
+                    </div>
 
                 {/* 🔹 Orden de Mostrar */}
                 <div>
@@ -302,6 +314,14 @@ export default function OptionsPage() {
                     { key: "estado", label: "Estado", type: "boolean" }
                 ]}
             />
+                                <IconPickerModal
+                        isOpen={isIconPickerOpen}
+                        onClose={() => setIsIconPickerOpen(false)}
+                        onSelect={(selectedIcon) => {
+                            setNewOption({ ...newOption, pathIcon: selectedIcon });
+                            setIsIconPickerOpen(false);
+                        }}
+                    />
             </div>
         </ProtectedPage>
     );
