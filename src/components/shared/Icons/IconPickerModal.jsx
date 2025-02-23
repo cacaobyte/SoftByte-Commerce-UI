@@ -1,15 +1,11 @@
-import { useState } from "react";
-import * as lucideIcons from "lucide-react";
+import React, { useState } from "react";
 import * as RiIcons from "react-icons/ri";
 import * as FaIcons from "react-icons/fa";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 
-const allIcons = { 
-  ...lucideIcons, 
-  ...RiIcons, 
-  ...FaIcons 
-};
+// 🔹 Usamos solo react-icons (FontAwesome y Remix Icons)
+const allIcons = { ...RiIcons, ...FaIcons };
 
 const IconPickerModal = ({ isOpen, onClose, onSelect }) => {
   const [search, setSearch] = useState("");
@@ -41,12 +37,12 @@ const IconPickerModal = ({ isOpen, onClose, onSelect }) => {
             <button
               key={iconName}
               onClick={() => {
-                onSelect(iconName || "FaQuestionCircle");// Solo enviamos el nombre del ícono
+                onSelect(iconName); // Guardamos el nombre del ícono
                 onClose();
               }}
               className="flex flex-col items-center justify-center p-2 border rounded-md hover:bg-gray-200 transition"
             >
-              {IconComponent && <IconComponent size={28} className="text-gray-700" />}
+              <IconComponent size={28} className="text-gray-700" />
               <span className="text-xs mt-1">{iconName}</span>
             </button>
           ))}
