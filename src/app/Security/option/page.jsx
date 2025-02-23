@@ -300,7 +300,16 @@ export default function OptionsPage() {
                 <DataTable columns={optionColumns} data={options} searchField="nombreMostrar" actions={actions} showActions={true} />
 
                 {/* 📌 Modales para activar/desactivar y ver detalles */}
-                <ConfirmationModal isOpen={confirmModalOpen} onClose={() => setConfirmModalOpen(false)} onConfirm={handleToggleStatus} />
+                <ConfirmationModal
+                isOpen={confirmModalOpen}
+                onClose={() => setConfirmModalOpen(false)}
+                onConfirm={handleToggleStatus}
+                title="Confirmar acción"
+                description={`¿Seguro que deseas ${selectedOption?.estado ? "desactivar" : "activar"} la opción "${selectedOption?.nombreMostrar}"?`}
+                confirmText={selectedOption?.estado ? "Desactivar" : "Activar"}
+                loading={updating}
+                />
+
                             <GenericModal
                 isOpen={viewModalOpen}
                 onClose={() => setViewModalOpen(false)}
