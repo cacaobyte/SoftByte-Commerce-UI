@@ -1,83 +1,103 @@
 "use client";
-import { useState } from "react";
+import { useState, useEffect, useRef } from "react";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
-import { CheckCircle, XCircle } from "lucide-react";
+import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
+import { CheckCircle, XCircle, Hash } from "lucide-react";
+import { getIconComponent } from "../../../utils/getIconComponent";
 
 const GenericModal = ({ isOpen, onClose, title, data = {}, model = [], hasImage = false }) => {
-  const [currentImage, setCurrentImage] = useState(0);
+  const [sections, setSections] = useState([]);
+  const [activeTab, setActiveTab] = useState("general");
+  const tabsListRef = useRef(null);
+
+  useEffect(() => {
+    if (model.length > 6) {
+      const chunkSize = 6;
+      const groupedSections = [];
+      for (let i = 0; i < model.length; i += chunkSize) {
+        groupedSections.push({
+          key: `section-${i / chunkSize + 1}`,
+          label: `${i / chunkSize + 1}`, // 🔹 Solo muestra números en lugar de "Sección X"
+          fields: model.slice(i, i + chunkSize),
+        });
+      }
+      setSections(groupedSections);
+      setActiveTab(groupedSections[0].key);
+    } else {
+      setSections([{ key: "general", label: "🔍", fields: model }]); // 🔹 Usa un ícono en lugar de "Información General"
+      setActiveTab("general");
+    }
+  }, [model]);
 
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
-      <DialogContent className="max-w-lg md:max-w-4xl p-6 rounded-lg shadow-lg bg-white transition-all duration-300">
+      <DialogContent className="max-w-2xl md:max-w-5xl p-6 rounded-xl shadow-lg bg-white transition-all duration-300">
         <DialogHeader>
-          <DialogTitle className="text-xl font-semibold text-gray-800">{title}</DialogTitle>
+          <DialogTitle className="text-2xl font-bold text-gray-900">{title}</DialogTitle>
         </DialogHeader>
 
-        {/* Contenedor Scrollable para evitar que los botones desaparezcan */}
-        <div className="max-h-[70vh] overflow-y-auto p-2 space-y-6">
-          
-          {/* 📸 Imagen o carrusel */}
-          {hasImage && data.image && (
-            <div className="flex justify-center relative">
-              {Array.isArray(data.image) ? (
-                <>
-                  <img 
-                    src={data.image[currentImage]} 
-                    alt="Imagen" 
-                    className="w-full h-64 object-cover rounded-lg shadow-md"
-                  />
-                  <button 
-                    className="absolute left-2 top-1/2 transform -translate-y-1/2 bg-white p-2 rounded-full shadow"
-                    onClick={() => setCurrentImage((prev) => (prev > 0 ? prev - 1 : data.image.length - 1))}
+        {/* 📌 Tabs correctamente configurados */}
+        <Tabs defaultValue={activeTab} value={activeTab} onValueChange={setActiveTab} className="w-full">
+          {sections.length > 1 && (
+            <div className="relative w-full">
+              <TabsList
+                ref={tabsListRef}
+                className="flex overflow-x-auto md:overflow-hidden whitespace-nowrap border-b border-gray-300 pb-2 scrollbar-hide md:justify-center"
+              >
+                {sections.map((section, index) => (
+                  <TabsTrigger
+                    key={section.key}
+                    value={section.key}
+                    className="px-4 py-2 text-gray-700 hover:text-gray-900 transition font-medium flex items-center gap-2"
                   >
-                    ◀
-                  </button>
-                  <button 
-                    className="absolute right-2 top-1/2 transform -translate-y-1/2 bg-white p-2 rounded-full shadow"
-                    onClick={() => setCurrentImage((prev) => (prev < data.image.length - 1 ? prev + 1 : 0))}
-                  >
-                    ▶
-                  </button>
-                </>
-              ) : (
-                <img 
-                  src={data.image} 
-                  alt="Imagen" 
-                  className="max-w-full h-64 object-cover rounded-lg shadow-md hover:scale-105 transition-transform"
-                />
-              )}
+                    <Hash size={16} className="text-gray-500" /> {section.label} {/* 🔹 Icono y número */}
+                  </TabsTrigger>
+                ))}
+              </TabsList>
             </div>
           )}
 
-          {/* 📌 Mostrar datos dinámicamente */}
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-            {Array.isArray(model) && model.length > 0 ? (
-              model.map((field) => (
-                <div key={field.key} className="bg-gray-100 p-3 rounded-lg flex flex-col hover:bg-gray-200 transition">
-                  <span className="text-gray-600 text-sm font-medium">{field.label}:</span>
-                  <p className="text-gray-800 text-md font-semibold">
-                    {field.type === "date"
-                      ? new Date(data[field.key]).toLocaleDateString("es-ES", { year: "numeric", month: "long", day: "numeric" })
-                      : field.type === "boolean"
-                      ? data[field.key] ? (
-                          <CheckCircle className="text-green-500 inline ml-1" size={18} />
-                        ) : (
-                          <XCircle className="text-red-500 inline ml-1" size={18} />
+          {/* 📌 Contenido de cada tab */}
+          {sections.map((section) => (
+            <TabsContent key={section.key} value={section.key} className="max-h-[50vh] overflow-y-auto px-2">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4 p-4">
+                {section.fields.map((field) => (
+                  <div key={field.key} className="flex flex-col">
+                    <span className="text-gray-600 text-sm font-medium">{field.label}:</span>
+                    <div className="text-gray-900 text-md font-semibold flex items-center gap-2 border-b border-gray-300 pb-1">
+                      {field.type === "date"
+                        ? data?.[field.key]
+                          ? new Date(data[field.key]).toLocaleDateString("es-ES", { year: "numeric", month: "long", day: "numeric" })
+                          : "No disponible"
+                        : field.type === "boolean"
+                        ? data?.[field.key]
+                          ? <CheckCircle className="text-green-500" size={18} />
+                          : <XCircle className="text-red-500" size={18} />
+                        : field.type === "number"
+                        ? Number(data?.[field.key] || 0).toLocaleString()
+                        : field.type === "icon"
+                        ? data?.[field.key] ? getIconComponent(data[field.key]) : "No disponible"
+                        : field.type === "image"
+                        ? (
+                          <div className="w-32 h-32 mx-auto my-2">
+                            <img
+                              src={data?.[field.key] || "https://via.placeholder.com/150"}
+                              alt={`Imagen de ${title}`}
+                              className="w-full h-full rounded-lg object-cover border border-gray-300"
+                            />
+                          </div>
                         )
-                      : field.type === "number"
-                      ? Number(data[field.key]).toLocaleString()
-                      : data[field.key] || "No disponible"}
-                  </p>
-                </div>
-              ))
-            ) : (
-              <p className="text-center text-gray-500">No hay datos para mostrar.</p>
-            )}
-          </div>
-        </div>
+                        : data?.[field.key] ?? "No disponible"}
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </TabsContent>
+          ))}
+        </Tabs>
 
-        {/* Sección de botones que siempre estará visible */}
+        {/* Sección de botones */}
         <DialogFooter className="flex justify-end border-t pt-4 mt-4">
           <Button variant="outline" className="hover:bg-gray-200 transition" onClick={onClose}>
             Cerrar

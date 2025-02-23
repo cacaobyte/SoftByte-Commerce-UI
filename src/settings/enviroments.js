@@ -67,6 +67,9 @@ module.exports = {
                         getRollByUser: "Seguridad/Option/{0}",//UserId
                         putStatusOption: "Seguridad/Option/{0}/{1}",//OptionId/Status
                     },
+                    Grouper:{
+                       getGrouper: "security/grouper",
+                    },
                     Roll:{
                        getRoll: "Security/Roll",
                        createRoll: "Security/Roll",
