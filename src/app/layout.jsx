@@ -2,7 +2,8 @@ import "../styles/globals.css";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import ClientWrapper from "../components/shared/ClientWrapper";
-import AppWrapper from "../components/AppWrapper"; // Importa el AppWrapper
+import AppWrapper from "../components/AppWrapper"; 
+import Footer from "../components/Footer";
 
 export const metadata = {
   title: "SoftByte Commerce",
@@ -22,6 +23,7 @@ export default function RootLayout({ children }) {
       <body className="min-h-screen antialiased bg-gray-50 dark:bg-gray-800">
         <AppWrapper>
           <ClientWrapper>{children}</ClientWrapper>
+          <Footer /> 
           <ToastContainer
             position="top-center"
             autoClose={3000}

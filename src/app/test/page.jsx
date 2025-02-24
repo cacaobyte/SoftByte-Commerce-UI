@@ -1,99 +1,45 @@
 "use client";
-import DataTable from "../../components/DataTable/DataTable"; // Ajusta la ruta si es necesario
-import { Edit, Trash, Eye } from "lucide-react";
 
-export default function Page() {
-  // Datos de prueba
-  const sampleData = [
-    {
-      id: 1,
-      bodega: "B001",
-      descripcion: "Bodega Central",
-      activo: true,
-      creadoPor: "Admin",
-      fechaCreacion: "2025-01-01",
-      telefono: "123456789",
-      departamento: "Guatemala",
-      municipio: "Zona 1",
-    },
-    {
-      id: 2,
-      bodega: "B002",
-      descripcion: "Bodega Secundaria",
-      activo: false,
-      creadoPor: "UserTest",
-      fechaCreacion: "2025-01-15",
-      telefono: "987654321",
-      departamento: "Escuintla",
-      municipio: "Puerto San José",
-    },
-    {
-      id: 3,
-      bodega: "B003",
-      descripcion: "Bodega Norte",
-      activo: true,
-      creadoPor: "Admin",
-      fechaCreacion: "2025-02-01",
-      telefono: "456123789",
-      departamento: "Chimaltenango",
-      municipio: "Tecpán",
-    },
-    {
-      id: 4,
-      bodega: "B004",
-      descripcion: "Bodega Sur",
-      activo: false,
-      creadoPor: "TestUser",
-      fechaCreacion: "2025-02-10",
-      telefono: "321654987",
-      departamento: "Quetzaltenango",
-      municipio: "Zona 3",
-    },
-  ];
+import React, { useState } from "react";
+import IconPickerModal from "@/components/shared/Icons/IconPickerModal";
+import { Button } from "@/components/ui/button";
+import * as FaIcons from "react-icons/fa"; // Solo usamos FontAwesome
 
-  // Columnas de la tabla
-  const columns = [
-    { key: "bodega", label: "Bodega" },
-    { key: "descripcion", label: "Descripción" },
-    { key: "activo", label: "Activo" },
-    { key: "creadoPor", label: "Creado por" },
-    { key: "fechaCreacion", label: "Fecha de Creación", type: "date" },
-    { key: "telefono", label: "Teléfono" },
-    { key: "departamento", label: "Departamento" },
-    { key: "municipio", label: "Municipio" },
-  ];
+const allIcons = { ...FaIcons }; // Solo usamos FaIcons
 
-  // Acciones para cada fila
-  const actions = [
-    {
-      label: "Ver",
-      variant: "outline",
-      icon: Eye,
-      onClick: (row) => alert(`Viendo detalles de: ${row.descripcion}`),
-    },
-    {
-      label: "Editar",
-      variant: "outline",
-      icon: Edit,
-      onClick: (row) => alert(`Editando: ${row.descripcion}`),
-    },
-    {
-      label: "Eliminar",
-      variant: "destructive",
-      icon: Trash,
-      onClick: (row) => alert(`Eliminando: ${row.descripcion}`),
-    },
-  ];
+export default function TestIconPicker() {
+  const [iconName, setIconName] = useState(""); // Estado para almacenar el icono seleccionado
+  const [isModalOpen, setIsModalOpen] = useState(false); // Estado para abrir/cerrar el modal
 
   return (
-    <div className="p-8">
-      <h1 className="text-2xl font-bold mb-6">Prueba de DataTable</h1>
-      <DataTable
-        columns={columns}
-        data={sampleData}
-        searchField="descripcion"
-        actions={actions}
-        showActions={true}
+    <div className="flex flex-col items-center justify-center min-h-screen bg-gray-100 p-10">
+      <h1 className="text-2xl font-bold mb-4">Prueba de IconPickerModal</h1>
+
+      {/* 🔹 Vista previa del ícono seleccionado */}
+      <div className="mb-4 flex flex-col items-center">
+        <p className="text-gray-700">Ícono seleccionado:</p>
+        <div className="mt-2 p-4 border rounded-md bg-white flex items-center justify-center">
+          {iconName && allIcons[iconName] && typeof allIcons[iconName] === "function" ? (
+            React.createElement(allIcons[iconName], { size: 48, className: "text-blue-500" })
+          ) : (
+            <FaIcons.FaQuestionCircle size={48} className="text-gray-400" />
+          )}
+        </div>
+      </div>
+
+      {/* 🔹 Botón para abrir el selector de íconos */}
+      <Button onClick={() => setIsModalOpen(true)} className="bg-blue-500 text-white px-6 py-2 rounded-md">
+        Seleccionar Ícono
+      </Button>
+
+      {/* 🔹 Componente IconPickerModal */}
+      <IconPickerModal
+        isOpen={isModalOpen}
+        onClose={() => setIsModalOpen(false)}
+        onSelect={(selectedIcon) => {
+          console.log("Ícono seleccionado:", selectedIcon);
+          setIconName(selectedIcon); // Guarda el nombre del icono
+        }}
       />
     </div>
   );

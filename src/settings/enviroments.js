@@ -1,8 +1,8 @@
 const { Warehouse } = require("lucide-react");
 
-//const environment = "https://localhost:32769/";
+const environment = "https://localhost:32769/";
 //Produccion
-const environment = "https://softbyte-commerce-api.onrender.com/";
+//const environment = "https://softbyte-commerce-api.onrender.com/";
 
 
 module.exports = {
@@ -66,6 +66,10 @@ module.exports = {
                         Options: "Seguridad/Option",
                         getRollByUser: "Seguridad/Option/{0}",//UserId
                         putStatusOption: "Seguridad/Option/{0}/{1}",//OptionId/Status
+                    },
+                    Grouper:{
+                       getGrouper: "security/grouper",
+                       getGrouperActive: "security/grouper/Active",
                     },
                     Roll:{
                        getRoll: "Security/Roll",

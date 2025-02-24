@@ -47,7 +47,7 @@ export default function ProfilePage() {
 
   return (
     <ProtectedPage>
-    <div className="max-w-5xl mx-auto mt-10 space-y-8">
+    <div className="max-w-5xl mx-auto mt-10 space-y-8 py-8">
       <Card className="shadow-2xl border-none rounded-xl">
         <CardHeader className="relative bg-gradient-to-br from-blue-500 to-purple-700 text-white py-10 text-center">
           <div className="absolute inset-0 bg-[radial-gradient(circle,_rgba(255,255,255,0.1)_0%,_transparent_70%)] opacity-20"></div>
@@ -104,7 +104,7 @@ export default function ProfilePage() {
 
 function ProfileDetail({ label, value, icon, href }) {
   return (
-    <div className="flex items-center gap-4 p-4 bg-gray-50 rounded-lg shadow-sm hover:bg-gray-100 transition-all duration-300">
+    <div className="flex items-center gap-4 p-4 bg-gray-50 rounded-lg shadow-sm hover:bg-gray-100 transition-all duration-300 py-4">
       <div className="text-blue-600 text-2xl">{icon}</div>
       <div>
         <p className="text-gray-700 font-semibold">{label}</p>

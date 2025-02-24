@@ -139,7 +139,7 @@ const DataTable = ({ columns, data, searchField, actions = [], showActions = fal
           <div className="mt-2 p-4 bg-gray-100 dark:bg-gray-800 rounded-lg">
             <div className="grid grid-cols-1 gap-4 text-sm">
               {columns.map((col) => (
-                <p key={col.key} className="flex justify-between">
+                <div key={col.key} className="flex justify-between">
                   <span className="font-semibold">{col.label}:</span>
                   <span>
                     {col.type === "boolean" ? (
@@ -152,7 +152,7 @@ const DataTable = ({ columns, data, searchField, actions = [], showActions = fal
                       col.render ? col.render(row) : row[col.key] || "No disponible"
                     )}
                   </span>
-                </p>
+                </div>
               ))}
             </div>
             {/* 📌 Sección de Acciones para Móvil */}
