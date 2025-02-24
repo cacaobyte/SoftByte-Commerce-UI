@@ -1,8 +1,8 @@
 const { Warehouse } = require("lucide-react");
 
-const environment = "https://localhost:32769/";
+//const environment = "https://localhost:32769/";
 //Produccion
-//const environment = "https://softbyte-commerce-api.onrender.com/";
+const environment = "https://softbyte-commerce-api.onrender.com/";
 
 
 module.exports = {
@@ -88,7 +88,10 @@ module.exports = {
                         deleteRoleUser: "Security/RoleUser/{0}/{1}",//UserId/RoleUserId
                         createRoleUser: "Security/RoleUser",
                     },
-                    Users: "Security/User",//Todos los usuarios de la aplicación,
+                    Users:{
+                        getUsers: "Security/User",
+                        getUsersActive: "Security/User/Active",
+                    } ,
                     UserOptionAction: "Security/UserOptionAction",
                     UserOption: {
                         getUserOption: "Security/UserOption",
