@@ -194,6 +194,7 @@ const ClientPage = () => {
     model={[
       { key: "cliente1", label: "ID Cliente" },
       { key: "activo", label: "Estado" },
+      { key: "image", label: "Foto", type: "image" },
     ]}
     hasImage={true}
   />
