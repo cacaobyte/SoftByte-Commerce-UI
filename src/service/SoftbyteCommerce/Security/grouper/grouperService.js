@@ -22,6 +22,15 @@ class GrouperService {
         });
     };
 
+    getGroupersActive = async() => {
+        const endpoint = this.endpoint.getGrouperActive; 
+        const headers = await getHeaders()
+        return this.service.request({
+          method: 'GET',
+          endpoint,
+          headers: headers,
+        });
+    };
 
 
 }

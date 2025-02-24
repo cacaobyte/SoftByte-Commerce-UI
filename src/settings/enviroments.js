@@ -69,6 +69,7 @@ module.exports = {
                     },
                     Grouper:{
                        getGrouper: "security/grouper",
+                       getGrouperActive: "security/grouper/Active",
                     },
                     Roll:{
                        getRoll: "Security/Roll",

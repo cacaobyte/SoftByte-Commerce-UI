@@ -13,14 +13,8 @@ import { Eye, PlusCircle, CheckCircle, XCircle } from "lucide-react";
 import { useHasMounted } from "../../../hooks/useHasMounted";
 import LoadingScreen from "../../../components/UseHasMounted/LoadingScreen";
 import ProtectedPage from "../../../components/ProtectedPage";
+import { roleColumns } from "../../../models/security/roleModels";
 
-// Definir columnas para DataTable con key
-export const roleColumns = [
-    { key: "nombreMostrar", label: "Nombre", type: "string" },   
-    { key: "estado", label: "Activo", type: "boolean" }, 
-    { key: "rol", label: "Rol", type: "string" },
-    { key: "aplicacion", label: "Aplicación", type: "string" },
-];
 
 export default function RolesPage() {
     const hasMounted = useHasMounted();

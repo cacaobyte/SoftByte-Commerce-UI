@@ -18,16 +18,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { getIconComponent } from "../../../utils/getIconComponent";
 import GenericModal from "../../../components/shared/Modal/Modal";
 import IconPickerModal from "../../../components/shared/Icons/IconPickerModal"; 
-
-// 📌 Definir columnas para DataTable
-export const optionColumns = [
-    { key: "nombreMostrar", label: "Nombre", type: "string" },
-    { key: "estado", label: "Activo", type: "boolean" },
-    { key: "descripcion", label: "Descripción", type: "string" },
-    { key: "url", label: "URL", type: "string" },
-    { key: "agrupador", label: "Agrupador", type: "string" },
-    { key: "icons", label: "Ícono", type: "string" },
-];
+import { optionColumns } from "../../../models/security/optionModel";
 
 export default function OptionsPage() {
     const hasMounted = useHasMounted();
@@ -74,7 +65,7 @@ export default function OptionsPage() {
     async function fetchGroupers() {
         try {
             const grouperService = new GrouperService();
-            const response = await grouperService.getGroupers();
+            const response = await grouperService.getGroupersActive();
             setGroupers(Array.isArray(response.data) ? response.data : []);
         } catch (error) {
             console.error("Error al obtener agrupadores:", error);

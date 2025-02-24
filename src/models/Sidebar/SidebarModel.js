@@ -121,6 +121,7 @@ export const sidebarItems = [
     submenus: [
       { title: "Perfiles de Usuario", route: "/Security/role/" },
       { title: "Opciones", route: "/Security/option" },
+      { title: "Menu", route: "/Security/grouper" },
       { title: "Lista de Usuarios", route: "/admin/usuarios/lista" },
       { title: "Asignar rol a opción", route: "/admin/usuarios/lista" },
       { title: "Asignar opción a usuario", route: "/admin/usuarios/lista" },
