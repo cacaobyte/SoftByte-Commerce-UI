@@ -11,6 +11,7 @@ import { Eye, EyeOff } from "lucide-react";
 
 const StepFormModal = ({ isOpen, onClose, title, modelInputs = [], onSubmit }) => {
   const [formData, setFormData] = useState({});
+  const [errors, setErrors] = useState({});
   const [steps, setSteps] = useState([]);
   const [activeStep, setActiveStep] = useState("step-0");
   const [showPassword, setShowPassword] = useState(false);
@@ -33,6 +34,22 @@ const StepFormModal = ({ isOpen, onClose, title, modelInputs = [], onSubmit }) =
   const handleInputChange = (e) => {
     const { name, value } = e.target;
     setFormData((prev) => ({ ...prev, [name]: value }));
+
+    // Validaciones
+    const field = modelInputs.find(f => f.key === name);
+    let error = "";
+
+    if (field?.required && !value) {
+      error = "Este campo es obligatorio.";
+    } else if (field?.minLength && value.length < field.minLength) {
+      error = `Debe tener al menos ${field.minLength} caracteres.`;
+    } else if (field?.maxLength && value.length > field.maxLength) {
+      error = `No puede exceder los ${field.maxLength} caracteres.`;
+    } else if (field?.pattern && !new RegExp(field.pattern).test(value)) {
+      error = "Formato inválido.";
+    }
+
+    setErrors((prev) => ({ ...prev, [name]: error }));
   };
 
   const handleFileChange = (e) => {
@@ -75,7 +92,9 @@ const StepFormModal = ({ isOpen, onClose, title, modelInputs = [], onSubmit }) =
 <TabsContent key={step.key} value={step.key} className="grid grid-cols-1 md:grid-cols-2 gap-4 p-4">
   {step.fields.map((field) => (
     <div key={field.key} className="flex flex-col">
-      <Label>{field.label}</Label>
+     <Label>
+       {field.label} {field.required && <span className="text-red-500">*</span>}
+     </Label>
 
       {/* 🔹 Input de texto */}
       {field.type === "text" && (
@@ -186,6 +205,7 @@ const StepFormModal = ({ isOpen, onClose, title, modelInputs = [], onSubmit }) =
           className="border rounded-lg p-2"
         />
       )}
+      {errors[field.key] && <span className="text-red-500 text-sm">{errors[field.key]}</span>}
     </div>
   ))}
 </TabsContent>
