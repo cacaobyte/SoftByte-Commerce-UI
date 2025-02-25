@@ -7,12 +7,21 @@ import { useHasMounted } from "../../../hooks/useHasMounted";
 import LoadingScreen from "../../../components/UseHasMounted/LoadingScreen";
 import ProtectedPage from "../../../components/ProtectedPage";
 import { usersColumns } from "../../../models/security/usersModel";
-
+import ConfirmationModal from "../../../components/shared/Modal/ConfirmationModal";
+import StepFormModal from "../../../components/shared/Forms/StepFormModal";
+import { Button } from "@/components/ui/button";
+import { PlusCircle } from "lucide-react";
+import { userModelInputs } from "../../../models/security/userInputModel";
 
 export default function UsersPage() {
     const hasMounted = useHasMounted();
     const [users, setUsers] = useState([]);
     const [loading, setLoading] = useState(true);
+    const [confirmModalOpen, setConfirmModalOpen] = useState(false);
+    const [selectedUser, setSelectedUser] = useState(null);
+    const [updating, setUpdating] = useState(false);
+    const [isCreateOpen, setIsCreateOpen] = useState(false);
+    const [creating, setCreating] = useState(false);
 
     useEffect(() => {
         fetchUsers();
@@ -22,17 +31,17 @@ export default function UsersPage() {
         try {
             const usersService = new UsersService();
             const response = await usersService.getAllUsers();
-            
+
             const formattedUsers = Array.isArray(response.data) ? response.data.map(user => ({
                 ...user,
-                fechaNacimiento: user.fechaNacimiento 
+                fechaNacimiento: user.fechaNacimiento
                     ? new Date(user.fechaNacimiento).toLocaleDateString('es-ES', { day: 'numeric', month: 'long', year: 'numeric' }) 
                     : 'Sin fecha',
-                createDate: user.createDate 
+                createDate: user.createDate
                     ? new Date(user.createDate).toLocaleDateString('es-ES', { day: 'numeric', month: 'long', year: 'numeric' }) 
                     : 'Sin fecha'
             })) : [];
-    
+
             setUsers(formattedUsers);
         } catch (error) {
             console.error("Error al obtener usuarios:", error);
@@ -41,7 +50,73 @@ export default function UsersPage() {
             setLoading(false);
         }
     }
+
+    // 🔹 Función para abrir el modal de confirmación
+    const openConfirmModal = (user) => {
+        setSelectedUser(user);
+        setConfirmModalOpen(true);
+    };
+
+    // 🔹 Función para cambiar el estado del usuario
+    async function handleToggleStatus() {
+        if (!selectedUser) return;
+
+        setUpdating(true);
+        try {
+            const usersService = new UsersService();
+            await usersService.UpdateStatusUser(selectedUser.userId);
+
+            setUsers(prevUsers =>
+                prevUsers.map(user =>
+                    user.userId === selectedUser.userId ? { ...user, estado: !user.estado } : user
+                )
+            );
+
+            toast.success(`Usuario ${selectedUser.userName} ${selectedUser.estado ? "desactivado" : "activado"} correctamente.`);
+        } catch (error) {
+            console.error("Error al cambiar estado del usuario:", error);
+            toast.error("Error al actualizar el estado del usuario.");
+        } finally {
+            setUpdating(false);
+            setConfirmModalOpen(false);
+        }
+    }
+
+    // 🔹 Función para crear un nuevo usuario
+    async function handleCreateUser(userData) {
+        setCreating(true);
+        try {
+            const usersService = new UsersService();
+            const formData = new FormData();
     
+            Object.keys(userData).forEach((key) => {
+                if (key === "foto" && userData[key] instanceof File) {
+                    formData.append("imageFile", userData[key]);  // 🔹 Enviar la imagen correctamente
+                } else {
+                    formData.append(key, userData[key]);
+                }
+            });
+    
+            await usersService.createUsers(formData);
+            toast.success("Usuario creado exitosamente.");
+            setIsCreateOpen(false);
+            fetchUsers();
+        } catch (error) {
+            console.error("Error al crear usuario:", error);
+            toast.error("Error al crear usuario.");
+        } finally {
+            setCreating(false);
+        }
+    }
+    
+
+    const actions = [
+        {
+            label: "Activar/Desactivar",
+            variant: "destructive",
+            onClick: (user) => openConfirmModal(user),
+        },
+    ];
 
     if (!hasMounted) {
         return <LoadingScreen message="Cargando usuarios..." />;
@@ -50,20 +125,34 @@ export default function UsersPage() {
     return (
         <ProtectedPage>
             <div className="p-6">
-                {/* ✅ Título de la Página */}
-                <h1 className="text-3xl font-bold text-gray-900 dark:text-white mb-4">Gestión de Usuarios</h1>
-                
-                {/* ✅ Mensaje Explicativo */}
-                <p className="text-gray-700 dark:text-gray-300 mb-6">
-                    Aquí puedes ver la lista de usuarios registrados en el sistema. 
-                    Contacta al administrador si necesitas realizar cambios.
-                </p>
+                <div className="flex justify-between items-center mb-6">
+                    <h1 className="text-3xl font-bold text-gray-900 dark:text-white">Gestión de Usuarios</h1>
+                    <Button className="bg-black text-white flex items-center gap-2" onClick={() => setIsCreateOpen(true)}>
+                        <PlusCircle className="w-5 h-5" /> Nuevo Usuario
+                    </Button>
+                </div>
 
-                {/* 📌 Tabla con los Usuarios */}
-                <DataTable 
-                    columns={usersColumns} 
-                    data={users} 
-                    searchField="userName" 
+                <DataTable columns={usersColumns} data={users} searchField="userName" actions={actions} showActions={true} />
+
+                {/* 📌 Formulario Paso a Paso para Creación de Usuario */}
+                <StepFormModal 
+                    isOpen={isCreateOpen} 
+                    onClose={() => setIsCreateOpen(false)} 
+                    title="Crear Usuario" 
+                    modelInputs={userModelInputs} 
+                    onSubmit={handleCreateUser}
+                    loading={creating}
+                />
+
+                {/* 📌 Modal de Confirmación para Activar/Desactivar Usuario */}
+                <ConfirmationModal
+                    isOpen={confirmModalOpen}
+                    onClose={() => setConfirmModalOpen(false)}
+                    onConfirm={handleToggleStatus}
+                    title="Confirmar acción"
+                    description={`¿Estás seguro de que deseas ${selectedUser?.estado ? "desactivar" : "activar"} al usuario "${selectedUser?.userName}"?`}
+                    confirmText={selectedUser?.estado ? "Desactivar" : "Activar"}
+                    loading={updating}
                 />
             </div>
         </ProtectedPage>

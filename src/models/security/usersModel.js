@@ -1,7 +1,8 @@
 // 📌 Definición de las columnas para la DataTable
 // 📌 Definición de las columnas para la DataTable
 export const usersColumns = [
-    { key: "userName", label: "Nombre", type: "string" },
+    { key: "userName", label: "usuario", type: "string" },
+    { key: "usuario", label: "Nombre", type: "string" },
         { 
         key: "fotoUrl", 
         label: "Foto", 
