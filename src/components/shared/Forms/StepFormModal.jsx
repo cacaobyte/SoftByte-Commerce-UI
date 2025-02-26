@@ -52,6 +52,13 @@ const StepFormModal = ({ isOpen, onClose, title, modelInputs = [], onSubmit }) =
     setErrors((prev) => ({ ...prev, [name]: error }));
   };
 
+  const handleClose = () => {
+    setFormData({});
+    setErrors({});
+    setActiveStep("step-0"); // Volver al primer paso
+    onClose(); // Cerrar el modal
+  };
+  
   const handleFileChange = (e) => {
     setFormData((prev) => ({ ...prev, [e.target.name]: e.target.files[0] }));
   };
@@ -71,7 +78,7 @@ const StepFormModal = ({ isOpen, onClose, title, modelInputs = [], onSubmit }) =
   };
 
   return (
-    <Dialog open={isOpen} onOpenChange={onClose}>
+    <Dialog open={isOpen} onOpenChange={handleClose}>
       <DialogContent className="max-w-3xl">
         <DialogHeader>
           <DialogTitle>{title}</DialogTitle>
@@ -156,23 +163,25 @@ const StepFormModal = ({ isOpen, onClose, title, modelInputs = [], onSubmit }) =
       )}
 
       {/* 🔹 Input de selección */}
-      {field.type === "select" && field.options && (
-        <Select 
-          value={formData[field.key] || ""}
-          onValueChange={(value) => setFormData((prev) => ({ ...prev, [field.key]: value }))}
-        >
-          <SelectTrigger>
-            <SelectValue placeholder="Seleccione una opción" />
-          </SelectTrigger>
-          <SelectContent>
-            {field.options.map((option) => (
-              <SelectItem key={option.value} value={option.value}>
-                {option.label}
-              </SelectItem>
-            ))}
-          </SelectContent>
-        </Select>
-      )}
+{/* 🔹 Input de selección */}
+{field.type === "select" && field.options && (
+  <Select 
+    value={formData[field.key] || ""}
+    onValueChange={(value) => setFormData((prev) => ({ ...prev, [field.key]: value }))}
+  >
+    <SelectTrigger>
+      <SelectValue placeholder="Seleccione una opción" />
+    </SelectTrigger>
+    <SelectContent>
+      {field.options?.map((option, index) => (
+        <SelectItem key={`${option.value}-${index}`} value={option.value || `option-${index}`}>
+          {option.label}
+        </SelectItem>
+      ))}
+    </SelectContent>
+  </Select>
+)}
+
 
       {/* 🔹 Input de archivo */}
       {field.type === "file" && (
@@ -219,7 +228,12 @@ const StepFormModal = ({ isOpen, onClose, title, modelInputs = [], onSubmit }) =
             <ChevronLeft size={18} /> Anterior
           </Button>
           {steps.findIndex((s) => s.key === activeStep) === steps.length - 1 ? (
-            <Button onClick={() => onSubmit(formData)}>
+            <Button onClick={() => {
+              onSubmit(formData);
+              setFormData({});
+              setErrors({});
+              setActiveStep("step-0");
+            }}>
               <FilePlus size={18} className="mr-2" /> Guardar
             </Button>
           ) : (

@@ -2,6 +2,8 @@
 import React, { useEffect, useState } from "react";
 import { toast } from "react-toastify";
 import UsersService from "../../../service/SoftbyteCommerce/Security/users/usersSecurityService";
+import WarehouseService from "../../../service/SoftbyteCommerce/Sales/Warehouse/warehouseService";
+
 import DataTable from "../../../components/DataTable/DataTable";
 import { useHasMounted } from "../../../hooks/useHasMounted";
 import LoadingScreen from "../../../components/UseHasMounted/LoadingScreen";
@@ -16,6 +18,7 @@ import { userModelInputs } from "../../../models/security/userInputModel";
 export default function UsersPage() {
     const hasMounted = useHasMounted();
     const [users, setUsers] = useState([]);
+    const [warehouses, setWarehouses] = useState([]); 
     const [loading, setLoading] = useState(true);
     const [confirmModalOpen, setConfirmModalOpen] = useState(false);
     const [selectedUser, setSelectedUser] = useState(null);
@@ -25,6 +28,7 @@ export default function UsersPage() {
 
     useEffect(() => {
         fetchUsers();
+        fetchWarehouses();
     }, []);
 
     async function fetchUsers() {
@@ -74,13 +78,31 @@ export default function UsersPage() {
 
             toast.success(`Usuario ${selectedUser.userName} ${selectedUser.estado ? "desactivado" : "activado"} correctamente.`);
         } catch (error) {
-            console.error("Error al cambiar estado del usuario:", error);
             toast.error("Error al actualizar el estado del usuario.");
         } finally {
             setUpdating(false);
             setConfirmModalOpen(false);
         }
     }
+
+    async function fetchWarehouses() {
+        try {
+          const warehouseService = new WarehouseService();
+          const response = await warehouseService.getWarehouseActive();
+    
+          // 🔹 Filtrar solo las bodegas activas
+          const activeWarehouses = response.data
+            .filter(bodega => bodega.activo) // Solo las activas
+            .map(bodega => ({
+              value: bodega.bodega1, // Código de la bodega
+              label: `${bodega.bodega1} - ${bodega.descripcion}`, 
+            }));
+    
+          setWarehouses(activeWarehouses);
+        } catch (error) {
+          console.error("Error al obtener bodegas activas:", error);
+        }
+      }
 
     // 🔹 Función para crear un nuevo usuario
     async function handleCreateUser(userData) {
@@ -135,14 +157,18 @@ export default function UsersPage() {
                 <DataTable columns={usersColumns} data={users} searchField="userName" actions={actions} showActions={true} />
 
                 {/* 📌 Formulario Paso a Paso para Creación de Usuario */}
+
                 <StepFormModal 
-                    isOpen={isCreateOpen} 
-                    onClose={() => setIsCreateOpen(false)} 
-                    title="Crear Usuario" 
-                    modelInputs={userModelInputs} 
-                    onSubmit={handleCreateUser}
-                    loading={creating}
-                />
+  isOpen={isCreateOpen} 
+  onClose={() => setIsCreateOpen(false)} 
+  title="Crear Usuario" 
+  modelInputs={userModelInputs.map(input => 
+    input.key === "celular" ? { ...input, options: warehouses } : input
+  )}
+  onSubmit={handleCreateUser}
+  loading={creating}
+/>
+
 
                 {/* 📌 Modal de Confirmación para Activar/Desactivar Usuario */}
                 <ConfirmationModal

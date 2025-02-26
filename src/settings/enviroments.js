@@ -40,6 +40,7 @@ module.exports = {
                 },
                 Warehouse:{
                     getWarehouse: "api/cc/warehouse/bodegas",
+                    getWarehouseActive: "api/cc/warehouse/bodegas/active",
                     CreateWarehouse: "api/cc/warehouse/logistic/addWarehouse",
                     putWarehouse: "api/cc/warehouse/logistic/updateWarehouse/{0}",
                     editWarehouse: "api/cc/warehouse/logistic/editWarehouse/{0}",
