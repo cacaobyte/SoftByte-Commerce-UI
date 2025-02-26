@@ -1,6 +1,7 @@
 "use client";
 import { useEffect, useState } from "react";
 import RoleuserService from "../../../service/SoftbyteCommerce/Security/roleUsers/roleUserService";
+import RoleService from "../../../service/SoftbyteCommerce/Security/Role/RoleSecurityService"; 
 import { toast } from "react-toastify";
 import LoadingScreen from "../../../components/UseHasMounted/LoadingScreen";
 import { Input } from "@/components/ui/input";
@@ -9,6 +10,7 @@ import { ChevronDown, ChevronUp } from "lucide-react";
 
 const PageRolUsuario = () => {
     const [rolesUsuarios, setRolesUsuarios] = useState([]);
+    const [rolesActivos, setRolesActivos] = useState([]); // Aquí guardaremos los roles activos
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
     const [searchTerm, setSearchTerm] = useState("");
@@ -16,6 +18,7 @@ const PageRolUsuario = () => {
 
     useEffect(() => {
         fetchRolesUsuarios();
+        fetchRolesActivos();
     }, []);
 
     async function fetchRolesUsuarios() {
@@ -51,8 +54,22 @@ const PageRolUsuario = () => {
         }
     }
 
-    if (loading) return <LoadingScreen message="Cargando roles de usuario..." />;
-    if (error) return <div className="text-red-500 font-semibold">Error al cargar roles de usuario.</div>;
+    async function fetchRolesActivos() {
+        try {
+            const roleService = new RoleService();
+            const response = await roleService.getRollsActive(); // Obtiene los roles activos
+
+            console.log("Response de Roles Activos:", response.data);
+
+            setRolesActivos(response.data);
+        } catch (error) {
+            console.error("Error al obtener roles activos:", error);
+            toast.error("Error al obtener roles activos.");
+        }
+    }
+
+    if (loading) return <LoadingScreen message="Cargando roles de usuario y roles activos..." />;
+    if (error) return <div className="text-red-500 font-semibold">Error al cargar los datos.</div>;
 
     // Filtrar usuarios según la búsqueda
     const filteredUsers = Object.keys(rolesUsuarios).filter(username =>
@@ -122,6 +139,20 @@ const PageRolUsuario = () => {
                                     </ul>
                                 )}
                             </li>
+                        ))}
+                    </ul>
+                )}
+            </div>
+
+            {/* 🔹 Sección de roles activos */}
+            <div className="mt-6 p-4 bg-gray-100 rounded-lg shadow-md">
+                <h2 className="text-xl font-semibold mb-2">Roles Activos</h2>
+                {rolesActivos.length === 0 ? (
+                    <p className="text-gray-600">No hay roles activos disponibles.</p>
+                ) : (
+                    <ul className="list-disc pl-5 text-gray-700">
+                        {rolesActivos.map((role) => (
+                            <li key={role.idRol}>{role.claveVista}</li>
                         ))}
                     </ul>
                 )}
