@@ -146,6 +146,10 @@ export default function UsersPage() {
 
     return (
         <ProtectedPage>
+            <div>
+                En este apartado podras gestionar los usuarios de la aplicación.  
+                <strong className="text-black"> Toma en cuenta que si desactivar un usuario este no podrá iniciar sesión al sistema.</strong>
+            </div>
             <div className="p-6">
                 <div className="flex justify-between items-center mb-6">
                     <h1 className="text-3xl font-bold text-gray-900 dark:text-white">Gestión de Usuarios</h1>

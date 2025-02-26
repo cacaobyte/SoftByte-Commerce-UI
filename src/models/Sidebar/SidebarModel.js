@@ -123,6 +123,7 @@ export const sidebarItems = [
       { title: "Opciones", route: "/Security/option" },
       { title: "Menu", route: "/Security/grouper" },
       { title: "Lista de Usuarios", route: "/Security/user/" },
+      { title: "Asignar rol a usuario", route: "/Security/rolUsuario" },
       { title: "Asignar rol a opción", route: "/admin/usuarios/lista" },
       { title: "Asignar opción a usuario", route: "/admin/usuarios/lista" },
       { title: "estado usuarios", route: "/admin/usuarios/lista" },

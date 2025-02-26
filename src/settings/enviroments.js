@@ -74,6 +74,7 @@ module.exports = {
                     },
                     Roll:{
                        getRoll: "Security/Roll",
+                       getRollActive: "Security/Roll/Active",
                        createRoll: "Security/Roll",
                        putRoll: "Security/Roll/{0}/{1}",//RollId/Status
                     },
