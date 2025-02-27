@@ -23,6 +23,16 @@ class WarehouseService {
         });
     };
 
+    getWarehouseActive = async() => {
+        const endpoint = this.endpoint.getWarehouse;
+        const headers = await getHeaders()
+        return this.service.request({
+            method: 'GET',
+            endpoint,
+            headers: headers,
+        });
+    };
+
     putWarehouseId = async(warehouseId) => {
         const endpoint = this.endpoint.putWarehouse.replace("{0}", warehouseId); 
         const headers = await getHeaders()

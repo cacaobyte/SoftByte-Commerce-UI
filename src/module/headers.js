@@ -2,6 +2,7 @@ import { isPlatform } from '@ionic/react';
 import { Preferences } from '@capacitor/preferences';
 
 let cachedToken = null; // Token almacenado en memoria
+
 export const getToken = async () => {
   if (!cachedToken) {
     if (isPlatform('hybrid')) {
