@@ -118,7 +118,7 @@ const PageRolUsuario = () => {
         <div className="p-6">
             <div className="flex justify-between items-center">
                 <h1 className="text-3xl font-bold text-gray-900 dark:text-white mb-2">Asignación de Roles a Usuarios</h1>
-                <Button variant="outline" onClick={() => setIsModalOpen(true)} >
+                <Button className="bg-black text-white flex items-center gap-2" onClick={() => setIsModalOpen(true)} >
                     <PlusCircle size={20} className="mr-2" /> Asignar Nuevo Rol
                 </Button>
             </div>
@@ -210,7 +210,7 @@ const PageRolUsuario = () => {
                     </div>
 
                     <DialogFooter>
-                        <Button variant="outline" onClick={handleAssignRole} >
+                        <Button className="bg-black text-white flex items-center gap-2" onClick={handleAssignRole} >
                             Asignar Rol
                         </Button>
                     </DialogFooter>
