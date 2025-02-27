@@ -23,6 +23,17 @@ class RoleService {
         });
     };
 
+    getRollsActive = async(data) => {
+        const endpoint = this.endpoint.getRollActive; 
+        const headers = await getHeaders()
+        return this.service.request({
+          method: 'GET',
+          endpoint,
+          data, 
+          headers: headers,
+        });
+    };
+
     createRoll = async(data) => {
         const endpoint = this.endpoint.createRoll; 
         const headers = await getHeaders()

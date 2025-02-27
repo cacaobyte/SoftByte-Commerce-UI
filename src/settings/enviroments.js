@@ -40,6 +40,7 @@ module.exports = {
                 },
                 Warehouse:{
                     getWarehouse: "api/cc/warehouse/bodegas",
+                    getWarehouseActive: "api/cc/warehouse/bodegas/active",
                     CreateWarehouse: "api/cc/warehouse/logistic/addWarehouse",
                     putWarehouse: "api/cc/warehouse/logistic/updateWarehouse/{0}",
                     editWarehouse: "api/cc/warehouse/logistic/editWarehouse/{0}",
@@ -73,6 +74,7 @@ module.exports = {
                     },
                     Roll:{
                        getRoll: "Security/Roll",
+                       getRollActive: "Security/Roll/Active",
                        createRoll: "Security/Roll",
                        putRoll: "Security/Roll/{0}/{1}",//RollId/Status
                     },
@@ -85,12 +87,15 @@ module.exports = {
                         getRoleByUserId: "Security/RoleUser/{0}",//UserId
                         getUserWithRoles: "Security/RoleUser/GetUsersWithRoles",
                         getRolesUsers: "Security/RoleUser",
+                        postRolesUsers: "Security/RoleUser",
                         deleteRoleUser: "Security/RoleUser/{0}/{1}",//UserId/RoleUserId
                         createRoleUser: "Security/RoleUser",
                     },
                     Users:{
                         getUsers: "Security/User",
                         getUsersActive: "Security/User/Active",
+                        putUser: "Security/User/{0}",
+                        postUser: "security/register",
                     } ,
                     UserOptionAction: "Security/UserOptionAction",
                     UserOption: {
