@@ -87,6 +87,7 @@ module.exports = {
                         getRoleByUserId: "Security/RoleUser/{0}",//UserId
                         getUserWithRoles: "Security/RoleUser/GetUsersWithRoles",
                         getRolesUsers: "Security/RoleUser",
+                        postRolesUsers: "Security/RoleUser",
                         deleteRoleUser: "Security/RoleUser/{0}/{1}",//UserId/RoleUserId
                         createRoleUser: "Security/RoleUser",
                     },

@@ -23,6 +23,28 @@ class RoleuserService {
         });
     };
 
+    postRollsUsers = async({ user, role, roles = [], superUser = false }) => {
+        if (!user || !role) {
+            return Promise.reject(new Error("El usuario y el rol son obligatorios"));
+        }
+    
+        const endpoint = this.endpoint.postRolesUsers; 
+        const headers = await getHeaders();
+    
+        return this.service.request({
+            method: 'POST',
+            endpoint,
+            data: {
+                user,
+                role: parseInt(role), // Convertir a número si es necesario
+                roles,
+                superUser
+            },
+            headers: headers,
+        });
+    };
+    
+
 
 
 }
