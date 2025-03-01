@@ -29,6 +29,12 @@ const PageRolUsuario = () => {
     const [roleToDelete, setRoleToDelete] = useState(null);
     const [updating, setUpdating] = useState(false);
 
+    const resetForm = () => {
+        setSelectedUser("");
+        setSelectedRole("");
+        setIsModalOpen(false);
+    };
+
     useEffect(() => {
         fetchRolesUsuarios();
         fetchRolesActivos();
@@ -103,6 +109,7 @@ const PageRolUsuario = () => {
             setSelectedRole("");
             setIsModalOpen(false);
             fetchRolesUsuarios(); 
+            resetForm();
         } catch (error) {
             const errorMessage = error.response?.data?.error || "Error al asignar el rol.";
             toast.error(errorMessage);
@@ -208,7 +215,8 @@ const PageRolUsuario = () => {
             </div>
 
             {/* 🔹 Modal para asignar rol */}
-            <Dialog open={isModalOpen} onOpenChange={setIsModalOpen}>
+            <Dialog open={isModalOpen} onOpenChange={(open) => { if (!open) resetForm(); }}>
+
                 <DialogContent className="max-w-md">
                     <DialogHeader>
                         <DialogTitle>Asignar Rol a Usuario</DialogTitle>
