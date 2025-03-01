@@ -10,6 +10,7 @@ import { Button } from "@/components/ui/button";
 import { ChevronDown, ChevronUp, PlusCircle } from "lucide-react";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from "@/components/ui/dialog";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import ConfirmationModal from "../../../components/shared/Modal/ConfirmationModal";
 
 const PageRolUsuario = () => {
     const [rolesUsuarios, setRolesUsuarios] = useState([]);
@@ -23,6 +24,10 @@ const PageRolUsuario = () => {
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [selectedUser, setSelectedUser] = useState("");
     const [selectedRole, setSelectedRole] = useState("");
+
+    const [confirmModalOpen, setConfirmModalOpen] = useState(false);
+    const [roleToDelete, setRoleToDelete] = useState(null);
+    const [updating, setUpdating] = useState(false);
 
     useEffect(() => {
         fetchRolesUsuarios();
@@ -44,7 +49,8 @@ const PageRolUsuario = () => {
                 acc[role.username].roles.push({
                     idRol: role.idRol,
                     claveVista: role.claveVista,
-                    selected: role.selected
+                    selected: role.selected,
+                    usuario: role.usuario
                 });
                 return acc;
             }, {});
@@ -98,10 +104,32 @@ const PageRolUsuario = () => {
             setIsModalOpen(false);
             fetchRolesUsuarios(); 
         } catch (error) {
-            toast.error("Error al asignar el rol.");
+            const errorMessage = error.response?.data?.error || "Error al asignar el rol.";
+            toast.error(errorMessage);
         }
     }
 
+
+    async function handleDeleteRole() {
+        if (!roleToDelete) return;
+    
+        try {
+            setUpdating(true);
+            const roleuserService = new RoleuserService();
+            console.log("roleToDelete", roleToDelete);
+            await roleuserService.DeleteUserRoll(roleToDelete.user, roleToDelete.role);
+      
+            toast.success("Rol eliminado con éxito.");
+            fetchRolesUsuarios();
+        } catch (error) {
+            toast.error("Error al eliminar el rol.");
+        } finally {
+            setConfirmModalOpen(false);
+            setRoleToDelete(null);
+            setUpdating(false);
+        }
+    }
+    
     if (loading) return <LoadingScreen message="Cargando datos de usuarios y roles..." />;
     if (error) return <div className="text-red-500 font-semibold">Error al cargar los datos.</div>;
 
@@ -158,7 +186,16 @@ const PageRolUsuario = () => {
                                     <ul className="mt-2 space-y-1 bg-gray-50 p-3 rounded-md">
                                         {rolesUsuarios[username].roles.map((role) => (
                                             <li key={role.idRol} className="flex items-center gap-2">
-                                                <input type="checkbox" checked={role.selected} readOnly className="h-4 w-4 text-blue-600" />
+                                                <input 
+                                                    type="checkbox" 
+                                                    checked={role.selected} 
+                                                    readOnly 
+                                                    onClick={() => {
+                                                        setRoleToDelete({ user: role.usuario, role: role.idRol });
+                                                        setConfirmModalOpen(true);
+                                                    }}                                                                                                       
+                                                    className="h-4 w-4 text-blue-600 cursor-pointer"
+                                                />
                                                 <span className="text-gray-700">{role.claveVista}</span>
                                             </li>
                                         ))}
@@ -216,6 +253,16 @@ const PageRolUsuario = () => {
                     </DialogFooter>
                 </DialogContent>
             </Dialog>
+            
+            <ConfirmationModal
+                isOpen={confirmModalOpen}
+                onClose={() => setConfirmModalOpen(false)}
+                onConfirm={handleDeleteRole}
+                title="Confirmar Eliminación"
+                description={`¿Estás seguro de que deseas eliminar el rol seleccionado del usuario?`}
+                confirmText="Eliminar"
+                loading={updating}
+            />
         </div>
     );
 };
