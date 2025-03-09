@@ -14,7 +14,6 @@ import { useHasMounted } from "../../../hooks/useHasMounted";
 import LoadingScreen from "../../../components/UseHasMounted/LoadingScreen";
 import ProtectedPage from "../../../components/ProtectedPage";
 import { roleColumns } from "../../../models/security/roleModels";
-import ConfirmationModal from "../../../components/shared/Modal/ConfirmationModal";
 
 export default function RolesPage() {
     const hasMounted = useHasMounted();
