@@ -82,6 +82,9 @@ const PageOptionUser = () => {
         }
     }
 
+    /**
+     * Maneja la asignación de una opción a un usuario.
+     */
     async function handleAssignOption() {
         if (!selectedUser || !selectedOption) {
             toast.warning("Debe seleccionar un usuario y una opción.");
@@ -90,9 +93,10 @@ const PageOptionUser = () => {
 
         try {
             const optionUserService = new OptionUserService();
-            await optionUserService.postOptionToUser({
-                user: selectedUser, 
-                optionId: parseInt(selectedOption),
+            await optionUserService.assignOptionToUser({
+                user: selectedUser,
+                options: [parseInt(selectedOption)], // Convertimos la opción a número y la enviamos como array
+                allowed: true,
             });
 
             toast.success("Opción asignada con éxito.");

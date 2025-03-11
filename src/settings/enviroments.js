@@ -105,6 +105,7 @@ module.exports = {
                         getUsersWithOptions: "Security/UserOption/GetUsersWithOptions",
                         putUserOption: "Security/UserOption",
                         getOptionByUser: "Security/UserOption/GetOption/{0}",//UserId
+                        assingOptionUser: 'Security/UserOption'
                     }
                 },
                 Users:{
