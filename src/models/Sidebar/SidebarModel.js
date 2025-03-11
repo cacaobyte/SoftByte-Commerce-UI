@@ -128,7 +128,7 @@ export const sidebarItems = [
       { title: "Asignar opción a usuario", route: "/Security/optionUser" },
       { title: "estado usuarios", route: "/Security/statusUsers" },
         // { title: "Asignar  acción a opción", route: "/Security/actionOption" },
-      { title: "Historial de Cambios", route: "/Security/historyChanges" },
+     // { title: "Historial de Cambios", route: "/Security/historyChanges" },
     ],
   },
   {
