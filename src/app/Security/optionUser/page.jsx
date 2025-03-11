@@ -1,12 +1,16 @@
 "use client";
 import { useEffect, useState } from "react";
 import OptionUserService from "../../../service/SoftbyteCommerce/Security/optionUser/optionUserService";
+import UsersService from "../../../service/SoftbyteCommerce/Security/users/usersSecurityService";
+import OptionsService from "../../../service/SoftbyteCommerce/Security/Option/OptionService";
 import { toast } from "react-toastify";
 import LoadingScreen from "../../../components/UseHasMounted/LoadingScreen";
 import { Input } from "@/components/ui/input";
-import UserOptionsList from "../../../components/shared/security/UserOptionsList"; 
-import UsersService from "../../../service/SoftbyteCommerce/Security/users/usersSecurityService";
-import OptionsService from "../../../service/SoftbyteCommerce/Security/Option/OptionService";
+import { Button } from "@/components/ui/button";
+import UserOptionsList from "../../../components/shared/security/UserOptionsList";
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from "@/components/ui/dialog";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { PlusCircle } from "lucide-react";
 
 const PageOptionUser = () => {
     const [optionsUsers, setOptionsUsers] = useState([]);
@@ -15,6 +19,10 @@ const PageOptionUser = () => {
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
     const [searchTerm, setSearchTerm] = useState("");
+
+    const [isModalOpen, setIsModalOpen] = useState(false);
+    const [selectedUser, setSelectedUser] = useState("");
+    const [selectedOption, setSelectedOption] = useState("");
 
     useEffect(() => {
         fetchOptionsUsers();
@@ -74,6 +82,33 @@ const PageOptionUser = () => {
         }
     }
 
+    async function handleAssignOption() {
+        if (!selectedUser || !selectedOption) {
+            toast.warning("Debe seleccionar un usuario y una opción.");
+            return;
+        }
+
+        try {
+            const optionUserService = new OptionUserService();
+            await optionUserService.postOptionToUser({
+                user: selectedUser, 
+                optionId: parseInt(selectedOption),
+            });
+
+            toast.success("Opción asignada con éxito.");
+            setIsModalOpen(false);
+            fetchOptionsUsers(); 
+            resetForm();
+        } catch (error) {
+            const errorMessage = error.response?.data?.error || "Error al asignar la opción.";
+            toast.error(errorMessage);
+        }
+    }
+
+    const resetForm = () => {
+        setSelectedUser("");
+        setSelectedOption("");
+    };
 
     // Carga mientras se obtienen los datos
     if (loading) return <LoadingScreen message="Cargando opciones de usuario..." />;
@@ -81,7 +116,13 @@ const PageOptionUser = () => {
 
     return (
         <div className="p-6">
-            <h1 className="text-3xl font-bold text-gray-900 dark:text-white mb-2">Opciones Asignadas a Usuarios</h1>
+            <div className="flex justify-between items-center">
+                <h1 className="text-3xl font-bold text-gray-900 dark:text-white mb-2">Opciones Asignadas a Usuarios</h1>
+                <Button className="bg-black text-white flex items-center gap-2" onClick={() => setIsModalOpen(true)}>
+                    <PlusCircle size={20} className="mr-2" /> Asignar Nueva Opción
+                </Button>
+            </div>
+
             <p className="text-gray-600 mb-4">
                 En esta pantalla puedes ver las opciones asignadas a cada usuario. Usa la barra de búsqueda para encontrar una opción específica.
             </p>
@@ -97,8 +138,55 @@ const PageOptionUser = () => {
                 />
             </div>
 
-            {/* 📋 Lista de opciones agrupadas por usuario - Reutilizando el Componente */}
+            {/* 📋 Lista de opciones agrupadas por usuario */}
             <UserOptionsList groupedOptions={optionsUsers} searchTerm={searchTerm} />
+
+            {/* 🔹 Modal para asignar opción */}
+            <Dialog open={isModalOpen} onOpenChange={setIsModalOpen}>
+                <DialogContent className="max-w-md">
+                    <DialogHeader>
+                        <DialogTitle>Asignar Opción a Usuario</DialogTitle>
+                    </DialogHeader>
+
+                    <div className="mb-4">
+                        <label className="block font-medium text-gray-700">Usuario:</label>
+                        <Select value={selectedUser} onValueChange={setSelectedUser}>
+                            <SelectTrigger className="w-full">
+                                <SelectValue placeholder="Seleccione un usuario" />
+                            </SelectTrigger>
+                            <SelectContent>
+                                {usuariosActivos.map(user => (
+                                    <SelectItem key={user.userId} value={user.userId}>
+                                        {user.userName} - {user.usuario}
+                                    </SelectItem>
+                                ))}
+                            </SelectContent>
+                        </Select>
+                    </div>
+
+                    <div className="mb-4">
+                        <label className="block font-medium text-gray-700">Opción:</label>
+                        <Select value={selectedOption} onValueChange={setSelectedOption}>
+                            <SelectTrigger className="w-full">
+                                <SelectValue placeholder="Seleccione una opción" />
+                            </SelectTrigger>
+                            <SelectContent>
+                                {options.map(option => (
+                                    <SelectItem key={option.idOpcion} value={option.idOpcion}>
+                                        {option.opcion} - {option.menu}
+                                    </SelectItem>
+                                ))}
+                            </SelectContent>
+                        </Select>
+                    </div>
+
+                    <DialogFooter>
+                        <Button className="bg-black text-white flex items-center gap-2" onClick={handleAssignOption}>
+                            Asignar Opción
+                        </Button>
+                    </DialogFooter>
+                </DialogContent>
+            </Dialog>
         </div>
     );
 };
