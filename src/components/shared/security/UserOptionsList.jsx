@@ -1,9 +1,14 @@
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { ChevronDown, ChevronUp } from "lucide-react";
+import OptionUserService from "../../../service/SoftbyteCommerce/Security/optionUser/optionUserService";
+import { toast } from "react-toastify";
 
-const UserOptionsList = ({ groupedOptions, searchTerm }) => {
+const UserOptionsList = ({ groupedOptions, searchTerm, fetchOptionsUsers }) => {
     const [expandedUsers, setExpandedUsers] = useState({});
+    const [updating, setUpdating] = useState(false);
+
+    const optionUserService = new OptionUserService();
 
     // Filtra los usuarios por el término de búsqueda
     const filteredUsers = Object.keys(groupedOptions).filter(userName =>
@@ -15,6 +20,33 @@ const UserOptionsList = ({ groupedOptions, searchTerm }) => {
     const toggleExpand = (userName) => {
         setExpandedUsers(prev => ({ ...prev, [userName]: !prev[userName] }));
     };
+
+    // Manejar el cambio de estado de una opción asignada al usuario
+    const handleOptionChange = async (user, option, allowed) => {
+        if (updating) return;
+        setUpdating(true);
+    
+        const payload = {
+            user,
+            option,
+            allowed,
+        };
+    
+        console.log("Datos que se enviarán al backend:", payload); // 🔍 Verifica en la consola
+    
+        try {
+            await optionUserService.updateUserOptionStatus(payload);
+    
+            toast.success(`Opción ${allowed ? "habilitada" : "deshabilitada"} correctamente.`);
+            fetchOptionsUsers(); // Refrescar la lista después de la actualización
+        } catch (error) {
+            console.error("Error en la actualización:", error);
+            toast.error(error.response?.data?.errors?.options?.[0] || "Error al actualizar la opción.");
+        } finally {
+            setUpdating(false);
+        }
+    };
+    
 
     return (
         <div className="bg-white shadow-md rounded-lg p-4">
@@ -44,8 +76,9 @@ const UserOptionsList = ({ groupedOptions, searchTerm }) => {
                                             <input
                                                 type="checkbox"
                                                 checked={option.selected}
-                                                readOnly
-                                                className="h-4 w-4 text-blue-600"
+                                                onChange={() => handleOptionChange(option.usuario, option.idOpcion, !option.selected)}
+                                                className="h-4 w-4 text-blue-600 cursor-pointer"
+                                                disabled={updating}
                                             />
                                             <span className="text-gray-700">{option.claveVista}</span>
                                             <p className="text-sm text-gray-500">

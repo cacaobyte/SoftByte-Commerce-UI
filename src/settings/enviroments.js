@@ -1,6 +1,6 @@
 const { Warehouse } = require("lucide-react");
 
-const environment = "https://localhost:32769/";
+const environment = "https://localhost:32771/";
 //Produccion
 //const environment = "https://softbyte-commerce-api.onrender.com/";
 
@@ -105,7 +105,8 @@ module.exports = {
                         getUsersWithOptions: "Security/UserOption/GetUsersWithOptions",
                         putUserOption: "Security/UserOption",
                         getOptionByUser: "Security/UserOption/GetOption/{0}",//UserId
-                        assingOptionUser: 'Security/UserOption'
+                        assingOptionUser: 'Security/UserOption',
+                        updateUserOptionStatus: 'Security/UserOption'
                     }
                 },
                 Users:{

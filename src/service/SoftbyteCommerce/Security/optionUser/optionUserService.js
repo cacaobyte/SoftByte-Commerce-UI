@@ -60,6 +60,40 @@ class OptionUserService {
         });
     };
 
+      /**
+     * Actualiza el estado de una opción asignada a un usuario.
+     * @param {Object} data - Datos de la actualización.
+     * @param {string} data.user - ID del usuario.
+     * @param {number} data.option - ID de la opción.
+     * @param {boolean} data.allowed - Nuevo estado de la opción.
+     */
+      updateUserOptionStatus = async ({ user, option, allowed }) => {
+        if (!user || option == null) {
+            return Promise.reject(new Error("El usuario y la opción son obligatorios"));
+        }
+    
+        const endpoint = this.endpoint.updateUserOptionStatus;
+        const headers = await getHeaders();
+    
+        const payload = {
+            user,
+            options: [option], // 🔥 Debe ser un array con un solo elemento
+            allowed
+        };
+    
+        console.log("Enviando payload al backend:", payload); // 🔍 Verifica lo que se envía
+    
+        return this.service.request({
+            method: 'PUT',
+            endpoint,
+            data: payload,
+            headers: headers,
+        });
+    };
+    
+    
+    
+    
 
 }
 

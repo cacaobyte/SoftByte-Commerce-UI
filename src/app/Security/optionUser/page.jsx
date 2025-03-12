@@ -143,7 +143,7 @@ const PageOptionUser = () => {
             </div>
 
             {/* 📋 Lista de opciones agrupadas por usuario */}
-            <UserOptionsList groupedOptions={optionsUsers} searchTerm={searchTerm} />
+            <UserOptionsList groupedOptions={optionsUsers} searchTerm={searchTerm} fetchOptionsUsers={fetchOptionsUsers}/>
 
             {/* 🔹 Modal para asignar opción */}
             <Dialog open={isModalOpen} onOpenChange={setIsModalOpen}>
