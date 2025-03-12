@@ -8,7 +8,7 @@ import "react-toastify/dist/ReactToastify.css";
 import ClientsService from "../../../service/SoftbyteCommerce/Sales/clients/clientsService";
 import { useHasMounted } from "../../../hooks/useHasMounted";
 import LoadingScreen from "../../../components/UseHasMounted/LoadingScreen";
-import { clientColumns, clientModalModel } from "../../../models/clients/clientModel";
+import { clientColumns, clientModalModel, photoModal } from "../../../models/clients/clientModel";
 
 const ClientPage = () => {
   const [clients, setClients] = useState([]);
@@ -92,11 +92,7 @@ const ClientPage = () => {
       cliente1: selectedClient.cliente1,
       activo: selectedClient.activo ? "Activo" : "Inactivo",
     }}
-    model={[
-      { key: "cliente1", label: "ID Cliente" },
-      { key: "activo", label: "Estado" },
-      { key: "image", label: "Foto", type: "image" },
-    ]}
+    model={photoModal}
     hasImage={true}
   />
 )}

@@ -159,3 +159,8 @@ export const clientColumns = [
     },
   ];
   
+  export const photoModal =[
+    { key: "cliente1", label: "ID Cliente" },
+    { key: "activo", label: "Estado" },
+    { key: "image", label: "Foto", type: "image" },
+  ]
