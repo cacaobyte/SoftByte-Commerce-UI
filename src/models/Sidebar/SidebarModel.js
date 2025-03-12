@@ -25,6 +25,7 @@ export const sidebarItems = [
       { title: "Historial de Ventas", route: "/ventas/historial" },
       { title: "Facturas", route: "/ventas/facturas" },
       { title: "Devoluciones", route: "/ventas/devoluciones" },
+      { title: "cotizacion", route: "/ventas/cotizacion" },
     ],
   },
   {
@@ -105,13 +106,27 @@ export const sidebarItems = [
     ],
   },
   {
-    title: "Soporte",
-    icon: "help",
-    route: "/soporte",
+    title: "Recursos Humanos",
+    icon: "FcManager",
+    route: "/RRHH",
     submenus: [
-      { title: "FAQs", route: "/support/faqs/" },
-      { title: "Contacto", route: "/support/contact" },
-      { title: "Guías", route: "/support/guia" },
+      { title: "Recursos Humanos", route: "/RRHH" },
+      { title: "Planilla", route: "/Planilla" },
+      { title: "Boletas", route: "/Boletas" },
+      { title: "Horas Extras", route: "/Extras" },
+      { title: "Asistencia", route: "/Asistencia" }, 
+      { title: "Permisos y Vacaciones", route: "/Permisos" }, 
+    ],
+  },
+  
+  {
+    title: "Facturación",
+    icon: "billing",
+    route: "/facturacion",
+    submenus: [
+      { title: "Emitir Factura", route: "/facturacion/emitir" },
+      { title: "Facturas Pendientes", route: "/facturacion/pendientes" },
+      { title: "Historial de Facturación", route: "/facturacion/historial" },
     ],
   },
   {
@@ -132,13 +147,13 @@ export const sidebarItems = [
     ],
   },
   {
-    title: "Facturación",
-    icon: "billing",
-    route: "/facturacion",
+    title: "Soporte",
+    icon: "help",
+    route: "/soporte",
     submenus: [
-      { title: "Emitir Factura", route: "/facturacion/emitir" },
-      { title: "Facturas Pendientes", route: "/facturacion/pendientes" },
-      { title: "Historial de Facturación", route: "/facturacion/historial" },
+      { title: "FAQs", route: "/support/faqs/" },
+      { title: "Contacto", route: "/support/contact" },
+      { title: "Guías", route: "/support/guia" },
     ],
   },
 ];
