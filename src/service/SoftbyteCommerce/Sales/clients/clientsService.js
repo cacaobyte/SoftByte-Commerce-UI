@@ -1,6 +1,6 @@
 import RestfulHandler from '../../../../module/handler/restfulHandler';
 import enviroment from '../../../../settings/enviroments';
-import { getHeaders } from '.././../../../module/headers'; 
+import { getHeaders, getToken} from '.././../../../module/headers'; 
 
 class ClientsService {
     constructor() {
