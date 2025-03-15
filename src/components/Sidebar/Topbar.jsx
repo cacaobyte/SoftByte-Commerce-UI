@@ -15,7 +15,7 @@ import { useRouter } from "next/navigation";
 const Topbar = () => {
   const [darkMode, setDarkMode] = useState(false);
   const [userMenuOpen, setUserMenuOpen] = useState(false);
-    const router = useRouter();
+  const router = useRouter();
 
   // Alternar entre claro y oscuro
   const toggleDarkMode = () => {
@@ -77,14 +77,11 @@ const Topbar = () => {
 
           {/* Menú desplegable */}
           {userMenuOpen && (
-            
-            <div
-              className={`absolute right-0 mt-2 w-48 rounded-md shadow-lg bg-white dark:bg-gray-800 text-gray-800 dark:text-gray-200`}
-            >
+            <div className={`absolute right-0 mt-2 w-48 rounded-md shadow-lg bg-white dark:bg-gray-800 text-gray-800 dark:text-gray-200`}>
               <ul className="py-2">
                 <li
                   className="px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-700 cursor-pointer"
-                  onClick={() => alert("Mi Cuenta")}
+                  onClick={() => router.push("/setting/profile/")} 
                 >
                   Mi Cuenta
                 </li>
@@ -101,17 +98,17 @@ const Topbar = () => {
                   Dashboard
                 </li>
               </ul>
-             
-                          <div className="p-4 border-t">
-                            <Button
-                              variant="ghost"
-                              className="w-full justify-start text-red-500"
-                              onClick={handleLogout}
-                            >
-                              <Icons.logout className="mr-3 w-5 h-5" />
-                              Cerrar Sesión
-                            </Button>
-                          </div>
+
+              <div className="p-4 border-t">
+                <Button
+                  variant="ghost"
+                  className="w-full justify-start text-red-500"
+                  onClick={handleLogout}
+                >
+                  <Icons.logout className="mr-3 w-5 h-5" />
+                  Cerrar Sesión
+                </Button>
+              </div>
             </div>
           )}
         </div>
