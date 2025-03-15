@@ -8,6 +8,7 @@ import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { FilePlus, ChevronRight, ChevronLeft } from "lucide-react";
 import { Eye, EyeOff } from "lucide-react";
+import { useMemo } from "react";
 
 const StepFormModal = ({ isOpen, onClose, title, modelInputs = [], onSubmit }) => {
   const [formData, setFormData] = useState({});
@@ -16,20 +17,25 @@ const StepFormModal = ({ isOpen, onClose, title, modelInputs = [], onSubmit }) =
   const [activeStep, setActiveStep] = useState("step-0");
   const [showPassword, setShowPassword] = useState(false);
 
-  useEffect(() => {
-    // Dividir los campos en pasos
-    const chunkSize = 4;
-    const groupedSteps = [];
+  const groupedSteps = useMemo(() => {
+    const chunkSize = 6;
+    const steps = [];
     for (let i = 0; i < modelInputs.length; i += chunkSize) {
-      groupedSteps.push({
+      steps.push({
         key: `step-${i / chunkSize}`,
         label: `Paso ${i / chunkSize + 1}`,
         fields: modelInputs.slice(i, i + chunkSize),
       });
     }
-    setSteps(groupedSteps);
-    setActiveStep(groupedSteps[0]?.key || "");
+    return steps;
   }, [modelInputs]);
+  
+  useEffect(() => {
+    if (groupedSteps.length > 0) {
+      setSteps(groupedSteps);
+      setActiveStep(groupedSteps[0]?.key || "");
+    }
+  }, [groupedSteps]);
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;

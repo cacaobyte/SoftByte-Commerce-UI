@@ -9,12 +9,16 @@ import ClientsService from "../../../service/SoftbyteCommerce/Sales/clients/clie
 import { useHasMounted } from "../../../hooks/useHasMounted";
 import LoadingScreen from "../../../components/UseHasMounted/LoadingScreen";
 import { clientColumns, clientModalModel, photoModal } from "../../../models/clients/clientModel";
+import StepFormModal from "../../../components/shared/Forms/StepFormModal";
+import { clientModelInputs } from "../../../models/clients/clientModelInputs";
+import { PlusCircle } from "lucide-react"
 
 const ClientPage = () => {
   const [clients, setClients] = useState([]);
   const [detailModalOpen, setDetailModalOpen] = useState(false);
   const [photoModalOpen, setPhotoModalOpen] = useState(false);
   const [selectedClient, setSelectedClient] = useState(null);
+   const [isCreateOpen, setIsCreateOpen] = useState(false);
   const hasMounted = useHasMounted();
   const clientsService = new ClientsService();
 
@@ -41,16 +45,62 @@ const ClientPage = () => {
     setPhotoModalOpen(true);
   };
 
+  const handleCreateClient = async (formData) => {
+    try {
+      const clientFormData = new FormData();
+  
+      // Agregar los datos del formulario a FormData
+      Object.keys(formData).forEach((key) => {
+        if (formData[key] !== undefined && formData[key] !== null) {
+          clientFormData.append(key, formData[key]);
+        }
+      });
+  
+      // Verificar si hay una imagen y agregarla
+      if (formData.imageFile instanceof File) {
+        clientFormData.append("imageFile", formData.imageFile);
+      }
+  
+      // Llamar al servicio para crear el cliente
+      await clientsService.createClients(clientFormData);
+  
+      toast.success("Cliente creado exitosamente");
+  
+      // Cerrar el modal después de la creación
+      setIsCreateOpen(false);
+    } catch (error) {
+      console.error("Error al crear el cliente:", error);
+      toast.error("No se pudo crear el cliente. Inténtalo de nuevo.");
+    }
+  };
+
+
   if (!hasMounted) {
     return <LoadingScreen message="Preparando tu experiencia..." />;
   }
 
   return (
     <div className="p-6">
-      <div className="flex justify-between items-center mb-6">
-        <h1 className="text-2xl font-bold">Gestión de Clientes</h1>
-        <Button onClick={fetchClients}>Refrescar</Button>
-      </div>
+<div className="flex justify-between items-center mb-6">
+  <h1 className="text-2xl font-bold">Gestión de Clientes</h1>
+  <div className="flex gap-4">
+    {/* Botón para abrir el modal de creación de clientes */}
+    <Button className="bg-black text-white flex items-center gap-2" onClick={() => setIsCreateOpen(true)}>
+      <PlusCircle className="w-5 h-5" /> Nuevo Cliente
+    </Button>
+
+    {/* Botón para refrescar la tabla */}
+    <Button onClick={fetchClients}>Refrescar</Button>
+  </div>
+</div>
+
+      <StepFormModal 
+  isOpen={isCreateOpen} 
+  onClose={() => setIsCreateOpen(false)} 
+  title="Crear Cliente" 
+  modelInputs={clientModelInputs}
+  onSubmit={handleCreateClient} // Cambiado para usar la función correcta
+/>
 
       <DataTable
         columns={clientColumns}
