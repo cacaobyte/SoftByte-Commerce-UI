@@ -1,5 +1,6 @@
 import RestfulHandler from '../../../../../module/handler/restfulHandler';
 import enviroment from '../../../../../settings/enviroments';
+import { getHeaders } from '../../../../../module/headers';
 
 class GuiaService {
     constructor() {

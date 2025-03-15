@@ -47,32 +47,37 @@ const ClientPage = () => {
 
   const handleCreateClient = async (formData) => {
     try {
-      const clientFormData = new FormData();
-  
-      // Agregar los datos del formulario a FormData
-      Object.keys(formData).forEach((key) => {
-        if (formData[key] !== undefined && formData[key] !== null) {
-          clientFormData.append(key, formData[key]);
+        const clientFormData = new FormData();
+
+        // ✅ Asegurar que Cliente1 siempre se envía, aunque esté vacío
+        clientFormData.append("Cliente1", formData.Cliente1 ? formData.Cliente1 : ""); 
+
+        // ✅ Agregar los demás datos del formulario a FormData
+        Object.keys(formData).forEach((key) => {
+            if (formData[key] !== undefined && formData[key] !== null) {
+                clientFormData.append(key, formData[key]);
+            }
+        });
+
+        // ✅ Verificar si hay una imagen y agregarla
+        if (formData.imageFile instanceof File) {
+            clientFormData.append("imageFile", formData.imageFile);
         }
-      });
-  
-      // Verificar si hay una imagen y agregarla
-      if (formData.imageFile instanceof File) {
-        clientFormData.append("imageFile", formData.imageFile);
-      }
-  
-      // Llamar al servicio para crear el cliente
-      await clientsService.createClients(clientFormData);
-  
-      toast.success("Cliente creado exitosamente");
-  
-      // Cerrar el modal después de la creación
-      setIsCreateOpen(false);
+
+        // 🔹 Llamar al servicio para crear el cliente
+        await clientsService.createClients(clientFormData);
+
+        toast.success("Cliente creado exitosamente");
+
+        // 🔹 Cerrar el modal después de la creación
+        setIsCreateOpen(false);
     } catch (error) {
-      console.error("Error al crear el cliente:", error);
-      toast.error("No se pudo crear el cliente. Inténtalo de nuevo.");
+        console.error("Error al crear el cliente:", error);
+        toast.error("No se pudo crear el cliente. Inténtalo de nuevo.");
     }
-  };
+};
+
+
 
 
   if (!hasMounted) {
@@ -99,7 +104,7 @@ const ClientPage = () => {
   onClose={() => setIsCreateOpen(false)} 
   title="Crear Cliente" 
   modelInputs={clientModelInputs}
-  onSubmit={handleCreateClient} // Cambiado para usar la función correcta
+  onSubmit={handleCreateClient} 
 />
 
       <DataTable
