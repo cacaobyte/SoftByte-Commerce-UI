@@ -49,7 +49,7 @@ const ClientPage = () => {
     try {
         const clientFormData = new FormData();
 
-        // ✅ Asegurar que Cliente1 siempre se envía, aunque esté vacío
+        // ✅ Asegurar que Cliente1 siempre se envía
         clientFormData.append("Cliente1", formData.Cliente1 ? formData.Cliente1 : ""); 
 
         // ✅ Agregar los demás datos del formulario a FormData
@@ -59,9 +59,12 @@ const ClientPage = () => {
             }
         });
 
-        // ✅ Verificar si hay una imagen y agregarla
-        if (formData.imageFile instanceof File) {
-            clientFormData.append("imageFile", formData.imageFile);
+        // ✅ Verificar si la imagen está presente antes de agregarla
+        if (formData.foto && formData.foto instanceof File) {
+            console.log("Imagen detectada en el formulario:", formData.foto);
+            clientFormData.append("imageFile", formData.foto);
+        } else {
+            console.warn("⚠️ No se encontró ninguna imagen en el formulario.");
         }
 
         // 🔹 Llamar al servicio para crear el cliente
@@ -76,6 +79,7 @@ const ClientPage = () => {
         toast.error("No se pudo crear el cliente. Inténtalo de nuevo.");
     }
 };
+
 
 
 
