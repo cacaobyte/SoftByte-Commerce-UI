@@ -60,6 +60,7 @@ export const sidebarItems = [
     route: "/clientes",
     submenus: [
       { title: "Lista de Clientes", route: "/clients/clientList/" },
+      { title: "Clientes", route: "/clients/clients/" },
       { title: "Créditos", route: "/clientes/creditos" },
       { title: "Contactos", route: "/clientes/contactos" },
       { title: "Estadísticas", route: "/clientes/estadisticas" },

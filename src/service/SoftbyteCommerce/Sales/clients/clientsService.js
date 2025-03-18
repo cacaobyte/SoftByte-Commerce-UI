@@ -46,6 +46,27 @@ class ClientsService {
         }
     };
 
+        /**
+     * Actualiza un cliente existente con nueva información y/o imagen
+     * @param {FormData} clientData - Datos actualizados del cliente (incluye imagen si aplica)
+     */
+        updateClient = async (clientData) => {
+            try {
+                const token = await getToken(); // Obtener el token directamente
+                return await this.service.request({
+                    method: "PUT", // 🔹 Método PUT para actualizar
+                    endpoint: this.endpoint.updateClient, // 🔹 Endpoint de actualización
+                    data: clientData,
+                    headers: {
+                        Token: token, // 🔹 Autorización con el token
+                        // Axios maneja automáticamente 'Content-Type' para FormData
+                    },
+                });
+            } catch (error) {
+                console.error("Error al actualizar el cliente:", error);
+                throw error;
+            }
+        };
 
 }
 

@@ -34,7 +34,8 @@ module.exports = {
                 },
                 clients:{
                     getClients: "clients/allClients",
-                    createClient: "clients/createClient"
+                    createClient: "clients/createClient",
+                    updateClient: "clients/updateClient",
                 },
                 sales:{
                     getSales: "ventas",

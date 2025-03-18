@@ -11,7 +11,7 @@ import LoadingScreen from "../../../components/UseHasMounted/LoadingScreen";
 import { clientColumns, clientModalModel, photoModal } from "../../../models/clients/clientModel";
 import StepFormModal from "../../../components/shared/Forms/StepFormModal";
 import { clientModelInputs } from "../../../models/clients/clientModelInputs";
-import { PlusCircle } from "lucide-react"
+import { PlusCircle, Pencil } from "lucide-react"
 
 const ClientPage = () => {
   const [clients, setClients] = useState([]);
@@ -19,6 +19,7 @@ const ClientPage = () => {
   const [photoModalOpen, setPhotoModalOpen] = useState(false);
   const [selectedClient, setSelectedClient] = useState(null);
    const [isCreateOpen, setIsCreateOpen] = useState(false);
+   const [isEditOpen, setIsEditOpen] = useState(false);
   const hasMounted = useHasMounted();
   const clientsService = new ClientsService();
 
@@ -44,6 +45,12 @@ const ClientPage = () => {
     setSelectedClient(client);
     setPhotoModalOpen(true);
   };
+
+    // 🔹 Manejar la apertura del modal de edición
+    const handleEditClient = (client) => {
+      setSelectedClient(client);
+      setIsEditOpen(true);
+    };
 
   const handleCreateClient = async (formData) => {
     try {
@@ -81,6 +88,31 @@ const ClientPage = () => {
 };
 
 
+  // 🔹 Actualizar cliente
+  const handleUpdateClient = async (formData) => {
+    try {
+      const clientFormData = new FormData();
+      clientFormData.append("Cliente1", selectedClient?.cliente1); 
+
+      Object.keys(formData).forEach((key) => {
+        if (formData[key] !== undefined && formData[key] !== null) {
+          clientFormData.append(key, formData[key]);
+        }
+      });
+
+      if (formData.foto && formData.foto instanceof File) {
+        clientFormData.append("imageFile", formData.foto);
+      }
+
+      await clientsService.updateClient(clientFormData);
+      toast.success("Cliente actualizado correctamente");
+      setIsEditOpen(false);
+      fetchClients();
+    } catch (error) {
+      console.error("Error al actualizar el cliente:", error);
+      toast.error("No se pudo actualizar el cliente.");
+    }
+  };
 
 
 
@@ -111,12 +143,32 @@ const ClientPage = () => {
   onSubmit={handleCreateClient} 
 />
 
+
+ {/* 🔹 MODAL EDITAR CLIENTE */}
+{selectedClient && (
+  <StepFormModal 
+  isOpen={isEditOpen} 
+  onClose={() => setIsEditOpen(false)} 
+  title="Actualizar Cliente" 
+  modelInputs={clientModelInputs}
+  defaultValues={selectedClient}
+  onSubmit={handleUpdateClient} 
+/>
+
+)}
+
+
       <DataTable
         columns={clientColumns}
         data={clients}
         searchField="primerNombre"
         showActions={true}
         actions={[
+          {
+            label: "Editar",
+            icon: <Pencil className="w-4 h-4" />,
+            onClick: handleEditClient,
+          },
           {
             label: "Ver Detalles",
             onClick: handleViewDetails,
