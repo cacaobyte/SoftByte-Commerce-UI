@@ -22,6 +22,15 @@ class ClientsService {
         });
     };
 
+    getContectClients = async() => {
+        const endpoint = this.endpoint.contactClients;
+        const headers = await getHeaders()
+        return this.service.request({
+            method: 'GET',
+            endpoint,
+            headers: headers,
+        });
+    };
 
     /**
      * Crea un nuevo cliente con su información y una imagen opcional
