@@ -18,6 +18,7 @@ const ClientContactsPage = () => {
   const [search, setSearch] = useState("");
   const [selectedClient, setSelectedClient] = useState(null);
   const [detailModalOpen, setDetailModalOpen] = useState(false);
+  const [imagePreview, setImagePreview] = useState(null); // ✅ Estado para la vista previa de imagen
   const hasMounted = useHasMounted();
   const clientsService = new ClientsService();
 
@@ -45,7 +46,7 @@ const ClientContactsPage = () => {
         client.email?.toLowerCase().includes(query)
     );
     setFilteredContacts(filtered);
-    setCurrentPage(1); // Resetear a la primera página tras búsqueda
+    setCurrentPage(1);
   };
 
   // Calcular los datos de la página actual
@@ -95,31 +96,37 @@ const ClientContactsPage = () => {
             <motion.div
               key={client.cliente1}
               whileHover={{ scale: 1.05 }}
-              className="bg-white dark:bg-gray-800 p-6 rounded-2xl shadow-xl border border-gray-200 dark:border-gray-700 flex flex-col items-center transition-all duration-300"
+              className="bg-white dark:bg-gray-800 p-6 rounded-2xl shadow-xl border border-gray-200 dark:border-gray-700 flex flex-col justify-between min-h-[310px] transition-all duration-300 relative"
             >
-              {/* Imagen */}
-              <img
-                src={client.foto || "/avatar.png"}
-                alt={`Foto de ${client.nombreCompleto}`}
-                className="w-28 h-28 rounded-full object-cover border-4 border-gray-300 dark:border-gray-600 shadow-md"
-              />
+              {/* Imagen con Vista Previa */}
+              <div 
+                className="flex justify-center cursor-pointer relative"
+                onMouseEnter={() => setImagePreview(client.foto || "/avatar.png")}
+                onMouseLeave={() => setImagePreview(null)}
+              >
+                <img
+                  src={client.foto || "/avatar.png"}
+                  alt={`Foto de ${client.nombreCompleto}`}
+                  className="w-24 h-24 rounded-full object-cover border-4 border-gray-300 dark:border-gray-600 shadow-md"
+                />
+              </div>
 
-              {/* Nombre */}
-              <h3 className="text-xl font-semibold mt-4 text-center text-gray-900 dark:text-white">
-                {client.nombreCompleto || "Sin nombre"}
-              </h3>
-
-              {/* Contacto */}
-              <p className="text-sm text-gray-600 dark:text-gray-400 mt-2 flex items-center">
-                📧 {client.email || "Sin correo"}
-              </p>
-              <p className="text-sm text-gray-600 dark:text-gray-400 flex items-center">
-                📞 {client.celular || "Sin teléfono"}
-              </p>
+              {/* Nombre y Contacto */}
+              <div className="text-center space-y-2">
+                <h3 className="text-xl font-semibold text-gray-900 dark:text-white">
+                  {client.nombreCompleto || "Sin nombre"}
+                </h3>
+                <p className="text-sm text-gray-600 dark:text-gray-400 flex items-center justify-center">
+                  📧 {client.email || "Sin correo"}
+                </p>
+                <p className="text-sm text-gray-600 dark:text-gray-400 flex items-center justify-center">
+                  📞 {client.celular || "Sin teléfono"}
+                </p>
+              </div>
 
               {/* Botón Detalles */}
               <Button
-                className="mt-5 w-full bg-gray-800 text-white hover:bg-gray-900 transition-all"
+                className="mt-auto w-full bg-gray-800 text-white hover:bg-gray-900 transition-all"
                 onClick={() => handleViewDetails(client)}
               >
                 Ver Detalles
@@ -139,7 +146,7 @@ const ClientContactsPage = () => {
             onClick={prevPage}
             disabled={currentPage === 1}
           >
-            Anterior
+            ⬅️ Anterior
           </Button>
           <span className="text-lg font-semibold text-gray-700 dark:text-white">
             Página {currentPage} de {totalPages}
@@ -149,7 +156,7 @@ const ClientContactsPage = () => {
             onClick={nextPage}
             disabled={currentPage === totalPages}
           >
-            Siguiente 
+            Siguiente ➡️
           </Button>
         </div>
       )}
@@ -163,6 +170,22 @@ const ClientContactsPage = () => {
           data={selectedClient}
           model={contactClientModel}
         />
+      )}
+
+      {/* Vista Previa de Imagen Flotante */}
+      {imagePreview && (
+        <motion.div
+          initial={{ opacity: 0, scale: 0.8 }}
+          animate={{ opacity: 1, scale: 1 }}
+          exit={{ opacity: 0, scale: 0.8 }}
+          className="fixed bottom-10 right-10 bg-white dark:bg-gray-800 p-2 rounded-xl shadow-lg border dark:border-gray-700 z-50"
+        >
+          <img
+            src={imagePreview}
+            alt="Vista previa"
+            className="w-40 h-40 rounded-lg object-cover"
+          />
+        </motion.div>
       )}
     </div>
   );
