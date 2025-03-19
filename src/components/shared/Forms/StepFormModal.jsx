@@ -1,5 +1,5 @@
 "use client";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useMemo } from "react";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -8,40 +8,34 @@ import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { FilePlus, ChevronRight, ChevronLeft } from "lucide-react";
 import { Eye, EyeOff } from "lucide-react";
-import { useMemo } from "react";
 
-const StepFormModal = ({ isOpen, onClose, title, modelInputs = [], onSubmit }) => {
-  const [formData, setFormData] = useState({});
+const StepFormModal = ({ isOpen, onClose, title, modelInputs = [], onSubmit, defaultValues = {} }) => {
+  const [formData, setFormData] = useState({}); 
   const [errors, setErrors] = useState({});
-  const [steps, setSteps] = useState([]);
   const [activeStep, setActiveStep] = useState("step-0");
   const [showPassword, setShowPassword] = useState(false);
 
+  // ✅ Evitar re-renders infinitos asegurando que el estado solo se setea cuando cambia `defaultValues` o se abre el modal
+  useEffect(() => {
+    if (isOpen) {
+      setFormData(defaultValues || {}); // Se establece solo cuando el modal se abre
+    }
+  }, [isOpen]);
+
   const groupedSteps = useMemo(() => {
     const chunkSize = 6;
-    const steps = [];
-    for (let i = 0; i < modelInputs.length; i += chunkSize) {
-      steps.push({
-        key: `step-${i / chunkSize}`,
-        label: `Paso ${i / chunkSize + 1}`,
-        fields: modelInputs.slice(i, i + chunkSize),
-      });
-    }
-    return steps;
+    return modelInputs.reduce((acc, curr, index) => {
+      const stepIndex = Math.floor(index / chunkSize);
+      if (!acc[stepIndex]) acc[stepIndex] = { key: `step-${stepIndex}`, label: `Paso ${stepIndex + 1}`, fields: [] };
+      acc[stepIndex].fields.push(curr);
+      return acc;
+    }, []);
   }, [modelInputs]);
-  
-  useEffect(() => {
-    if (groupedSteps.length > 0) {
-      setSteps(groupedSteps);
-      setActiveStep(groupedSteps[0]?.key || "");
-    }
-  }, [groupedSteps]);
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
     setFormData((prev) => ({ ...prev, [name]: value }));
 
-    // Validaciones
     const field = modelInputs.find(f => f.key === name);
     let error = "";
 
@@ -61,25 +55,25 @@ const StepFormModal = ({ isOpen, onClose, title, modelInputs = [], onSubmit }) =
   const handleClose = () => {
     setFormData({});
     setErrors({});
-    setActiveStep("step-0"); // Volver al primer paso
-    onClose(); // Cerrar el modal
+    setActiveStep("step-0");
+    onClose();
   };
-  
+
   const handleFileChange = (e) => {
     setFormData((prev) => ({ ...prev, [e.target.name]: e.target.files[0] }));
   };
 
   const nextStep = () => {
-    const currentIndex = steps.findIndex((s) => s.key === activeStep);
-    if (currentIndex < steps.length - 1) {
-      setActiveStep(steps[currentIndex + 1].key);
+    const currentIndex = groupedSteps.findIndex((s) => s.key === activeStep);
+    if (currentIndex < groupedSteps.length - 1) {
+      setActiveStep(groupedSteps[currentIndex + 1].key);
     }
   };
 
   const prevStep = () => {
-    const currentIndex = steps.findIndex((s) => s.key === activeStep);
+    const currentIndex = groupedSteps.findIndex((s) => s.key === activeStep);
     if (currentIndex > 0) {
-      setActiveStep(steps[currentIndex - 1].key);
+      setActiveStep(groupedSteps[currentIndex - 1].key);
     }
   };
 
@@ -92,161 +86,84 @@ const StepFormModal = ({ isOpen, onClose, title, modelInputs = [], onSubmit }) =
 
         <Tabs defaultValue={activeStep} value={activeStep} onValueChange={setActiveStep}>
           <TabsList className="flex overflow-x-auto border-b pb-2 scrollbar-hide">
-            {steps.map((step) => (
+            {groupedSteps.map((step) => (
               <TabsTrigger key={step.key} value={step.key} className="px-4 py-2 text-gray-700 font-medium">
                 {step.label}
               </TabsTrigger>
             ))}
           </TabsList>
 
-          {steps.map((step) => (
+          {groupedSteps.map((step) => (
+            <TabsContent key={step.key} value={step.key} className="grid grid-cols-1 md:grid-cols-2 gap-4 p-4">
+              {step.fields.map((field) => (
+                <div key={field.key} className="flex flex-col">
+                  <Label>
+                    {field.label} {field.required && <span className="text-red-500">*</span>}
+                  </Label>
 
+                  {field.type === "text" && (
+                    <Input name={field.key} value={formData[field.key] || ""} onChange={handleInputChange} />
+                  )}
 
-<TabsContent key={step.key} value={step.key} className="grid grid-cols-1 md:grid-cols-2 gap-4 p-4">
-  {step.fields.map((field) => (
-    <div key={field.key} className="flex flex-col">
-     <Label>
-       {field.label} {field.required && <span className="text-red-500">*</span>}
-     </Label>
+                  {field.type === "password" && (
+                    <div className="relative">
+                      <Input type={showPassword ? "text" : "password"} name={field.key} value={formData[field.key] || ""} onChange={handleInputChange} />
+                      <button type="button" className="absolute right-3 top-2 text-gray-500" onClick={() => setShowPassword(!showPassword)}>
+                        {showPassword ? <EyeOff size={20} /> : <Eye size={20} />}
+                      </button>
+                    </div>
+                  )}
 
-      {/* 🔹 Input de texto */}
-      {field.type === "text" && (
-        <Input 
-          name={field.key} 
-          value={formData[field.key] || ""} 
-          onChange={handleInputChange} 
-        />
-      )}
+                  {field.type === "email" && (
+                    <Input type="email" name={field.key} value={formData[field.key] || ""} onChange={handleInputChange} />
+                  )}
 
-      {/* 🔹 Input de contraseña con opción de mostrar/ocultar */}
-   {/* 🔹 Input de contraseña con botón de visibilidad */}
-   {field.type === "password" && (
-                <div className="relative">
-                  <Input
-                    type={showPassword ? "text" : "password"}
-                    name={field.key}
-                    value={formData[field.key] || ""}
-                    onChange={handleInputChange}
-                  />
-                  <button
-                    type="button"
-                    className="absolute right-3 top-2 text-gray-500"
-                    onClick={() => setShowPassword(!showPassword)}
-                  >
-                    {showPassword ? <EyeOff size={20} /> : <Eye size={20} />}
-                  </button>
+                  {field.type === "number" && (
+                    <Input type="number" name={field.key} value={formData[field.key] || ""} onChange={handleInputChange} />
+                  )}
+
+                  {field.type === "date" && (
+                    <Input type="date" name={field.key} value={formData[field.key] || ""} onChange={handleInputChange} />
+                  )}
+
+                  {field.type === "select" && field.options && (
+                    <Select value={formData[field.key] || ""} onValueChange={(value) => setFormData((prev) => ({ ...prev, [field.key]: value }))}>
+                      <SelectTrigger>
+                        <SelectValue placeholder="Seleccione una opción" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        {field.options?.map((option, index) => (
+                          <SelectItem key={`${option.value}-${index}`} value={option.value || `option-${index}`}>
+                            {option.label}
+                          </SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
+                  )}
+
+                  {field.type === "file" && <Input type="file" name={field.key} onChange={handleFileChange} />}
+
+                  {field.type === "checkbox" && (
+                    <div className="flex items-center space-x-2">
+                      <input type="checkbox" name={field.key} checked={formData[field.key] || false} onChange={(e) => setFormData((prev) => ({ ...prev, [field.key]: e.target.checked }))} />
+                      <Label htmlFor={field.key}> {field.label} </Label>
+                    </div>
+                  )}
+
+                  {errors[field.key] && <span className="text-red-500 text-sm">{errors[field.key]}</span>}
                 </div>
-      )}
-
-      {/* 🔹 Input de correo electrónico */}
-      {field.type === "email" && (
-        <Input 
-          type="email" 
-          name={field.key} 
-          value={formData[field.key] || ""} 
-          onChange={handleInputChange} 
-        />
-      )}
-
-      {/* 🔹 Input de número */}
-      {field.type === "number" && (
-        <Input 
-          type="number" 
-          name={field.key} 
-          value={formData[field.key] || ""} 
-          onChange={handleInputChange} 
-        />
-      )}
-
-      {/* 🔹 Input de fecha */}
-      {field.type === "date" && (
-        <Input 
-          type="date" 
-          name={field.key} 
-          value={formData[field.key] || ""} 
-          onChange={handleInputChange} 
-        />
-      )}
-
-      {/* 🔹 Input de selección */}
-{/* 🔹 Input de selección */}
-{field.type === "select" && field.options && (
-  <Select 
-    value={formData[field.key] || ""}
-    onValueChange={(value) => setFormData((prev) => ({ ...prev, [field.key]: value }))}
-  >
-    <SelectTrigger>
-      <SelectValue placeholder="Seleccione una opción" />
-    </SelectTrigger>
-    <SelectContent>
-      {field.options?.map((option, index) => (
-        <SelectItem key={`${option.value}-${index}`} value={option.value || `option-${index}`}>
-          {option.label}
-        </SelectItem>
-      ))}
-    </SelectContent>
-  </Select>
-)}
-
-
-      {/* 🔹 Input de archivo */}
-      {field.type === "file" && (
-        <Input 
-          type="file" 
-          name={field.key} 
-          onChange={handleFileChange} 
-        />
-      )}
-
-      {/* 🔹 Checkbox */}
-      {field.type === "checkbox" && (
-        <div className="flex items-center space-x-2">
-          <input 
-            type="checkbox" 
-            name={field.key} 
-            checked={formData[field.key] || false} 
-            onChange={(e) => setFormData((prev) => ({ ...prev, [field.key]: e.target.checked }))} 
-          />
-          <Label htmlFor={field.key}> {field.label} </Label>
-        </div>
-      )}
-
-      {/* 🔹 Textarea */}
-      {field.type === "textarea" && (
-        <textarea 
-          name={field.key} 
-          value={formData[field.key] || ""} 
-          onChange={handleInputChange} 
-          className="border rounded-lg p-2"
-        />
-      )}
-      {errors[field.key] && <span className="text-red-500 text-sm">{errors[field.key]}</span>}
-    </div>
-  ))}
-</TabsContent>
-
-
+              ))}
+            </TabsContent>
           ))}
         </Tabs>
 
         <DialogFooter className="flex justify-between mt-4">
-          <Button variant="outline" onClick={prevStep} disabled={steps.findIndex((s) => s.key === activeStep) === 0}>
+          <Button variant="outline" onClick={prevStep} disabled={groupedSteps.findIndex((s) => s.key === activeStep) === 0}>
             <ChevronLeft size={18} /> Anterior
           </Button>
-          {steps.findIndex((s) => s.key === activeStep) === steps.length - 1 ? (
-            <Button onClick={() => {
-              onSubmit(formData);
-              setFormData({});
-              setErrors({});
-              setActiveStep("step-0");
-            }}>
-              <FilePlus size={18} className="mr-2" /> Guardar
-            </Button>
-          ) : (
-            <Button variant="outline" onClick={nextStep}>
-              Siguiente <ChevronRight size={18} />
-            </Button>
-          )}
+          <Button onClick={() => onSubmit(formData)}>
+            <FilePlus size={18} className="mr-2" /> Guardar
+          </Button>
         </DialogFooter>
       </DialogContent>
     </Dialog>

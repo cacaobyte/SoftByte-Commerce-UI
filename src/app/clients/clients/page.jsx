@@ -48,9 +48,18 @@ const ClientPage = () => {
 
     // 🔹 Manejar la apertura del modal de edición
     const handleEditClient = (client) => {
-      setSelectedClient(client);
+      // Normalizar los nombres de las claves
+      const normalizedClient = Object.keys(client).reduce((acc, key) => {
+        // Convertir la primera letra de cada clave a mayúscula para que coincida con el modelInput
+        const newKey = key.charAt(0).toUpperCase() + key.slice(1);
+        acc[newKey] = client[key];
+        return acc;
+      }, {});
+    
+      setSelectedClient(normalizedClient);
       setIsEditOpen(true);
     };
+    
 
   const handleCreateClient = async (formData) => {
     try {
@@ -144,18 +153,18 @@ const ClientPage = () => {
 />
 
 
- {/* 🔹 MODAL EDITAR CLIENTE */}
-{selectedClient && (
+{/* MODAL EDITAR CLIENTE */}
+{isEditOpen && selectedClient && (
   <StepFormModal 
-  isOpen={isEditOpen} 
-  onClose={() => setIsEditOpen(false)} 
-  title="Actualizar Cliente" 
-  modelInputs={clientModelInputs}
-  defaultValues={selectedClient}
-  onSubmit={handleUpdateClient} 
-/>
-
+    isOpen={isEditOpen} 
+    onClose={() => setIsEditOpen(false)} 
+    title="Actualizar Cliente" 
+    modelInputs={clientModelInputs}
+    defaultValues={selectedClient} // ✅ Ahora enviamos las claves normalizadas
+    onSubmit={handleUpdateClient} 
+  />
 )}
+
 
 
       <DataTable
