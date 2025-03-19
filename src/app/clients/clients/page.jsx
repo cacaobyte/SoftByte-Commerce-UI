@@ -101,18 +101,24 @@ const ClientPage = () => {
   const handleUpdateClient = async (formData) => {
     try {
       const clientFormData = new FormData();
-      clientFormData.append("Cliente1", selectedClient?.cliente1); 
-
+  
+      // ✅ Asegurar que Cliente1 esté presente y no sea undefined
+      if (selectedClient?.Cliente1) {
+        clientFormData.append("Cliente1", selectedClient.Cliente1);
+      } else {
+        console.warn("⚠️ Cliente1 no está definido en selectedClient.");
+      }
+  
       Object.keys(formData).forEach((key) => {
         if (formData[key] !== undefined && formData[key] !== null) {
           clientFormData.append(key, formData[key]);
         }
       });
-
+  
       if (formData.foto && formData.foto instanceof File) {
         clientFormData.append("imageFile", formData.foto);
       }
-
+  
       await clientsService.updateClient(clientFormData);
       toast.success("Cliente actualizado correctamente");
       setIsEditOpen(false);
@@ -122,6 +128,7 @@ const ClientPage = () => {
       toast.error("No se pudo actualizar el cliente.");
     }
   };
+  
 
 
 
@@ -156,13 +163,14 @@ const ClientPage = () => {
 {/* MODAL EDITAR CLIENTE */}
 {isEditOpen && selectedClient && (
   <StepFormModal 
-    isOpen={isEditOpen} 
-    onClose={() => setIsEditOpen(false)} 
-    title="Actualizar Cliente" 
-    modelInputs={clientModelInputs}
-    defaultValues={selectedClient} // ✅ Ahora enviamos las claves normalizadas
-    onSubmit={handleUpdateClient} 
-  />
+  isOpen={isEditOpen} 
+  onClose={() => setIsEditOpen(false)} 
+  title="Actualizar Cliente" 
+  modelInputs={clientModelInputs}
+  defaultValues={{ Cliente1: selectedClient?.Cliente1, ...selectedClient }} 
+  onSubmit={handleUpdateClient} 
+/>
+
 )}
 
 
