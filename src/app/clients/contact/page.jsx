@@ -146,7 +146,7 @@ const ClientContactsPage = () => {
             onClick={prevPage}
             disabled={currentPage === 1}
           >
-            ⬅️ Anterior
+             Anterior
           </Button>
           <span className="text-lg font-semibold text-gray-700 dark:text-white">
             Página {currentPage} de {totalPages}
@@ -156,7 +156,7 @@ const ClientContactsPage = () => {
             onClick={nextPage}
             disabled={currentPage === totalPages}
           >
-            Siguiente ➡️
+            Siguiente 
           </Button>
         </div>
       )}

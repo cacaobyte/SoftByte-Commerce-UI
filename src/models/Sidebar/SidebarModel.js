@@ -21,11 +21,11 @@ export const sidebarItems = [
     icon: "FcSalesPerformance",
     route: "/ventas",
     submenus: [
-      { title: "Nueva Venta", route: "/ventas/nueva" },
-      { title: "Historial de Ventas", route: "/ventas/historial" },
-      { title: "Facturas", route: "/ventas/facturas" },
-      { title: "Devoluciones", route: "/ventas/devoluciones" },
-      { title: "cotizacion", route: "/ventas/cotizacion" },
+      { title: "Nueva Venta", route: "/sale/newSale" },
+      { title: "Historial de Ventas", route: "/sale/invoice" },
+      { title: "Facturas", route: "/sale/invoice" },
+      { title: "Devoluciones", route: "/sale/returns" },
+      { title: "cotizacion", route: "/sale/quotes" },
     ],
   },
   {
