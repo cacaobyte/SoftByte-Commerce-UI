@@ -3,7 +3,14 @@ import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-import { FaPhone, FaMapMarkerAlt, FaBuilding, FaUserTie, FaUser, FaBirthdayCake } from "react-icons/fa";
+import {
+  FaPhone,
+  FaMapMarkerAlt,
+  FaBuilding,
+  FaUserTie,
+  FaUser,
+  FaBirthdayCake,
+} from "react-icons/fa";
 import ClientsService from "../../../../service/SoftbyteCommerce/Sales/clients/clientsService";
 
 const QuotesClients = ({ onSelectClient }) => {
@@ -11,14 +18,15 @@ const QuotesClients = ({ onSelectClient }) => {
   const [filteredClients, setFilteredClients] = useState([]);
   const [selectedClient, setSelectedClient] = useState(null);
   const [search, setSearch] = useState("");
+  const [imagePreview, setImagePreview] = useState(null); // Estado para la vista previa
 
   useEffect(() => {
     const fetchClients = async () => {
       const service = new ClientsService();
       try {
         const response = await service.getClients();
-        const formattedClients = response.data.map(client => ({
-          ...client, 
+        const formattedClients = response.data.map((client) => ({
+          ...client,
           foto: client.foto || "/avatar.png",
         }));
 
@@ -48,7 +56,7 @@ const QuotesClients = ({ onSelectClient }) => {
   }, []);
 
   useEffect(() => {
-    const filtered = clients.filter(client =>
+    const filtered = clients.filter((client) =>
       `${client.primerNombre} ${client.primerApellido} ${client.cliente1}`
         .toLowerCase()
         .includes(search.toLowerCase())
@@ -83,7 +91,9 @@ const QuotesClients = ({ onSelectClient }) => {
                 className="w-12 h-12 rounded-full object-cover border border-gray-300"
               />
               <div>
-                <p className="font-semibold">{client.primerNombre} {client.primerApellido}</p>
+                <p className="font-semibold">
+                  {client.primerNombre} {client.primerApellido}
+                </p>
                 <p className="text-xs text-gray-500">{client.email}</p>
               </div>
             </motion.li>
@@ -92,12 +102,31 @@ const QuotesClients = ({ onSelectClient }) => {
       </div>
 
       {/* Detalle del cliente */}
-      <div className="w-full md:w-2/3 p-6 flex flex-col items-center justify-center">
+      <div className="w-full md:w-2/3 p-6 flex flex-col items-center justify-center relative">
         {selectedClient ? (
           <>
-            <motion.div 
-              className="relative w-32 h-32 rounded-full overflow-hidden border border-gray-300 shadow-md"
+            {/* Vista Previa de Imagen */}
+            {imagePreview && (
+              <motion.div
+                className="absolute bottom-4 right-4 w-32 h-32 rounded-lg shadow-lg border border-gray-300 overflow-hidden bg-white z-50"
+                initial={{ opacity: 0, scale: 0.8 }}
+                animate={{ opacity: 1, scale: 1 }}
+                exit={{ opacity: 0, scale: 0.8 }}
+              >
+                <img
+                  src={imagePreview}
+                  alt="Vista previa"
+                  className="w-full h-full object-cover"
+                />
+              </motion.div>
+            )}
+
+            {/* Contenedor de imagen con preview */}
+            <motion.div
+              className="relative w-32 h-32 rounded-full overflow-hidden border border-gray-300 shadow-md flex items-center justify-center cursor-pointer"
               whileHover={{ scale: 1.1 }}
+              onMouseEnter={() => setImagePreview(selectedClient.foto)}
+              onMouseLeave={() => setImagePreview(null)}
             >
               <img
                 src={selectedClient.foto}
@@ -106,7 +135,9 @@ const QuotesClients = ({ onSelectClient }) => {
               />
             </motion.div>
 
-            <h2 className="text-2xl font-bold mt-4">{selectedClient.primerNombre} {selectedClient.primerApellido}</h2>
+            <h2 className="text-2xl font-bold mt-4">
+              {selectedClient.primerNombre} {selectedClient.primerApellido}
+            </h2>
             <p className="text-gray-500">{selectedClient.email || "Sin email"}</p>
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4 w-full px-8">
@@ -138,7 +169,9 @@ const QuotesClients = ({ onSelectClient }) => {
               <div className="border-b pb-2 flex items-center gap-2">
                 <FaBirthdayCake className="text-pink-500" />
                 <p className="text-sm font-semibold">Edad:</p>
-                <p>{selectedClient.edad ? `${selectedClient.edad} años` : "No disponible"}</p>
+                <p>
+                  {selectedClient.edad ? `${selectedClient.edad} años` : "No disponible"}
+                </p>
               </div>
             </div>
 
