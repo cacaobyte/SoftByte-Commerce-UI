@@ -20,6 +20,7 @@ export default function TestPage() {
 
   const handleSelectClient = (client) => {
     setSelectedClient(client);
+    console.log("Cliente seleccionado:", client);
     setClientModalOpen(false);
   };
 
