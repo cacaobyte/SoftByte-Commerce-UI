@@ -8,6 +8,7 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/u
 import DataTable from "../../components/shared/DataTable/DataTable";
 import { articlesColumns } from "../../models/Quotes/Articles/articlesColumns";
 import { Home, Package, Mail, Phone } from "lucide-react"; // Íconos para la bodega
+import QuotesService from "../../service/SoftbyteCommerce/Sales/Quotes/quotesService";
 
 export default function TestPage() {
   const [clientModalOpen, setClientModalOpen] = useState(false);
@@ -17,6 +18,12 @@ export default function TestPage() {
   const [selectedClient, setSelectedClient] = useState(null);
   const [selectedWarehouse, setSelectedWarehouse] = useState(null);
   const [selectedArticles, setSelectedArticles] = useState([]);
+  const [notes, setNotes] = useState("");
+  const [paymentType, setPaymentType] = useState("Efectivo");
+  const [currency, setCurrency] = useState("GTQ");
+  const [applyDiscount, setApplyDiscount] = useState(false);
+
+  const quotesService = new QuotesService();
 
   const handleSelectClient = (client) => {
     setSelectedClient(client);
@@ -39,10 +46,76 @@ export default function TestPage() {
     setSelectedArticles(updatedArticles);
   };
 
-  // 🔢 Cálculo del total de la cotización
-  const totalCotizacion = useMemo(() => {
+  
+  // Cálculo del subtotal
+  const subtotal = useMemo(() => {
     return selectedArticles.reduce((sum, article) => sum + (article.total || 0), 0);
   }, [selectedArticles]);
+
+  // Cálculo del descuento del cliente si está activado
+  const clientDiscount = useMemo(() => {
+    return applyDiscount && selectedClient?.descuento ? (subtotal * selectedClient.descuento) / 100 : 0;
+  }, [applyDiscount, selectedClient, subtotal]);
+
+  // Cálculo de impuestos (Ejemplo: 12%)
+  const taxes = useMemo(() => {
+    return subtotal * 0.12;
+  }, [subtotal]);
+
+   // Cálculo del total final
+  const totalCotizacion = useMemo(() => {
+    return subtotal - clientDiscount + taxes;
+  }, [subtotal, clientDiscount, taxes]);
+
+  // Función para enviar la cotización al servicio
+  const handleGenerateQuote = async () => {
+    if (!selectedClient || !selectedWarehouse || selectedArticles.length === 0) {
+      alert("Faltan datos para generar la cotización.");
+      return;
+    }
+    const requestData = {
+      fechaCreacion: new Date().toISOString(),
+      fechaActualizacion: new Date().toISOString(),
+      clienteId: selectedClient.cliente1,
+      nombreCliente: selectedClient.primerNombre,
+      apellidoCliente: selectedClient.primerApellido,
+      correo: selectedClient.email,
+      telefono: selectedClient.celular,
+      tipoPago: paymentType,
+      descuentoCliente: selectedClient.descuento,
+      subtotal,
+      descuentoTotal: clientDiscount,
+      impuestos: taxes,
+      total: totalCotizacion,
+      estado: "Pendiente",
+      moneda: currency,
+      origen: "Tienda",
+      usuarioCreador: "admin",
+      notas: notes,
+      detalles: selectedArticles.map((article) => ({
+        idArticulo: article.articulo1,
+        nombreArticulo: article.descripcion,
+        precioUnitario: article.precio,
+        cantidad: article.cantidad,
+        descuentoAplicado: article.descuento || 0,
+        subtotal: article.subtotal,
+        impuestos: article.impuesto || 0,
+        total: article.total,
+        fechaCreacion: new Date().toISOString(),
+        fechaActualizacion: new Date().toISOString(),
+        usuarioCreador: "admin",
+      })),
+    };
+
+    try {
+      await quotesService.CreateQuotes(requestData);
+      alert("Cotización generada exitosamente.");
+    } catch (error) {
+      console.error("Error al generar la cotización:", error);
+      alert("Hubo un error al generar la cotización.");
+    }
+  };
+
 
   return (
     <div className="py-8 px-6">
@@ -106,6 +179,34 @@ export default function TestPage() {
           )}
         </div>
 
+        <div className="mb-4">
+        <label>Notas del vendedor:</label>
+        <textarea className="w-full border p-2 rounded" value={notes} onChange={(e) => setNotes(e.target.value)} />
+      </div>
+
+      <div className="mb-4">
+        <label>Tipo de pago:</label>
+        <select className="w-full border p-2 rounded" value={paymentType} onChange={(e) => setPaymentType(e.target.value)}>
+          <option>Efectivo</option>
+          <option>Tarjeta de crédito</option>
+          <option>Transferencia bancaria</option>
+        </select>
+      </div>
+
+      <div className="mb-4">
+        <label>Moneda:</label>
+        <select className="w-full border p-2 rounded" value={currency} onChange={(e) => setCurrency(e.target.value)}>
+          <option>GTQ</option>
+          <option>USD</option>
+          <option>EUR</option>
+        </select>
+      </div>
+
+      <div className="mb-4">
+        <input type="checkbox" checked={applyDiscount} onChange={() => setApplyDiscount(!applyDiscount)} />
+        <label className="ml-2">Aplicar descuento del cliente</label>
+      </div>
+
         {/* Tabla de Artículos Seleccionados */}
         {selectedArticles.length > 0 ? (
           <div>
@@ -125,9 +226,7 @@ export default function TestPage() {
 
             {/* Total de la Cotización */}
             <div className="mt-4 text-right">
-              <h3 className="text-xl font-bold">
-                Total de la Cotización: <span className="text-green-600">${totalCotizacion.toFixed(2)}</span>
-              </h3>
+            <h3 className="text-xl font-bold mt-4">Total: <span className="text-green-600">${totalCotizacion.toFixed(2)}</span></h3>
             </div>
           </div>
         ) : (
@@ -138,9 +237,9 @@ export default function TestPage() {
       {/* Botón de Generar Cotización */}
       {selectedClient && selectedWarehouse && selectedArticles.length > 0 && (
         <div className="mt-6 flex justify-end">
-          <Button className="bg-purple-600 hover:bg-purple-700 text-white font-bold py-2 px-4 rounded-lg">
-            Generar Cotización
-          </Button>
+   <div className="mt-6 flex justify-end">
+        <Button onClick={handleGenerateQuote}>Generar Cotización</Button>
+      </div>
         </div>
       )}
 
@@ -176,3 +275,4 @@ export default function TestPage() {
     </div>
   );
 }
+
