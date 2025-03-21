@@ -74,7 +74,7 @@ export default function TestPage() {
         {selectedWarehouse ? (
           <div className="border-b pb-2 mb-2">
             <h3 className="text-lg font-semibold">Bodega</h3>
-            <p><strong>Código:</strong> {selectedWarehouse.bodega || "No disponible"}</p>
+            <p><strong>Código:</strong> {selectedWarehouse.bodega1 || "No disponible"}</p>
             <p><strong>Descripción:</strong> {selectedWarehouse.descripcion || "No disponible"}</p>
           </div>
         ) : (
