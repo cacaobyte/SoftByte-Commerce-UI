@@ -143,7 +143,7 @@ const handleGenerateQuote = async () => {
 
 
   return (
-<div className="mb-6">
+<div className="mb-12">
   <h1 className="text-3xl font-bold tracking-tight text-gray-900 mb-2">Cotización de Productos</h1>
   <p className="text-muted-foreground text-sm mb-4">
     Selecciona la información necesaria para generar una cotización completa.
@@ -336,42 +336,42 @@ const handleGenerateQuote = async () => {
         </div>
 
         {/* Tabla de Artículos Seleccionados */}
-        <Card className="w-full">
+        <Card className="w-full ">
   <CardHeader>
     <CardTitle className="text-base sm:text-lg">🛒 Artículos Seleccionados</CardTitle>
   </CardHeader>
 
-  <CardContent>
-    {selectedArticles.length > 0 ? (
-      <>
-        <DataTable
-          columns={articlesColumns}
-          data={selectedArticles}
-          searchField="descripcion"
-          showActions={true}
-          actions={[
-            {
-              label: "Eliminar",
-              onClick: removeArticle,
-            },
-          ]}
-        />
+        <CardContent>
+          {selectedArticles.length > 0 ? (
+            <>
+              <DataTable
+                columns={articlesColumns}
+                data={selectedArticles}
+                searchField="descripcion"
+                showActions={true}
+                actions={[
+                  {
+                    label: "Eliminar",
+                    onClick: removeArticle,
+                  },
+                ]}
+              />
 
-        <div className="mt-4 text-right">
-          <h3 className="text-xl font-bold">
-            Total: <span className="text-green-600">Q{totalCotizacion.toFixed(2)}</span>
-          </h3>
-        </div>
-      </>
-    ) : (
-      <div className="flex flex-col items-center justify-center py-12 text-center text-muted-foreground">
-        <ShoppingCart size={40} className="mb-4 text-gray-400" />
-        <p>No hay artículos seleccionados.</p>
-        <p className="text-sm">Agrega productos para generar tu cotización.</p>
-      </div>
-    )}
-  </CardContent>
-</Card>
+              <div className="mt-4 text-right">
+                <h3 className="text-xl font-bold">
+                  Total: <span className="text-green-600">Q{totalCotizacion.toFixed(2)}</span>
+                </h3>
+              </div>
+            </>
+          ) : (
+            <div className="flex flex-col items-center justify-center py-12 text-center text-muted-foreground ">
+              <ShoppingCart size={40} className="mb-4 text-gray-400" />
+              <p>No hay artículos seleccionados.</p>
+              <p className="text-sm">Agrega productos para generar tu cotización.</p>
+            </div>
+          )}
+        </CardContent>
+      </Card>
         
       </div>
 
