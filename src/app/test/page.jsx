@@ -126,6 +126,15 @@ const handleGenerateQuote = async () => {
   try {
     await quotesService.CreateQuotes(requestData);
     toast.success("Cotización generada exitosamente.");
+
+       
+        setSelectedClient(null);
+        setSelectedWarehouse(null);
+        setSelectedArticles([]);
+        setNotes("");
+        setPaymentType("Efectivo");
+        setCurrency("GTQ");
+        setApplyDiscount(false);
   } catch (error) {
     toast.error("Hubo un error al generar la cotización.");
   }
