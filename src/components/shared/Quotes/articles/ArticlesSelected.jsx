@@ -127,7 +127,7 @@ const QuotesArticles = ({ onSelectArticles }) => {
                 <div>
                   <p className="font-semibold">{article.descripcion}</p>
                   <p className="text-xs text-gray-500">{article.categoria}</p>
-                  <p className="text-xs text-gray-500">Precio: ${article.precio.toFixed(2)}</p>
+                  <p className="text-xs text-gray-500">Precio: Q{article.precio.toFixed(2)}</p>
                   <p className="text-xs text-gray-500">Stock: {article.existencias}</p>
                 </div>
                 <FaPlus className="text-green-500 ml-auto" />
@@ -185,7 +185,7 @@ const QuotesArticles = ({ onSelectArticles }) => {
                         className="border rounded px-2 py-1 w-16"
                       />
                     </p>
-                    <p>Total: ${article.total.toFixed(2)}</p>
+                    <p>Total: Q{article.total.toFixed(2)}</p>
                   </div>
                 </li>
               ))}

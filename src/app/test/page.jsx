@@ -206,8 +206,6 @@ const handleGenerateQuote = async () => {
         <label>Moneda:</label>
         <select className="w-full border p-2 rounded" value={currency} onChange={(e) => setCurrency(e.target.value)}>
           <option>GTQ</option>
-          <option>USD</option>
-          <option>EUR</option>
         </select>
       </div>
 
@@ -235,7 +233,7 @@ const handleGenerateQuote = async () => {
 
             {/* Total de la Cotización */}
             <div className="mt-4 text-right">
-            <h3 className="text-xl font-bold mt-4">Total: <span className="text-green-600">${totalCotizacion.toFixed(2)}</span></h3>
+            <h3 className="text-xl font-bold mt-4">Total: <span className="text-green-600">Q{totalCotizacion.toFixed(2)}</span></h3>
             </div>
           </div>
         ) : (
