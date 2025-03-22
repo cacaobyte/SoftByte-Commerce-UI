@@ -77,12 +77,12 @@ export default function ContactPage() {
                         <div>
                             <p className="text-lg font-semibold text-black">Sitio Web</p>
                             <a
-                                href="https://www.cacaobyte.com/"
+                                href="https://cacaobyte.com/"
                                 target="_blank"
                                 rel="noopener noreferrer"
                                 className="text-blue-600 hover:underline text-md"
                             >
-                                www.cacaobyte.com
+                                https://cacaobyte.com/
                             </a>
                         </div>
                     </div>

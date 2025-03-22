@@ -12,15 +12,16 @@ export const clientColumns = [
       key: "foto",
       label: "Foto",
       render: (row) => (
-        <div className="w-16 h-16">
+        <div className="w-16 h-16 flex items-center justify-center">
           <img
             src={row.foto || "https://via.placeholder.com/150"}
             alt={`Foto de ${row.primerNombre}`}
             className="w-full h-full rounded-full object-cover border border-gray-300"
+            style={{ width: "64px", height: "64px", borderRadius: "50%" }}
           />
         </div>
       ),
-    },
+    },    
     { key: "dpi", label: "DPI" },
     { key: "cf", label: "CF" },
     {

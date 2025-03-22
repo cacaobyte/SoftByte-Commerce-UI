@@ -11,7 +11,7 @@ import LoadingScreen from "../../../components/UseHasMounted/LoadingScreen";
 import { clientColumns, clientModalModel, photoModal } from "../../../models/clients/clientModel";
 import StepFormModal from "../../../components/shared/Forms/StepFormModal";
 import { clientModelInputs } from "../../../models/clients/clientModelInputs";
-import { PlusCircle } from "lucide-react"
+import { PlusCircle, Pencil } from "lucide-react"
 
 const ClientPage = () => {
   const [clients, setClients] = useState([]);
@@ -19,6 +19,7 @@ const ClientPage = () => {
   const [photoModalOpen, setPhotoModalOpen] = useState(false);
   const [selectedClient, setSelectedClient] = useState(null);
    const [isCreateOpen, setIsCreateOpen] = useState(false);
+   const [isEditOpen, setIsEditOpen] = useState(false);
   const hasMounted = useHasMounted();
   const clientsService = new ClientsService();
 
@@ -45,34 +46,90 @@ const ClientPage = () => {
     setPhotoModalOpen(true);
   };
 
+    // 🔹 Manejar la apertura del modal de edición
+    const handleEditClient = (client) => {
+      // Normalizar los nombres de las claves
+      const normalizedClient = Object.keys(client).reduce((acc, key) => {
+        // Convertir la primera letra de cada clave a mayúscula para que coincida con el modelInput
+        const newKey = key.charAt(0).toUpperCase() + key.slice(1);
+        acc[newKey] = client[key];
+        return acc;
+      }, {});
+    
+      setSelectedClient(normalizedClient);
+      setIsEditOpen(true);
+    };
+    
+
   const handleCreateClient = async (formData) => {
+    try {
+        const clientFormData = new FormData();
+
+        // ✅ Asegurar que Cliente1 siempre se envía
+        clientFormData.append("Cliente1", formData.Cliente1 ? formData.Cliente1 : ""); 
+
+        // ✅ Agregar los demás datos del formulario a FormData
+        Object.keys(formData).forEach((key) => {
+            if (formData[key] !== undefined && formData[key] !== null) {
+                clientFormData.append(key, formData[key]);
+            }
+        });
+
+        // ✅ Verificar si la imagen está presente antes de agregarla
+        if (formData.foto && formData.foto instanceof File) {
+            console.log("Imagen detectada en el formulario:", formData.foto);
+            clientFormData.append("imageFile", formData.foto);
+        } else {
+            console.warn("⚠️ No se encontró ninguna imagen en el formulario.");
+        }
+
+        // 🔹 Llamar al servicio para crear el cliente
+        await clientsService.createClients(clientFormData);
+
+        toast.success("Cliente creado exitosamente");
+
+        // 🔹 Cerrar el modal después de la creación
+        setIsCreateOpen(false);
+    } catch (error) {
+        console.error("Error al crear el cliente:", error);
+        toast.error("No se pudo crear el cliente. Inténtalo de nuevo.");
+    }
+};
+
+
+  // 🔹 Actualizar cliente
+  const handleUpdateClient = async (formData) => {
     try {
       const clientFormData = new FormData();
   
-      // Agregar los datos del formulario a FormData
+      // ✅ Asegurar que Cliente1 esté presente y no sea undefined
+      if (selectedClient?.Cliente1) {
+        clientFormData.append("Cliente1", selectedClient.Cliente1);
+      } else {
+        console.warn("⚠️ Cliente1 no está definido en selectedClient.");
+      }
+  
       Object.keys(formData).forEach((key) => {
         if (formData[key] !== undefined && formData[key] !== null) {
           clientFormData.append(key, formData[key]);
         }
       });
   
-      // Verificar si hay una imagen y agregarla
-      if (formData.imageFile instanceof File) {
-        clientFormData.append("imageFile", formData.imageFile);
+      if (formData.foto && formData.foto instanceof File) {
+        clientFormData.append("imageFile", formData.foto);
       }
   
-      // Llamar al servicio para crear el cliente
-      await clientsService.createClients(clientFormData);
-  
-      toast.success("Cliente creado exitosamente");
-  
-      // Cerrar el modal después de la creación
-      setIsCreateOpen(false);
+      await clientsService.updateClient(clientFormData);
+      toast.success("Cliente actualizado correctamente");
+      setIsEditOpen(false);
+      fetchClients();
     } catch (error) {
-      console.error("Error al crear el cliente:", error);
-      toast.error("No se pudo crear el cliente. Inténtalo de nuevo.");
+      console.error("Error al actualizar el cliente:", error);
+      toast.error("No se pudo actualizar el cliente.");
     }
   };
+  
+
 
 
   if (!hasMounted) {
@@ -99,8 +156,24 @@ const ClientPage = () => {
   onClose={() => setIsCreateOpen(false)} 
   title="Crear Cliente" 
   modelInputs={clientModelInputs}
-  onSubmit={handleCreateClient} // Cambiado para usar la función correcta
+  onSubmit={handleCreateClient} 
 />
+
+
+{/* MODAL EDITAR CLIENTE */}
+{isEditOpen && selectedClient && (
+  <StepFormModal 
+  isOpen={isEditOpen} 
+  onClose={() => setIsEditOpen(false)} 
+  title="Actualizar Cliente" 
+  modelInputs={clientModelInputs}
+  defaultValues={{ Cliente1: selectedClient?.Cliente1, ...selectedClient }} 
+  onSubmit={handleUpdateClient} 
+/>
+
+)}
+
+
 
       <DataTable
         columns={clientColumns}
@@ -108,6 +181,11 @@ const ClientPage = () => {
         searchField="primerNombre"
         showActions={true}
         actions={[
+          {
+            label: "Editar",
+            icon: <Pencil className="w-4 h-4" />,
+            onClick: handleEditClient,
+          },
           {
             label: "Ver Detalles",
             onClick: handleViewDetails,
