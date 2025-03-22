@@ -5,10 +5,10 @@ import WarehouseSelected from "@/components/shared/Quotes/warehouse/warehouseSel
 import QuotesArticles from "@/components/shared/Quotes/articles/ArticlesSelected";
 import { Button } from "@/components/ui/button";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
-import DataTable from "../../components/shared/DataTable/DataTable";
-import { articlesColumns } from "../../models/Quotes/Articles/articlesColumns";
+import DataTable from "../../../../components/shared/DataTable/DataTable"
+import { articlesColumns } from "../../../../models/Quotes/Articles/articlesColumns";
 import { Home, Package, Mail, Phone, BadgeCheck, Warehouse, ShoppingCart, UserRound } from "lucide-react"; 
-import QuotesService from "../../service/SoftbyteCommerce/Sales/Quotes/quotesService";
+import QuotesService from "../../../../service/SoftbyteCommerce/Sales/Quotes/quotesService";
 import { v4 as uuidv4 } from 'uuid';
 import { Label } from "@/components/ui/label"
 import { Textarea } from "@/components/ui/textarea"
@@ -308,8 +308,10 @@ const handleGenerateQuote = async () => {
             </SelectTrigger>
             <SelectContent>
               <SelectItem value="Efectivo">Efectivo</SelectItem>
-              <SelectItem value="Tarjeta de crédito">Tarjeta de crédito</SelectItem>
-              <SelectItem value="Transferencia bancaria">Transferencia</SelectItem>
+              <SelectItem value="Tarjeta crédito">Tarjeta crédito</SelectItem>
+              <SelectItem value="Tarjeta debito">Tarjeta debito</SelectItem>
+              <SelectItem value="cheque">cheque</SelectItem>
+              <SelectItem value="Transferencia">Transferencia</SelectItem>
             </SelectContent>
           </Select>
         </div>

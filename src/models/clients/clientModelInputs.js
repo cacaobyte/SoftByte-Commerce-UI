@@ -61,5 +61,6 @@ export const clientModelInputs = [
     { key: "Notificar", label: "Recibir Notificaciones", type: "checkbox", required: false },
   
     { key: "foto", label: "Foto", type: "file", required: false }
+
   ];
   
