@@ -9,6 +9,7 @@ import DataTable from "../../components/shared/DataTable/DataTable";
 import { articlesColumns } from "../../models/Quotes/Articles/articlesColumns";
 import { Home, Package, Mail, Phone } from "lucide-react"; // Íconos para la bodega
 import QuotesService from "../../service/SoftbyteCommerce/Sales/Quotes/quotesService";
+import { v4 as uuidv4 } from 'uuid';
 
 export default function TestPage() {
   const [clientModalOpen, setClientModalOpen] = useState(false);
@@ -68,53 +69,61 @@ export default function TestPage() {
   }, [subtotal, clientDiscount, taxes]);
 
   // Función para enviar la cotización al servicio
-  const handleGenerateQuote = async () => {
-    if (!selectedClient || !selectedWarehouse || selectedArticles.length === 0) {
-      alert("Faltan datos para generar la cotización.");
-      return;
-    }
-    const requestData = {
+// Función para enviar la cotización al servicio
+const handleGenerateQuote = async () => {
+  if (!selectedClient || !selectedWarehouse || selectedArticles.length === 0) {
+    alert("Faltan datos para generar la cotización.");
+    return;
+  }
+
+  // clienteId ahora es string, se respeta como está o se genera un nuevo UUID si viene vacío
+  const clienteId = selectedClient.cliente1?.length > 0 ? selectedClient.cliente1 : uuidv4();
+
+  const requestData = {
+    fechaCreacion: new Date().toISOString(),
+    fechaActualizacion: new Date().toISOString(),
+    clienteId: clienteId, // ahora string
+    nombreCliente: selectedClient.primerNombre,
+    apellidoCliente: selectedClient.primerApellido,
+    correo: selectedClient.email || "",
+    telefono: selectedClient.celular || "",
+    tipoPago: paymentType,
+    descuentoCliente: selectedClient.descuento || 0,
+    subtotal,
+    descuentoTotal: clientDiscount,
+    impuestos: taxes,
+    total: totalCotizacion,
+    estado: "Pendiente",
+    moneda: currency,
+    origen: "Tienda",
+    usuarioCreador: "admin",
+    notas: notes,
+    detalles: selectedArticles.map((article) => ({
+      idArticulo: String(article.articulo1), // conversión explícita a string
+      nombreArticulo: article.descripcion,
+      precioUnitario: article.precio,
+      cantidad: article.cantidad,
+      descuentoAplicado: article.descuento || 0,
+      subtotal: article.subtotal,
+      impuestos: article.impuesto || 0,
+      total: article.total,
       fechaCreacion: new Date().toISOString(),
       fechaActualizacion: new Date().toISOString(),
-      clienteId: selectedClient.cliente1,
-      nombreCliente: selectedClient.primerNombre,
-      apellidoCliente: selectedClient.primerApellido,
-      correo: selectedClient.email,
-      telefono: selectedClient.celular,
-      tipoPago: paymentType,
-      descuentoCliente: selectedClient.descuento,
-      subtotal,
-      descuentoTotal: clientDiscount,
-      impuestos: taxes,
-      total: totalCotizacion,
-      estado: "Pendiente",
-      moneda: currency,
-      origen: "Tienda",
       usuarioCreador: "admin",
-      notas: notes,
-      detalles: selectedArticles.map((article) => ({
-        idArticulo: article.articulo1,
-        nombreArticulo: article.descripcion,
-        precioUnitario: article.precio,
-        cantidad: article.cantidad,
-        descuentoAplicado: article.descuento || 0,
-        subtotal: article.subtotal,
-        impuestos: article.impuesto || 0,
-        total: article.total,
-        fechaCreacion: new Date().toISOString(),
-        fechaActualizacion: new Date().toISOString(),
-        usuarioCreador: "admin",
-      })),
-    };
-
-    try {
-      await quotesService.CreateQuotes(requestData);
-      alert("Cotización generada exitosamente.");
-    } catch (error) {
-      console.error("Error al generar la cotización:", error);
-      alert("Hubo un error al generar la cotización.");
-    }
+    })),
   };
+
+  console.log("📦 Datos antes de enviar:", JSON.stringify(requestData, null, 2));
+
+  try {
+    await quotesService.CreateQuotes(requestData);
+    alert("Cotización generada exitosamente.");
+  } catch (error) {
+    console.error("❌ Error al generar la cotización:", error);
+    alert("Hubo un error al generar la cotización.");
+  }
+};
+
 
 
   return (

@@ -23,17 +23,22 @@ class QuotesService {
         });
     };
 
-    CreateQuotes = async (data) => {
-        const endpoint = this.endpoint.createQuotes;
-        const headers = await getHeaders();
+
     
+    CreateQuotes = async(data) => {
+        const endpoint = this.endpoint.createQuotes; 
+        const headers = await getHeaders()
+        console.log("⚡ Llamando a CreateQuotes con endpoint:", endpoint);
+        console.log("📦 Datos enviados en CreateQuotes:", data);
         return this.service.request({
             method: 'POST',
-            endpoint,
-            headers, 
-            data    
+            endpoint: endpoint,
+            data: data,
+            headers: headers, 
         });
     };
+
+
     
 }
 
