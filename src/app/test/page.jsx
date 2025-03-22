@@ -95,8 +95,8 @@ const handleGenerateQuote = async () => {
     total: totalCotizacion,
     estado: "Pendiente",
     moneda: currency,
-    origen: "Tienda",
-    usuarioCreador: "admin",
+    origen: selectedWarehouse.bodega1 || "",
+    usuarioCreador: "seller",
     notas: notes,
     detalles: selectedArticles.map((article) => ({
       idArticulo: String(article.articulo1), // conversión explícita a string
@@ -109,7 +109,7 @@ const handleGenerateQuote = async () => {
       total: article.total,
       fechaCreacion: new Date().toISOString(),
       fechaActualizacion: new Date().toISOString(),
-      usuarioCreador: "admin",
+      usuarioCreador: "seller",
     })),
   };
 
