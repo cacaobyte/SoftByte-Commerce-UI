@@ -75,7 +75,17 @@ const QuotesClients = ({ onSelectClient }) => {
           className="mb-4 border border-gray-300 rounded-lg"
         />
         <ul>
-          {filteredClients.map((client, index) => (
+        {filteredClients.length === 0 ? (
+          <div className="text-center p-6 bg-gray-50 border border-dashed border-gray-300 rounded-lg">
+            <p className="text-lg font-semibold text-gray-700 mb-2">
+              No se encontraron clientes registrados.
+            </p>
+            <p className="text-sm text-gray-500">
+              Registra nuevos clientes o verifica los filtros de búsqueda.
+            </p>
+          </div>
+        ) : (
+          filteredClients.map((client, index) => (
             <motion.li
               key={index}
               onClick={() => setSelectedClient(client)}
@@ -97,7 +107,8 @@ const QuotesClients = ({ onSelectClient }) => {
                 <p className="text-xs text-gray-500">{client.email}</p>
               </div>
             </motion.li>
-          ))}
+          ))
+        )}
         </ul>
       </div>
 

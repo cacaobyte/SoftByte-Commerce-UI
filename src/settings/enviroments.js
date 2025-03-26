@@ -1,6 +1,6 @@
 const { Warehouse } = require("lucide-react");
 
-const environment = "https://localhost:32771/";
+const environment = "https://localhost:32769/";
 //Produccion
 //const environment = "https://softbyte-commerce-api.onrender.com/";
 
@@ -14,6 +14,7 @@ module.exports = {
                 articles:{
                     getAllArticles: "api/cc/warehouse/articulosTodos",
                     getArticles: "api/cc/warehouse/articulos",
+                    getArticlesSelectedWarehouse: "api/cc/warehouse/articlesWarehouse/{0}",//WarehouseCode
                     getArticlesWholesale: "api/cc/warehouse/articulosMayoreo",
                     postArticles: "api/cc/warehouse/crearArticulos",
                     /*Pendientes

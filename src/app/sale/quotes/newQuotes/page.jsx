@@ -18,6 +18,9 @@ import { motion } from "framer-motion"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Separator } from "@/components/ui/separator"
 import { toast } from "react-toastify";
+import { useHasMounted } from '../../../../hooks/useHasMounted';
+import LoadingScreen from "../../../../components/UseHasMounted/LoadingScreen";
+import ProtectedPage from '../../../../components/ProtectedPage';
 
 
 export default function TestPage() {
@@ -32,7 +35,7 @@ export default function TestPage() {
   const [paymentType, setPaymentType] = useState("Efectivo");
   const [currency, setCurrency] = useState("GTQ");
   const [applyDiscount, setApplyDiscount] = useState(false);
-
+  const hasMounted = useHasMounted();
   const quotesService = new QuotesService();
 
   const handleSelectClient = (client) => {
@@ -141,8 +144,15 @@ const handleGenerateQuote = async () => {
 };
 
 
-
+if (!hasMounted) {
   return (
+    <div className="flex items-center justify-center min-h-screen bg-gray-100 dark:bg-gray-900">
+      <LoadingScreen message="Preparando tu experiencia..." />
+    </div>
+  );
+}
+  return (
+    <ProtectedPage>
 <div className="mb-12">
   <h1 className="text-3xl font-bold tracking-tight text-gray-900 mb-2">Cotización de Productos</h1>
   <p className="text-muted-foreground text-sm mb-4">
@@ -165,7 +175,7 @@ const handleGenerateQuote = async () => {
       <Warehouse className="mr-2 h-4 w-4" />
       Seleccionar Bodega
     </Button>
-
+    {selectedWarehouse && (
     <Button
       onClick={() => setArticleModalOpen(true)}
       className="bg-yellow-600 hover:bg-yellow-700 text-white"
@@ -173,6 +183,7 @@ const handleGenerateQuote = async () => {
       <ShoppingCart className="mr-2 h-4 w-4" />
       Seleccionar Artículos
     </Button>
+    )}
   </div>
 
   <Separator className="mt-6" />
@@ -420,10 +431,12 @@ const handleGenerateQuote = async () => {
           <DialogHeader>
             <DialogTitle>Seleccionar Artículos</DialogTitle>
           </DialogHeader>
-          <QuotesArticles onSelectArticles={handleSelectArticles} />
+          <QuotesArticles onSelectArticles={handleSelectArticles} warehouseCode={selectedWarehouse ? selectedWarehouse.bodega1 : null} />
+          
         </DialogContent>
       </Dialog>
     </div>
+    </ProtectedPage>
   );
 }
 

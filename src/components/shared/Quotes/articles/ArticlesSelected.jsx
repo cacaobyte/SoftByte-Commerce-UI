@@ -17,7 +17,7 @@ import {
 import ArticlesService from "../../../../service/SoftbyteCommerce/Article/articleService";
 import { toast } from "react-toastify";
 
-const QuotesArticles = ({ onSelectArticles }) => {
+const QuotesArticles = ({ onSelectArticles, warehouseCode  }) => {
   const [articles, setArticles] = useState([]);
   const [filteredArticles, setFilteredArticles] = useState([]);
   const [selectedArticles, setSelectedArticles] = useState([]);
@@ -28,7 +28,7 @@ const QuotesArticles = ({ onSelectArticles }) => {
     const fetchArticles = async () => {
       const service = new ArticlesService();
       try {
-        const response = await service.getArticles();
+        const response = await service.getArticlesSelectedWarehouse(warehouseCode);
         setArticles(response.data);
         setFilteredArticles(response.data);
       } catch (error) {
@@ -112,29 +112,42 @@ const QuotesArticles = ({ onSelectArticles }) => {
             onChange={(e) => setSearch(e.target.value)}
             className="mb-4 border border-gray-300 rounded-lg"
           />
-          <ul>
-            {filteredArticles.map((article, index) => (
-              <motion.li
-                key={index}
-                onClick={() => addArticleToQuote(article)}
-                className="cursor-pointer p-3 rounded-lg flex items-center gap-3 hover:bg-blue-100 transition"
-              >
-                <img
-                  src={article.foto}
-                  alt="Foto artículo"
-                  className="w-12 h-12 rounded-lg object-cover border border-gray-300"
-                />
-                <div>
-                  <p className="font-semibold">{article.descripcion}</p>
-                  <p className="text-xs text-gray-500">{article.categoria}</p>
-                  <p className="text-xs text-gray-500">Precio: Q{article.precio.toFixed(2)}</p>
-                  <p className="text-xs text-gray-500">Stock: {article.existencias}</p>
-                </div>
-                <FaPlus className="text-green-500 ml-auto" />
-              </motion.li>
-            ))}
-          </ul>
+
+          {filteredArticles.length === 0 ? (
+            <div className="text-center p-6 bg-gray-50 border border-dashed border-gray-300 rounded-lg">
+              <p className="text-lg font-semibold text-gray-700 mb-2">
+                Esta bodega no tiene artículos registrados.
+              </p>
+              <p className="text-sm text-gray-500">
+                Crea y registra nuevos artículos, o asigna artículos existentes a esta bodega para comenzar a cotizar.
+              </p>
+            </div>
+          ) : (
+            <ul>
+              {filteredArticles.map((article, index) => (
+                <motion.li
+                  key={index}
+                  onClick={() => addArticleToQuote(article)}
+                  className="cursor-pointer p-3 rounded-lg flex items-center gap-3 hover:bg-blue-100 transition"
+                >
+                  <img
+                    src={article.foto}
+                    alt="Foto artículo"
+                    className="w-12 h-12 rounded-lg object-cover border border-gray-300"
+                  />
+                  <div>
+                    <p className="font-semibold">{article.descripcion}</p>
+                    <p className="text-xs text-gray-500">{article.categoria}</p>
+                    <p className="text-xs text-gray-500">Precio: Q{article.precio.toFixed(2)}</p>
+                    <p className="text-xs text-gray-500">Stock: {article.existencias}</p>
+                  </div>
+                  <FaPlus className="text-green-500 ml-auto" />
+                </motion.li>
+              ))}
+            </ul>
+          )}
         </TabsContent>
+
 
         {/* Artículos Seleccionados */}
         <TabsContent value="selected" className="p-6">
