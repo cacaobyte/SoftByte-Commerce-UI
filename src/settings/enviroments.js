@@ -1,5 +1,6 @@
 const { Warehouse } = require("lucide-react");
 
+
 //Develop
 //const environment = "https://localhost:32769/";
 
@@ -16,6 +17,7 @@ module.exports = {
                 articles:{
                     getAllArticles: "api/cc/warehouse/articulosTodos",
                     getArticles: "api/cc/warehouse/articulos",
+                    getArticlesSelectedWarehouse: "api/cc/warehouse/articlesWarehouse/{0}",//WarehouseCode
                     getArticlesWholesale: "api/cc/warehouse/articulosMayoreo",
                     postArticles: "api/cc/warehouse/crearArticulos",
                     /*Pendientes
@@ -45,7 +47,8 @@ module.exports = {
                 },
                 quotes:{
                     getAllQuotes: "quotes/allQuotes",
-                    createQuotes: "quotes/create"
+                    createQuotes: "quotes/create",
+                    getAllQuotesCacaoByte: "quotes/allQuoCacao",
                 },
                 Warehouse:{
                     getWarehouse: "api/cc/warehouse/bodegas",
