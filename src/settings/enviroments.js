@@ -44,7 +44,8 @@ module.exports = {
                 },
                 quotes:{
                     getAllQuotes: "quotes/allQuotes",
-                    createQuotes: "quotes/create"
+                    createQuotes: "quotes/create",
+                    getAllQuotesCacaoByte: "quotes/allQuoCacao",
                 },
                 Warehouse:{
                     getWarehouse: "api/cc/warehouse/bodegas",
