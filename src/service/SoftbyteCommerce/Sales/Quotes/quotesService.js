@@ -13,8 +13,8 @@ class QuotesService {
     }
 
 
-    getAllQuotes = async() => {
-        const endpoint = this.endpoint.getAllQuotes;
+    getAllQuotesCacaoByte = async() => {
+        const endpoint = this.endpoint.getAllQuotesCacaoByte;
         const headers = await getHeaders()
         return this.service.request({
             method: 'GET',
@@ -39,6 +39,18 @@ class QuotesService {
     };
 
 
+
+    getAllQuotes = async() => {
+        const endpoint = this.endpoint.getAllQuotes;
+        const headers = await getHeaders()
+        return this.service.request({
+            method: 'GET',
+            endpoint,
+            headers: headers,
+        });
+    };
+
+    
     
 }
 

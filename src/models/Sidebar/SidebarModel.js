@@ -25,7 +25,8 @@ export const sidebarItems = [
       { title: "Historial de Ventas", route: "/sale/invoice" },
       { title: "Facturas", route: "/sale/invoice" },
       { title: "Devoluciones", route: "/sale/returns" },
-      { title: "cotizacion", route: "/sale/quotes" },
+      { title: "Nueva Cotizacion", route: "/sale/quotes/newQuotes" },
+      { title: "Cotizacion", route: "/sale/quotes/quotes" },
     ],
   },
   {

@@ -21,6 +21,15 @@ class ArticlesService {
             headers: headers,
         });
     };
+    getArticlesSelectedWarehouse = async(warehouse) => {
+        const endpoint = this.endpoint.getArticlesSelectedWarehouse.replace("{0}", warehouse);
+        const headers = await getHeaders()
+        return this.service.request({
+            method: 'GET',
+            endpoint,
+            headers: headers,
+        });
+    };
 
     getArticlesWholesale = async() => {
         const endpoint = this.endpoint.getArticlesWholesale;
