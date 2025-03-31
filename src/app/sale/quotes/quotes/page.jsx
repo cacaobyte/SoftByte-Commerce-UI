@@ -11,6 +11,7 @@ import { es } from 'date-fns/locale';
 import { toast } from 'react-toastify';
 import { Package } from 'lucide-react';
 import ProtectedPage from '../../../../components/ProtectedPage';
+import { columnsQuotes } from '../../../../models/Quotes/Quotes/QuotesModels';
 
 export default function QuotesListPage() {
   const [quotes, setQuotes] = useState([]);
@@ -45,66 +46,7 @@ export default function QuotesListPage() {
     setModalOpen(true);
   };
 
-  const columns = [
-    {
-      key: 'nombreCliente',
-      accessorKey: 'nombreCliente',
-      label: 'Cliente',
-    },
-    {
-      key: 'correo',
-      accessorKey: 'correo',
-      label: 'Correo',
-    },
-    {
-      key: 'tipoPago',
-      accessorKey: 'tipoPago',
-      label: 'Tipo de Pago',
-    },
-    {
-      key: 'moneda',
-      accessorKey: 'moneda',
-      label: 'Moneda',
-    },
-    {
-      key: 'subtotal',
-      accessorKey: 'subtotal',
-      label: 'Subtotal',
-      cell: ({ row }) => `Q${row.original.total.toFixed(2)}`,
-    },
-    {
-      key: 'descuentoTotal',
-      accessorKey: 'descuentoTotal',
-      label: 'Descuento',
-      cell: ({ row }) => `Q${row.original.total.toFixed(2)}`,
-    },   
-    {
-      key: 'total',
-      accessorKey: 'total',
-      label: 'Total',
-      cell: ({ row }) => `Q${row.original.total.toFixed(2)}`,
-    },
-    {
-      key: 'estado',
-      accessorKey: 'estado',
-      label: 'Estado',
-    },
-    {
-      key: 'origen',
-      accessorKey: 'origen',
-      label: 'Bodega',
-    },
-    {
-      key: 'fechaCreacion',
-      accessorKey: 'fechaCreacion',
-      label: 'Fecha de Creación',
-    },
-    {
-      key: 'usuarioCreador',
-      accessorKey: 'usuarioCreador',
-      label: 'Creador',
-    },
-  ];
+
 
   return (
     <ProtectedPage>
@@ -115,7 +57,7 @@ export default function QuotesListPage() {
         </p>
 
         <DataTable
-          columns={columns}
+          columns={columnsQuotes}
           data={quotes}
           searchField="nombreCliente"
           showActions={true}
@@ -129,79 +71,76 @@ export default function QuotesListPage() {
         />
 
 
-<Dialog open={modalOpen} onOpenChange={setModalOpen}>
-  <DialogContent className="w-[95vw] sm:w-[90vw] md:w-[80vw] lg:w-[70vw] max-w-none max-h-[90vh] overflow-y-auto p-4 rounded-lg">
-    <DialogHeader>
-      <DialogTitle className="text-base sm:text-lg md:text-xl">Detalles de Cotización</DialogTitle>
-    </DialogHeader>
+        <Dialog open={modalOpen} onOpenChange={setModalOpen}>
+          <DialogContent className="w-[95vw] sm:w-[90vw] md:w-[80vw] lg:w-[70vw] max-w-none max-h-[90vh] overflow-y-auto p-4 rounded-lg">
+            <DialogHeader>
+              <DialogTitle className="text-base sm:text-lg md:text-xl">Detalles de Cotización</DialogTitle>
+            </DialogHeader>
 
-    {selectedQuote && (
-      <div className="space-y-6">
-        {/* Información General */}
-        <Card>
-          <CardHeader>
-            <CardTitle className="text-base md:text-lg flex items-center gap-2">
-              🧾 Información General
-            </CardTitle>
-          </CardHeader>
-          <CardContent className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 text-sm">
-            <p><strong>Cliente:</strong> {selectedQuote.nombreCliente} {selectedQuote.apellidoCliente}</p>
-            <p><strong>Correo:</strong> {selectedQuote.correo}</p>
-            <p><strong>Teléfono:</strong> {selectedQuote.telefono}</p>
-            <p><strong>Pago:</strong> {selectedQuote.tipoPago}</p>
-            <p><strong>Moneda:</strong> {selectedQuote.moneda}</p>
-            <p><strong>Estado:</strong> {selectedQuote.estado}</p>
-            <p><strong>Origen:</strong> {selectedQuote.origen}</p>
-            <p><strong>Notas:</strong> {selectedQuote.notas || 'N/A'}</p>
-            <p><strong>Fecha:</strong> {selectedQuote.fechaCreacion}</p>
-          </CardContent>
-        </Card>
+            {selectedQuote && (
+              <div className="space-y-6">
+                {/* Información General */}
+                <Card>
+                  <CardHeader>
+                    <CardTitle className="text-base md:text-lg flex items-center gap-2">
+                      🧾 Información General
+                    </CardTitle>
+                  </CardHeader>
+                  <CardContent className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 text-sm">
+                    <p><strong>Cliente:</strong> {selectedQuote.nombreCliente} {selectedQuote.apellidoCliente}</p>
+                    <p><strong>Correo:</strong> {selectedQuote.correo}</p>
+                    <p><strong>Teléfono:</strong> {selectedQuote.telefono}</p>
+                    <p><strong>Pago:</strong> {selectedQuote.tipoPago}</p>
+                    <p><strong>Moneda:</strong> {selectedQuote.moneda}</p>
+                    <p><strong>Estado:</strong> {selectedQuote.estado}</p>
+                    <p><strong>Origen:</strong> {selectedQuote.origen}</p>
+                    <p><strong>Notas:</strong> {selectedQuote.notas || 'N/A'}</p>
+                    <p><strong>Fecha:</strong> {selectedQuote.fechaCreacion}</p>
+                  </CardContent>
+                </Card>
 
-        {/* Detalle de Artículos */}
-        <Card>
-          <CardHeader>
-            <CardTitle className="text-base md:text-lg flex items-center gap-2">
-              <Package className="w-5 h-5" />
-              Detalle de Artículos
-            </CardTitle>
-          </CardHeader>
-          <CardContent className="text-sm space-y-4">
-            {selectedQuote.detalles?.length > 0 ? (
-              selectedQuote.detalles.map((item, index) => (
-                <div
-                  key={index}
-                  className="border rounded-lg p-4 shadow-sm bg-muted/50 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3"
-                >
-                  <p><strong>ID:</strong> {item.idArticulo}</p>
-                  <p><strong>Artículo:</strong> {item.nombreArticulo}</p>
-                  <p><strong>Cantidad:</strong> {item.cantidad}</p>
-                  <p><strong>Precio:</strong> Q{item.precioUnitario.toFixed(2)}</p>
-                  <p className="sm:col-span-2 md:col-span-1"><strong>Total:</strong> Q{item.total.toFixed(2)}</p>
-                </div>
-              ))
-            ) : (
-              <p className="text-center text-muted-foreground">No hay artículos en esta cotización.</p>
+                {/* Detalle de Artículos */}
+                <Card>
+                  <CardHeader>
+                    <CardTitle className="text-base md:text-lg flex items-center gap-2">
+                      <Package className="w-5 h-5" />
+                      Detalle de Artículos
+                    </CardTitle>
+                  </CardHeader>
+                  <CardContent className="text-sm space-y-4">
+                    {selectedQuote.detalles?.length > 0 ? (
+                      selectedQuote.detalles.map((item, index) => (
+                        <div
+                          key={index}
+                          className="border rounded-lg p-4 shadow-sm bg-muted/50 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3"
+                        >
+                          <p><strong>ID:</strong> {item.idArticulo}</p>
+                          <p><strong>Artículo:</strong> {item.nombreArticulo}</p>
+                          <p><strong>Cantidad:</strong> {item.cantidad}</p>
+                          <p><strong>Precio:</strong> Q{item.precioUnitario.toFixed(2)}</p>
+                          <p className="sm:col-span-2 md:col-span-1"><strong>Total:</strong> Q{item.total.toFixed(2)}</p>
+                        </div>
+                      ))
+                    ) : (
+                      <p className="text-center text-muted-foreground">No hay artículos en esta cotización.</p>
+                    )}
+
+                    <Separator className="my-4" />
+
+                    <div className="text-right space-y-1">
+                      <p><strong>Subtotal:</strong> Q{selectedQuote.subtotal.toFixed(2)}</p>
+                      <p><strong>Descuento:</strong> Q{selectedQuote.descuentoTotal.toFixed(2)}</p>
+                      <p><strong>Impuestos:</strong> Q{selectedQuote.impuestos.toFixed(2)}</p>
+                      <p className="text-lg font-semibold text-green-600">
+                        <strong>Total:</strong> Q{selectedQuote.total.toFixed(2)}
+                      </p>
+                    </div>
+                  </CardContent>
+                </Card>
+              </div>
             )}
-
-            <Separator className="my-4" />
-
-            <div className="text-right space-y-1">
-              <p><strong>Subtotal:</strong> Q{selectedQuote.subtotal.toFixed(2)}</p>
-              <p><strong>Descuento:</strong> Q{selectedQuote.descuentoTotal.toFixed(2)}</p>
-              <p><strong>Impuestos:</strong> Q{selectedQuote.impuestos.toFixed(2)}</p>
-              <p className="text-lg font-semibold text-green-600">
-                <strong>Total:</strong> Q{selectedQuote.total.toFixed(2)}
-              </p>
-            </div>
-          </CardContent>
-        </Card>
-      </div>
-    )}
-  </DialogContent>
-</Dialog>
-
-
-
+          </DialogContent>
+        </Dialog>
       </div>
     </ProtectedPage>
   );
