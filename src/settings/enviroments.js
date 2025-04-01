@@ -2,10 +2,10 @@ const { Warehouse } = require("lucide-react");
 
 
 //Develop
-//const environment = "https://localhost:32769/";
+const environment = "https://localhost:32769/";
 
 //Produccion
-const environment = "https://softbyte-commerce-api.onrender.com/";
+//const environment = "https://softbyte-commerce-api.onrender.com/";
 
 
 module.exports = {

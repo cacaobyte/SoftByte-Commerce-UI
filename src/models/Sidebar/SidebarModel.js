@@ -3,8 +3,11 @@ export const sidebarItems = [
   {
     title: "Home",
     icon: "bell",
-    route: "/Home/elcome",
-    submenus: [],
+    route: "/Home/welcome",
+    submenus: [
+      { title: "Panel General", route: "/Home/welcome" },
+      { title: "Mi Empresa", route: "/Home/company" },
+    ],
   },
   {
     title: "Dashboard",

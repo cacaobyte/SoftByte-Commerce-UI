@@ -89,13 +89,12 @@ const MetricsPage = () => {
   ];
 
   return (
-    <div className="p-6 space-y-6">
+    <div className="p-6 space-y-6 pb-16">
       <h1 className="text-3xl font-bold tracking-tight flex items-center gap-2">
         <TrendingUp className="text-purple-500" /> Dashboard de Cotizaciones
       </h1>
       <p className="text-muted-foreground text-sm">Resumen estadístico general.</p>
 
-      {/* KPIs */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
         {loading
           ? Array.from({ length: 4 }).map((_, i) => <Skeleton key={i} className="h-32 rounded-xl" />)
@@ -106,7 +105,7 @@ const MetricsPage = () => {
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.3, delay: index * 0.1 }}
               >
-                <Card className="shadow-md hover:shadow-lg transition duration-300">
+                <Card className="shadow-md hover:shadow-lg transition duration-300 rounded-2xl">
                   <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
                     <CardTitle className="text-sm font-medium">{card.title}</CardTitle>
                     {card.icon}
@@ -119,9 +118,8 @@ const MetricsPage = () => {
             ))}
       </div>
 
-      {/* Gráfica mensual */}
       {metrics?.totalesPorMes?.length > 0 && (
-        <Card>
+        <Card className="rounded-2xl">
           <CardHeader>
             <CardTitle>📆 Ingresos por Mes</CardTitle>
           </CardHeader>
@@ -132,16 +130,15 @@ const MetricsPage = () => {
                 <XAxis dataKey="mes" />
                 <YAxis />
                 <Tooltip />
-                <Bar dataKey="total" fill="#4f46e5" radius={[4, 4, 0, 0]} />
+                <Bar dataKey="total" fill="#4f46e5" radius={[8, 8, 0, 0]} />
               </Chart>
             </ResponsiveContainer>
           </CardContent>
         </Card>
       )}
 
-      {/* Cotizaciones por usuario */}
       {metrics?.cotizacionesPorUsuario?.length > 0 && (
-        <Card>
+        <Card className="rounded-2xl">
           <CardHeader>
             <CardTitle>🧑‍💻 Cotizaciones por Usuario</CardTitle>
           </CardHeader>
@@ -151,16 +148,15 @@ const MetricsPage = () => {
                 <XAxis type="number" />
                 <YAxis type="category" dataKey="usuario" />
                 <Tooltip />
-                <Bar dataKey="cantidad" fill="#10b981" />
+                <Bar dataKey="cantidad" fill="#10b981" radius={[0, 8, 8, 0]} />
               </Chart>
             </ResponsiveContainer>
           </CardContent>
         </Card>
       )}
 
-      {/* Artículos más cotizados */}
       {metrics?.articulosMasCotizados?.length > 0 && (
-        <Card>
+        <Card className="rounded-2xl">
           <CardHeader>
             <CardTitle>📦 Artículos Más Cotizados</CardTitle>
           </CardHeader>
@@ -171,16 +167,15 @@ const MetricsPage = () => {
                 <XAxis dataKey="articulo" />
                 <YAxis />
                 <Tooltip />
-                <Bar dataKey="cantidadTotal" fill="#f59e0b" />
+                <Bar dataKey="cantidadTotal" fill="#f59e0b" radius={[8, 8, 0, 0]} />
               </Chart>
             </ResponsiveContainer>
           </CardContent>
         </Card>
       )}
 
-      {/* Cotizaciones por origen */}
       {metrics?.cotizacionesPorOrigen?.length > 0 && (
-        <Card>
+        <Card className="rounded-2xl">
           <CardHeader>
             <CardTitle>🌍 Cotizaciones por Origen</CardTitle>
           </CardHeader>
@@ -209,39 +204,35 @@ const MetricsPage = () => {
         </Card>
       )}
 
-
-    <div className='pb-6'>
-            {/* Tipos de pago */}
-            {metrics?.tiposPago?.length > 0 && (
-            <Card>
-                <CardHeader>
-                <CardTitle>💳 Tipos de Pago</CardTitle>
-                </CardHeader>
-                <CardContent className="pb-6"> {/* Espacio inferior añadido aquí */}
-                <ResponsiveContainer width="100%" height={250}>
-                    <PieChart>
-                    <Pie
-                        data={metrics.tiposPago}
-                        dataKey="cantidad"
-                        nameKey="tipo"
-                        cx="50%"
-                        cy="50%"
-                        outerRadius={80}
-                        fill="#8b5cf6"
-                        label
-                    >
-                        {metrics.tiposPago.map((_, index) => (
-                        <Cell key={index} fill={COLORS[index % COLORS.length]} />
-                        ))}
-                    </Pie>
-                    <Tooltip />
-                    <Legend />
-                    </PieChart>
-                </ResponsiveContainer>
-                </CardContent>
-            </Card>
-        )}
-        </div>
+      {metrics?.tiposPago?.length > 0 && (
+        <Card className="rounded-2xl">
+          <CardHeader>
+            <CardTitle>💳 Tipos de Pago</CardTitle>
+          </CardHeader>
+          <CardContent className="pb-6">
+            <ResponsiveContainer width="100%" height={250}>
+              <PieChart>
+                <Pie
+                  data={metrics.tiposPago}
+                  dataKey="cantidad"
+                  nameKey="tipo"
+                  cx="50%"
+                  cy="50%"
+                  outerRadius={80}
+                  fill="#8b5cf6"
+                  label
+                >
+                  {metrics.tiposPago.map((_, index) => (
+                    <Cell key={index} fill={COLORS[index % COLORS.length]} />
+                  ))}
+                </Pie>
+                <Tooltip />
+                <Legend />
+              </PieChart>
+            </ResponsiveContainer>
+          </CardContent>
+        </Card>
+      )}
     </div>
   );
 };
