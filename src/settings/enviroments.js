@@ -46,6 +46,9 @@ module.exports = {
                     getAllQuotes: "quotes/allQuotes",
                     createQuotes: "quotes/create",
                     getAllQuotesCacaoByte: "quotes/allQuoCacao",
+                    getAllQuotesStores: "quotes/quotesStores",
+                    getMyQuotes: "quotes/myQuotes",
+                    getMetricsQuotes: "quotes/metricsQuotes",
                 },
                 Warehouse:{
                     getWarehouse: "api/cc/warehouse/bodegas",

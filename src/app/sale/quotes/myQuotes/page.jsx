@@ -26,7 +26,7 @@ export default function QuotesListPage() {
 
   const fetchQuotes = async () => {
     try {
-      const result = await quotesService.getAllQuotes();
+      const result = await quotesService.getMyQuotes();
   
       const formattedData = (result?.data || []).map((quote) => ({
         ...quote,
@@ -51,9 +51,9 @@ export default function QuotesListPage() {
   return (
     <ProtectedPage>
       <div className="mb-10">
-        <h1 className="text-3xl font-bold tracking-tight mb-2">Todas Las Cotizaciones</h1>
+        <h1 className="text-3xl font-bold tracking-tight mb-2">Mis Cotizaciones</h1>
         <p className="text-muted-foreground text-sm mb-4">
-          Visualiza el historial de cotizaciones realizadas por los vendedores.
+          Visualiza el historial de cotizaciones realizadas por ti.
         </p>
 
         <DataTable

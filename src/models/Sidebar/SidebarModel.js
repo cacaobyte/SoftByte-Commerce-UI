@@ -25,8 +25,18 @@ export const sidebarItems = [
       { title: "Historial de Ventas", route: "/sale/invoice" },
       { title: "Facturas", route: "/sale/invoice" },
       { title: "Devoluciones", route: "/sale/returns" },
+    ],
+  },
+  {
+    title: "Cotizaciones",
+    icon: "quote",
+    route: "/quotes",
+    submenus: [
       { title: "Nueva Cotizacion", route: "/sale/quotes/newQuotes" },
-      { title: "Cotizacion", route: "/sale/quotes/quotes" },
+      { title: "Todas Las Cotizacion", route: "/sale/quotes/quotes" },
+      { title: "Mi Tienda", route: "/sale/quotes/quotesStores" },
+      { title: "Mis Cotizaciones", route: "/sale/quotes/myQuotes" },
+      { title: "Estadisticas Cotizaciones", route: "/sale/quotes/quoteStatistics" },
     ],
   },
   {
@@ -109,7 +119,7 @@ export const sidebarItems = [
   },
   {
     title: "Recursos Humanos",
-    icon: "FcManager",
+    icon: "rrhh",
     route: "/RRHH",
     submenus: [
       { title: "Recursos Humanos", route: "/RRHH" },
@@ -120,7 +130,6 @@ export const sidebarItems = [
       { title: "Permisos y Vacaciones", route: "/Permisos" }, 
     ],
   },
-  
   {
     title: "Facturación",
     icon: "billing",

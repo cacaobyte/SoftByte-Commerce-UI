@@ -51,6 +51,36 @@ class QuotesService {
     };
 
     
+    getAllQuotesStores = async() => {
+        const endpoint = this.endpoint.getAllQuotesStores;
+        const headers = await getHeaders()
+        return this.service.request({
+            method: 'GET',
+            endpoint,
+            headers: headers,
+        });
+    };
+
+    getMyQuotes = async() => {
+        const endpoint = this.endpoint.getMyQuotes;
+        const headers = await getHeaders()
+        return this.service.request({
+            method: 'GET',
+            endpoint,
+            headers: headers,
+        });
+    };
+
+    getMetricsQuotes = async() => {
+        const endpoint = this.endpoint.getMetricsQuotes;
+        const headers = await getHeaders()
+        return this.service.request({
+            method: 'GET',
+            endpoint,
+            headers: headers,
+        });
+    };
+
     
 }
 
