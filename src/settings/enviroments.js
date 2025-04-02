@@ -2,10 +2,10 @@ const { Warehouse } = require("lucide-react");
 
 
 //Develop
-//const environment = "https://localhost:32769/";
+const environment = "https://localhost:32769/";
 
 //Produccion
-const environment = "https://softbyte-commerce-api.onrender.com/";
+//const environment = "https://softbyte-commerce-api.onrender.com/";
 
 
 module.exports = {
@@ -49,6 +49,9 @@ module.exports = {
                     getAllQuotes: "quotes/allQuotes",
                     createQuotes: "quotes/create",
                     getAllQuotesCacaoByte: "quotes/allQuoCacao",
+                    getAllQuotesStores: "quotes/quotesStores",
+                    getMyQuotes: "quotes/myQuotes",
+                    getMetricsQuotes: "quotes/metricsQuotes",
                 },
                 Warehouse:{
                     getWarehouse: "api/cc/warehouse/bodegas",

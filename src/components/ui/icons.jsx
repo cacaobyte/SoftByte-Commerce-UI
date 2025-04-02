@@ -19,7 +19,9 @@ import {
 import { MdDashboard, MdSettings, MdOutlineSell } from "react-icons/md";
 import { RiDashboard3Fill } from "react-icons/ri";
 import { FcSalesPerformance } from "react-icons/fc";
-import { FaUsersViewfinder } from "react-icons/fa6";
+import { FaUsersViewfinder, FaRegMoneyBill1 } from "react-icons/fa6";
+import { FaPeopleArrows } from "react-icons/fa";
+
 
 export const Icons = {
   menu: FaBars,
@@ -45,4 +47,6 @@ export const Icons = {
   contactEmail: FaEnvelope, // Nuevo ícono de correo
   contactPhone: FaPhone, // Nuevo ícono de teléfono
   contactWebsite: FaGlobe, // Nuevo ícono de sitio web
+  quote:FaRegMoneyBill1,
+  rrhh: FaPeopleArrows, // Ícono para Recursos Humanos
 };
