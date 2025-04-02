@@ -25,6 +25,9 @@ module.exports = {
                     desactivar acticulos
                     */
                 },
+                home:{
+                    getHomeGeneral: "home/general",
+                },
                 categories:{
                     getCategoriesActive: "api/cc/warehouse/logistic/categoriesActive",
                     getCategorie: "api/cc/warehouse/logistic/categories",
