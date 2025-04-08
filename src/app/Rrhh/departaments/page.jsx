@@ -15,6 +15,7 @@ import LoadingScreen from "../../../components/UseHasMounted/LoadingScreen";
 const DepartamentsPage = () => {
   const [departaments, setDepartaments] = useState([]);
   const [selectedDepartament, setSelectedDepartament] = useState(null);
+  const [idDepartamento, setIdDepartamento] = useState(null);
   const [isCreateOpen, setIsCreateOpen] = useState(false);
   const [isEditOpen, setIsEditOpen] = useState(false);
   const [isDetailOpen, setIsDetailOpen] = useState(false);
@@ -36,13 +37,12 @@ const DepartamentsPage = () => {
 
   const handleCreateDepartament = async (formData) => {
     try {
-      // Convertimos a claves que espera el backend (minúscula inicial)
       const payload = Object.keys(formData).reduce((acc, key) => {
         acc[key.charAt(0).toLowerCase() + key.slice(1)] = formData[key];
         return acc;
       }, {});
-      payload.CreatedBy = "admin";
-      payload.UpdatedBy = "admin";
+      payload.createdBy = "admin";
+      payload.updatedBy = "admin";
 
       await departamentService.CreateDepartaments(payload);
       toast.success("Departamento creado exitosamente");
@@ -55,7 +55,6 @@ const DepartamentsPage = () => {
   };
 
   const handleEditDepartament = (departament) => {
-    // Normalizar según los nombres en el modelo
     const normalized = departamentModelInputs.reduce((acc, field) => {
       const key = field.key;
       const backendKey = key.charAt(0).toLowerCase() + key.slice(1);
@@ -63,6 +62,7 @@ const DepartamentsPage = () => {
       return acc;
     }, {});
     setSelectedDepartament(normalized);
+    setIdDepartamento(departament.idDepartamento); // 👈 Guardamos el ID original
     setIsEditOpen(true);
   };
 
@@ -72,10 +72,12 @@ const DepartamentsPage = () => {
         acc[key.charAt(0).toLowerCase() + key.slice(1)] = formData[key];
         return acc;
       }, {});
-      payload.UpdatedBy = "admin";
-      payload.UpdatedAt = new Date();
 
-      await departamentService.UpdateDepartament(payload);
+      payload.idDepartamento = idDepartamento; // 👈 Aquí se envía el ID original
+      payload.updatedBy = "admin";
+      payload.updatedAt = new Date();
+
+      await departamentService.UpdateDepartaments(payload);
       toast.success("Departamento actualizado correctamente");
       setIsEditOpen(false);
       fetchDepartaments();
@@ -107,14 +109,17 @@ const DepartamentsPage = () => {
       <div className="flex justify-between items-center mb-6">
         <h1 className="text-2xl font-bold">Gestión de Departamentos</h1>
         <div className="flex gap-4">
-          <Button className="bg-black text-white flex items-center gap-2" onClick={() => setIsCreateOpen(true)}>
+          <Button
+            className="bg-black text-white flex items-center gap-2"
+            onClick={() => setIsCreateOpen(true)}
+          >
             <PlusCircle className="w-5 h-5" /> Nuevo Departamento
           </Button>
           <Button onClick={fetchDepartaments}>Refrescar</Button>
         </div>
       </div>
 
-      {/* Modal Crear */}
+      {/* Crear */}
       <StepFormModal
         isOpen={isCreateOpen}
         onClose={() => setIsCreateOpen(false)}
@@ -123,7 +128,7 @@ const DepartamentsPage = () => {
         onSubmit={handleCreateDepartament}
       />
 
-      {/* Modal Editar */}
+      {/* Editar */}
       {isEditOpen && selectedDepartament && (
         <StepFormModal
           isOpen={isEditOpen}
@@ -135,7 +140,7 @@ const DepartamentsPage = () => {
         />
       )}
 
-      {/* Modal Detalles */}
+      {/* Detalles */}
       {isDetailOpen && selectedDepartament && (
         <GenericModal
           isOpen={isDetailOpen}
