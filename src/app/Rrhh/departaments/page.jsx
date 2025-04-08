@@ -126,8 +126,10 @@ const DepartamentsPage = () => {
         onClose={() => setIsCreateOpen(false)}
         title="Crear Departamento"
         modelInputs={departamentModelInputsCreate}
+        defaultValues={{}} 
         onSubmit={handleCreateDepartament}
       />
+
 
       {/* Editar */}
       {isEditOpen && selectedDepartament && (
