@@ -8,6 +8,7 @@ import { PlusCircle, Pencil } from "lucide-react";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { departamentModelInputs } from "../../../models/Rrhh/departamentModelInputs";
+import { departamentModelInputsCreate } from "../../../models/Rrhh/departamentModelInputsCreate";
 import DepartamentService from "../../../service/SoftbyteCommerce/Rrhh/departamentService";
 import { useHasMounted } from "../../../hooks/useHasMounted";
 import LoadingScreen from "../../../components/UseHasMounted/LoadingScreen";
@@ -124,7 +125,7 @@ const DepartamentsPage = () => {
         isOpen={isCreateOpen}
         onClose={() => setIsCreateOpen(false)}
         title="Crear Departamento"
-        modelInputs={departamentModelInputs}
+        modelInputs={departamentModelInputsCreate}
         onSubmit={handleCreateDepartament}
       />
 
