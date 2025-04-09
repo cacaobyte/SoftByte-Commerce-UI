@@ -61,6 +61,11 @@ module.exports = {
                         getAllDepartaments: "rrhh/allDepartaments",
                         createDepartament: "rrhh/createDepartament",
                         updateDepartament: "rrhh/updateDepartament",
+                    },
+                    Position:{
+                        getAllPosition: "rrhh/allPositions",
+                        createPosition: "rrhh/createPosition",
+                        updatePosition: "rrhh/updatePosition",
                     }
                 },
                 Warehouse:{
