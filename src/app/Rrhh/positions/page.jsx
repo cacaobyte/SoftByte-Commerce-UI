@@ -8,6 +8,7 @@ import { PlusCircle, Pencil } from "lucide-react";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { positionModelInputsCreate } from "../../../models/Rrhh/positions/positionModelInputsCreate";
+import { positionColumns } from "../../../models/Rrhh/positions/positionColumns";
 import { positionGenericModal } from "../../../models/Rrhh/positions/positionGenericModal";
 import PositionService from "../../../service/SoftbyteCommerce/Rrhh/positionService";
 import DepartamentService from "../../../service/SoftbyteCommerce/Rrhh/departamentService";
@@ -34,11 +35,31 @@ const PositionsPage = () => {
   const fetchPositions = async () => {
     try {
       const res = await positionService.getAllPositions();
-      setPositions(res.data);
+      
+      const formattedData = res.data.map((item) => ({
+        ...item,
+        createdAt: item.createdAt
+          ? new Date(item.createdAt).toLocaleDateString("es-ES", {
+              year: "numeric",
+              month: "long",
+              day: "numeric",
+            })
+          : null,
+        updatedAt: item.updatedAt
+          ? new Date(item.updatedAt).toLocaleDateString("es-ES", {
+              year: "numeric",
+              month: "long",
+              day: "numeric",
+            })
+          : null,
+      }));
+  
+      setPositions(formattedData);
     } catch (err) {
       toast.error("Error al obtener puestos");
     }
   };
+  
 
   const fetchDepartaments = async () => {
     try {
@@ -77,14 +98,12 @@ const PositionsPage = () => {
       acc[key] = position[backendKey] ?? "";
       return acc;
     }, {});
-  
-    // 🔸 Guardar el ID real del puesto directamente para luego enviarlo
+
     normalized.idPuesto = position.idPuesto;
     setSelectedPosition(normalized);
     setIsEditOpen(true);
   };
   
-
   const handleUpdatePosition = async (formData) => {
     try {
       const payload = Object.keys(formData).reduce((acc, key) => {
@@ -94,8 +113,6 @@ const PositionsPage = () => {
   
       payload.idPuesto = formData.idPuesto;
       payload.updatedBy = "admin";
-  
-      // 🔥 Asegurarse de incluir el nombre del departamento
       payload.nombreDepartamento = departaments.find(
         (d) => d.idDepartamento === payload.idDepartamento
       )?.nombreDepartamento;
@@ -109,24 +126,10 @@ const PositionsPage = () => {
     }
   };
   
-  
-
   const handleViewDetails = (position) => {
     setSelectedPosition(position);
     setIsDetailOpen(true);
   };
-
-  const positionColumns = [
-    { key: "nombrePuesto", label: "Nombre del Puesto" },
-    { key: "descripcion", label: "Descripción" },
-    { key: "codigoPuesto", label: "Código" },
-    { key: "nivelJerarquico", label: "Nivel Jerárquico" },
-    { key: "tipoPuesto", label: "Tipo" },
-    { key: "sueldoBase", label: "Sueldo" },
-    { key: "modalidadTrabajo", label: "Modalidad" },
-    { key: "estado", label: "Estado" },
-    { key: "nombreDepartamento", label: "Departamento" },
-  ];
 
   if (!hasMounted) return <LoadingScreen message="Cargando puestos..." />;
 

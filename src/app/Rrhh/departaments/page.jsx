@@ -9,6 +9,7 @@ import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { departamentModelInputs } from "../../../models/Rrhh/departamentModelInputs";
 import { departamentModelInputsCreate } from "../../../models/Rrhh/departamentModelInputsCreate";
+import { departamentColumns } from "../../../models/Rrhh/departamentColumns";
 import DepartamentService from "../../../service/SoftbyteCommerce/Rrhh/departamentService";
 import { useHasMounted } from "../../../hooks/useHasMounted";
 import LoadingScreen from "../../../components/UseHasMounted/LoadingScreen";
@@ -30,11 +31,31 @@ const DepartamentsPage = () => {
   const fetchDepartaments = async () => {
     try {
       const response = await departamentService.getAllDepartaments();
-      setDepartaments(response.data);
+  
+      const formatted = response.data.map((dep) => ({
+        ...dep,
+        createdAt: dep.createdAt
+          ? new Date(dep.createdAt).toLocaleDateString("es-ES", {
+              year: "numeric",
+              month: "long",
+              day: "numeric",
+            })
+          : "No disponible",
+        updatedAt: dep.updatedAt
+          ? new Date(dep.updatedAt).toLocaleDateString("es-ES", {
+              year: "numeric",
+              month: "long",
+              day: "numeric",
+            })
+          : "No disponible",
+      }));
+  
+      setDepartaments(formatted);
     } catch (err) {
       toast.error("Error al cargar los departamentos.");
     }
   };
+  
 
   const handleCreateDepartament = async (formData) => {
     try {
@@ -92,16 +113,6 @@ const DepartamentsPage = () => {
     setSelectedDepartament(departament);
     setIsDetailOpen(true);
   };
-
-  const departamentColumns = [
-    { key: "nombreDepartamento", label: "Nombre del Departamento" },
-    { key: "descripcion", label: "Descripción" },
-    { key: "codigoDepartamento", label: "Código" },
-    { key: "ubicacionFisica", label: "Ubicación Física" },
-    { key: "correoContacto", label: "Correo de Contacto" },
-    { key: "estado", label: "Estado" },
-    { key: "observaciones", label: "Observaciones" },
-  ];
 
   if (!hasMounted) return <LoadingScreen message="Cargando departamentos..." />;
 
