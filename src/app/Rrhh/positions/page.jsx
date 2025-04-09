@@ -8,6 +8,7 @@ import { PlusCircle, Pencil } from "lucide-react";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { positionModelInputsCreate } from "../../../models/Rrhh/positions/positionModelInputsCreate";
+import { positionGenericModal } from "../../../models/Rrhh/positions/positionGenericModal";
 import PositionService from "../../../service/SoftbyteCommerce/Rrhh/positionService";
 import DepartamentService from "../../../service/SoftbyteCommerce/Rrhh/departamentService";
 import { useHasMounted } from "../../../hooks/useHasMounted";
@@ -173,7 +174,7 @@ const PositionsPage = () => {
           onClose={() => setIsDetailOpen(false)}
           title={`Detalles del Puesto - ${selectedPosition?.nombrePuesto}`}
           data={selectedPosition}
-          model={positionModelInputsCreate(departaments)}
+          model={positionGenericModal(departaments)}
         />
       )}
 
