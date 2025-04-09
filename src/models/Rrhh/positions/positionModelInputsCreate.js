@@ -1,0 +1,91 @@
+export const positionModelInputsCreate = (departaments = []) => [
+    {
+      key: "idDepartamento",
+      label: "Departamento",
+      type: "select",
+      required: true,
+      options: departaments.map((dep) => ({
+        value: dep.idDepartamento,
+        label: dep.nombreDepartamento,
+      })),
+    },
+    {
+      key: "nombrePuesto",
+      label: "Nombre del Puesto",
+      type: "text",
+      required: true,
+      maxLength: 100,
+      placeholder: "Ej. Asistente Administrativo",
+    },
+    {
+      key: "descripcion",
+      label: "Descripción",
+      type: "text",
+      required: false,
+      maxLength: 255,
+    },
+    {
+      key: "nivelJerarquico",
+      label: "Nivel Jerárquico",
+      type: "select",
+      required: false,
+      options: [
+        { label: "Operativo", value: "Operativo" },
+        { label: "Técnico", value: "Técnico" },
+        { label: "Supervisión", value: "Supervisión" },
+        { label: "Coordinación", value: "Coordinación" },
+        { label: "Jefatura", value: "Jefatura" },
+        { label: "Gerencia", value: "Gerencia" },
+        { label: "Dirección", value: "Dirección" },
+      ],
+    },
+    {
+      key: "tipoPuesto",
+      label: "Tipo de Puesto",
+      type: "select",
+      required: false,
+      options: [
+        { label: "Tiempo Completo", value: "Tiempo Completo" },
+        { label: "Medio Tiempo", value: "Medio Tiempo" },
+        { label: "Temporal", value: "Temporal" },
+        { label: "Freelance", value: "Freelance" },
+        { label: "Consultor", value: "Consultor" },
+        { label: "Pasantía", value: "Pasantía" },
+      ],
+    },
+    {
+      key: "sueldoBase",
+      label: "Sueldo Base",
+      type: "number",
+      required: false,
+    },
+    {
+      key: "modalidadTrabajo",
+      label: "Modalidad de Trabajo",
+      type: "select",
+      required: false,
+      options: [
+        { label: "Presencial", value: "Presencial" },
+        { label: "Remoto", value: "Remoto" },
+        { label: "Híbrido", value: "Híbrido" },
+        { label: "Rotativo", value: "Rotativo" },
+      ],
+    },
+    {
+      key: "estado",
+      label: "Estado",
+      type: "select",
+      required: true,
+      options: [
+        { label: "Activo", value: "Activo" },
+        { label: "Inactivo", value: "Inactivo" },
+      ],
+    },
+    {
+      key: "observaciones",
+      label: "Observaciones",
+      type: "text",
+      required: false,
+    },
+  ];
+  
