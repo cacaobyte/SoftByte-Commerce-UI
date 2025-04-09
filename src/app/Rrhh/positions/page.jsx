@@ -76,9 +76,13 @@ const PositionsPage = () => {
       acc[key] = position[backendKey] ?? "";
       return acc;
     }, {});
+  
+    // 🔸 Guardar el ID real del puesto directamente para luego enviarlo
+    normalized.idPuesto = position.idPuesto;
     setSelectedPosition(normalized);
     setIsEditOpen(true);
   };
+  
 
   const handleUpdatePosition = async (formData) => {
     try {
@@ -86,11 +90,15 @@ const PositionsPage = () => {
         acc[key.charAt(0).toLowerCase() + key.slice(1)] = formData[key];
         return acc;
       }, {});
-
-      const pos = positions.find((p) => p.codigoPuesto === payload.codigoPuesto);
-      payload.idPuesto = pos?.idPuesto;
+  
+      payload.idPuesto = formData.idPuesto;
       payload.updatedBy = "admin";
-
+  
+      // 🔥 Asegurarse de incluir el nombre del departamento
+      payload.nombreDepartamento = departaments.find(
+        (d) => d.idDepartamento === payload.idDepartamento
+      )?.nombreDepartamento;
+  
       await positionService.UpdatePositions(payload);
       toast.success("Puesto actualizado correctamente");
       setIsEditOpen(false);
@@ -99,6 +107,8 @@ const PositionsPage = () => {
       toast.error("Error al actualizar puesto");
     }
   };
+  
+  
 
   const handleViewDetails = (position) => {
     setSelectedPosition(position);
