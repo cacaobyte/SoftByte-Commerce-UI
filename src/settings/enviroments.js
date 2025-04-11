@@ -25,6 +25,9 @@ module.exports = {
                     desactivar acticulos
                     */
                 },
+                home:{
+                    getHomeGeneral: "home/general",
+                },
                 categories:{
                     getCategoriesActive: "api/cc/warehouse/logistic/categoriesActive",
                     getCategorie: "api/cc/warehouse/logistic/categories",
@@ -52,6 +55,18 @@ module.exports = {
                     getAllQuotesStores: "quotes/quotesStores",
                     getMyQuotes: "quotes/myQuotes",
                     getMetricsQuotes: "quotes/metricsQuotes",
+                },
+                Rrhh:{
+                    Departaments:{
+                        getAllDepartaments: "rrhh/allDepartaments",
+                        createDepartament: "rrhh/createDepartament",
+                        updateDepartament: "rrhh/updateDepartament",
+                    },
+                    Position:{
+                        getAllPosition: "rrhh/allPositions",
+                        createPosition: "rrhh/createPosition",
+                        updatePosition: "rrhh/updatePosition",
+                    }
                 },
                 Warehouse:{
                     getWarehouse: "api/cc/warehouse/bodegas",

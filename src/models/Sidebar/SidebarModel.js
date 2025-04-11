@@ -125,8 +125,10 @@ export const sidebarItems = [
     icon: "rrhh",
     route: "/RRHH",
     submenus: [
+      { title: "Departamentos", route: "/Rrhh/departaments" },
+      { title: "Puestos", route: "/Rrhh/positions" },
+      { title: "Planilla", route: "/Rrhh/employees" },
       { title: "Recursos Humanos", route: "/RRHH" },
-      { title: "Planilla", route: "/Planilla" },
       { title: "Boletas", route: "/Boletas" },
       { title: "Horas Extras", route: "/Extras" },
       { title: "Asistencia", route: "/Asistencia" }, 
