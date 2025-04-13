@@ -1,3 +1,4 @@
+const { default: employees } = require("@/app/Rrhh/employees/page");
 const { Warehouse } = require("lucide-react");
 
 
@@ -66,6 +67,11 @@ module.exports = {
                         getAllPosition: "rrhh/allPositions",
                         createPosition: "rrhh/createPosition",
                         updatePosition: "rrhh/updatePosition",
+                    },
+                    employees:{
+                        getAllEmployees: "rrhh/allEmployees",
+                        createEmployee: "rrhh/createEmployee",
+                        updateEmployee: "rrhh/updateEmployee",
                     }
                 },
                 Warehouse:{
