@@ -1,6 +1,3 @@
-const { default: employees } = require("@/app/Rrhh/employees/page");
-const { Warehouse } = require("lucide-react");
-
 
 //Develop
 const environment = "https://localhost:32769/";
