@@ -83,22 +83,50 @@ const EmployeesPage = () => {
     }
   };
 
-  const handleCreateEmployee = async (formData) => {
-    try {
-      const payload = Object.fromEntries(
-        Object.entries(formData).map(([k, v]) => [k.charAt(0).toLowerCase() + k.slice(1), v])
-      );
-      payload.createdBy = "admin";
-      payload.updatedBy = "admin";
-
-      await employeeService.CreateEmployees(payload);
-      toast.success("Empleado creado exitosamente");
-      setIsCreateOpen(false);
-      fetchEmployees();
-    } catch {
-      toast.error("Error al crear empleado");
-    }
+  const sanitizeEmployeePayload = (formData) => {
+    const dateFields = ["fechaNacimiento", "fechaIngreso", "fechaEgreso"];
+    const numberFields = ["salario"];
+  
+    return Object.fromEntries(
+      Object.entries(formData).flatMap(([key, value]) => {
+        const normalizedKey = key.charAt(0).toLowerCase() + key.slice(1);
+  
+        // Manejo de fechas vacías
+        if (dateFields.includes(normalizedKey) && value === "") {
+          return [[normalizedKey, null]];
+        }
+  
+        // Manejo de salario vacío: lo removemos si no es número válido
+        if (numberFields.includes(normalizedKey)) {
+          if (value === "" || value === null || isNaN(value)) {
+            return []; // ← omitimos el campo del objeto
+          }
+          return [[normalizedKey, parseFloat(value)]];
+        }
+  
+        return [[normalizedKey, value]];
+      })
+    );
   };
+  
+
+  
+
+const handleCreateEmployee = async (formData) => {
+  try {
+    const payload = sanitizeEmployeePayload(formData);
+    payload.createdBy = "admin";
+    payload.updatedBy = "admin";
+
+    await employeeService.CreateEmployees(payload);
+    toast.success("Empleado creado exitosamente");
+    setIsCreateOpen(false);
+    fetchEmployees();
+  } catch {
+    toast.error("Error al crear empleado");
+  }
+};
+
 
   const handleEditEmployee = (employee) => {
     const normalized = employeeModelInputsCreate(departaments, positions).reduce((acc, field) => {
@@ -114,12 +142,10 @@ const EmployeesPage = () => {
 
   const handleUpdateEmployee = async (formData) => {
     try {
-      const payload = Object.fromEntries(
-        Object.entries(formData).map(([k, v]) => [k.charAt(0).toLowerCase() + k.slice(1), v])
-      );
+      const payload = sanitizeEmployeePayload(formData);
       payload.idEmpleado = formData.idEmpleado;
       payload.updatedBy = "admin";
-
+  
       await employeeService.UpdateEmployees(payload);
       toast.success("Empleado actualizado correctamente");
       setIsEditOpen(false);
@@ -128,6 +154,7 @@ const EmployeesPage = () => {
       toast.error("Error al actualizar empleado");
     }
   };
+  
 
   const handleViewDetails = (employee) => {
     setSelectedEmployee(employee);
