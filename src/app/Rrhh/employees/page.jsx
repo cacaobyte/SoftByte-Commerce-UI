@@ -180,7 +180,7 @@ const handleCreateEmployee = async (formData) => {
         isOpen={isCreateOpen}
         onClose={() => setIsCreateOpen(false)}
         title="Crear Empleado"
-        modelInputs={employeeModelInputsCreate(departaments, positions)}
+        modelInputs={employeeModelInputsCreate(positions, departaments)}
         defaultValues={{}}
         onSubmit={handleCreateEmployee}
       />
@@ -191,7 +191,7 @@ const handleCreateEmployee = async (formData) => {
           isOpen={isEditOpen}
           onClose={() => setIsEditOpen(false)}
           title="Actualizar Empleado"
-          modelInputs={employeeModelInputsCreate(departaments, positions)}
+          modelInputs={employeeModelInputsCreate(positions, departaments )}
           defaultValues={selectedEmployee}
           onSubmit={handleUpdateEmployee}
         />

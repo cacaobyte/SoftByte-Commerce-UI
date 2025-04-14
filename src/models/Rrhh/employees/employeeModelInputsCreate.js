@@ -25,10 +25,30 @@ export const employeeModelInputsCreate = (positions = [], departments = []) => [
       ],
     },
     {
+      key: "idDepartamento",
+      label: "Departamento",
+      type: "select",
+      required: true,
+      options: departments.map((dep) => ({
+        label: dep.nombreDepartamento,
+        value: dep.idDepartamento,
+      })),
+    },
+    {
+      key: "puesto",
+      label: "Puesto",
+      type: "select",
+      required: true,
+      options: positions.map((p) => ({
+        label: p.nombrePuesto + " - " + p.nombreDepartamento,
+        value: p.idPuesto,
+      })),
+    },
+    {
       key: "fechaNacimiento",
       label: "Fecha de Nacimiento",
       type: "date",
-      required: false,
+      required: true,
     },
     {
       key: "tipoDocumento",
@@ -178,25 +198,6 @@ export const employeeModelInputsCreate = (positions = [], departments = []) => [
       type: "text",
       required: false,
     },
-    {
-      key: "idDepartamento",
-      label: "Departamento",
-      type: "select",
-      required: true,
-      options: departments.map((dep) => ({
-        label: dep.nombreDepartamento,
-        value: dep.idDepartamento,
-      })),
-    },
-    {
-      key: "puesto",
-      label: "Puesto",
-      type: "select",
-      required: true,
-      options: positions.map((p) => ({
-        label: p.nombrePuesto + " - " + p.nombreDepartamento,
-        value: p.idPuesto,
-      })),
-    },
+
   ];
   
