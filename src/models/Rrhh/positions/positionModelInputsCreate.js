@@ -22,7 +22,7 @@ export const positionModelInputsCreate = (departaments = []) => [
       label: "Descripción",
       type: "text",
       required: false,
-      maxLength: 255,
+      maxLength: 50,
     },
     {
       key: "nivelJerarquico",
