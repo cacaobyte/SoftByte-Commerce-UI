@@ -1,5 +1,3 @@
-const { Warehouse } = require("lucide-react");
-
 
 //Develop
 //const environment = "https://localhost:32769/";
@@ -66,6 +64,11 @@ module.exports = {
                         getAllPosition: "rrhh/allPositions",
                         createPosition: "rrhh/createPosition",
                         updatePosition: "rrhh/updatePosition",
+                    },
+                    employees:{
+                        getAllEmployees: "rrhh/allEmployees",
+                        createEmployee: "rrhh/createEmployee",
+                        updateEmployee: "rrhh/updateEmployee",
                     }
                 },
                 Warehouse:{
