@@ -54,6 +54,14 @@ module.exports = {
                     getMyQuotes: "quotes/myQuotes",
                     getMetricsQuotes: "quotes/metricsQuotes",
                 },
+                sales:{
+                    getAllSales: "sales/allSales",
+                    createSale: "sales/createSale",
+                    getAllSalesCacaoByte: "sales/allSalesCacaoByte",
+                    getAllSalesStores: "sales/allSalesStores",
+                    getMySales: "sales/mySales",
+                    getMetricsSales: "sales/metricsSales",
+                },
                 Rrhh:{
                     Departaments:{
                         getAllDepartaments: "rrhh/allDepartaments",

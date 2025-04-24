@@ -39,10 +39,10 @@ const QuotesClients = ({ onSelectClient }) => {
           notificar: true,
           celular: "",
           direccion: "",
-          empresa: "",
+          empresa: "Virtual Store",
           estadoCivil: "",
           edad: "",
-          profesion: "",
+          profesion: "Tienda",
         });
 
         setClients(formattedClients);
